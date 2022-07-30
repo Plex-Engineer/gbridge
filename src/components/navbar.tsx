@@ -1,12 +1,11 @@
 import styled from "styled-components";
 import logo from "../assets/logo.svg";
-import { useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import menu from "../assets/menu.svg";
-import { useEthers, useEtherBalance, useNetwork } from "@usedapp/core";
-import { formatEther } from "@ethersproject/units";
 import { formatBigNumber } from "utils";
-import {networkProperties} from "constants/networks"
+import {GravityTestnet} from "constants/networks"
+import { useNetworkInfo } from "stores/networkInfo";
+import {getChainIdandAccount, getAccountBalance, connect} from "utils/addCantoToWallet"
 interface propsStyle {
   didScroll: boolean;
 }
@@ -181,17 +180,6 @@ border-bottom: ${(props) =>
   }
 `;
 
-function getName(value : string){
-switch(value){
-  case "convert":
-    return "convert coin"
-    break
-  default:
-    return value
-}
-}
-
-
 const Glitch = styled.p`
   & {
     color: var(--primary-color);
@@ -259,15 +247,36 @@ const Glitch = styled.p`
 `;
 
 const NavBar = () => {
-  const { account, activateBrowserWallet, chainId } = useEthers();
-  const chain : Number= chainId ?? 1;
-  const location = useLocation();
-  const isConnected = account !== undefined;
+  const networkInfo = useNetworkInfo();
+  useEffect(() => {
+    const [chainId, account] = getChainIdandAccount();
+    networkInfo.setChainId(chainId);
+    networkInfo.setAccount(account);
+  },[])
 
-  async function connect() {
-    // setIsModalOpen(true);
-    activateBrowserWallet();
-  }
+    //@ts-ignore
+    if (window.ethereum) {
+      //@ts-ignore
+      window.ethereum.on("accountsChanged", () => {
+        window.location.reload();
+      });
+   
+      //@ts-ignore
+      window.ethereum.on("networkChanged", () => {
+        window.location.reload();
+      });
+    }
+  
+    async function getBalance() {
+      if (networkInfo.account != undefined) {
+        networkInfo.setBalance(await getAccountBalance(networkInfo.account))
+      }
+    }
+  
+    useEffect(() => {
+      getBalance();
+    },[networkInfo.account])
+
 
   const [colorChange, setColorchange] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -279,8 +288,6 @@ const NavBar = () => {
     }
   };
   window.addEventListener("scroll", changeNavbarColor);
-
-  const balance = useEtherBalance(account) ?? 0;
 
   return (
     <Container didScroll={colorChange}>
@@ -310,16 +317,16 @@ const NavBar = () => {
           setIsNavOpen(!isNavOpen);
         }}
       />
-      {isConnected ? (
+      {networkInfo.isConnected ? (
         <button onClick={()=>{
           // setIsModalOpen(true)
         }}>
-          {formatBigNumber(formatEther(balance))}&nbsp;  
+          {formatBigNumber(networkInfo.balance)}&nbsp;  
           <span style={{
             fontWeight : "600",
             
-          }}>{networkProperties.find((val)=> val.chainId == chain)?.symbol ?? "ETH"}</span> |{" "}
-          {account?.substring(0, 5) + ".."}
+          }}>{(GravityTestnet.chainId == Number(networkInfo.chainId)) ? "DIODE" : "ETH"}</span> |{" "}
+          {networkInfo.account?.substring(0, 5) + ".."}
           
         </button>
       ) : (

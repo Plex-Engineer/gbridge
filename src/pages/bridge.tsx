@@ -3,7 +3,7 @@ import down from "assets/down.svg";
 import right from "assets/right.svg";
 import canto from "assets/logo.svg";
 import Popup from "reactjs-popup";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import TokenModal from "components/modals/tokenModal";
 import { Contract, ethers, utils } from "ethers";
 import { abi } from "constants/abi";
@@ -15,7 +15,7 @@ import { BigNumber } from "ethers";
 import { useGravityTokens } from "hooks/useGravityTokens";
 import { icons } from "constants/tokens";
 import ADDRESSES from "constants/addresses";
-import { checkPubKey } from "utils/nodeTransactions";
+import { useNetworkInfo } from "stores/networkInfo";
 
 const Container = styled.div`
   background-color: black;
@@ -153,28 +153,17 @@ const DestInput = styled.input`
   }
 `;
 const BridgePage = () => {
+  const networkInfo = useNetworkInfo();
   const [amount, setAmount] = useState("");
-  const { account, activateBrowserWallet, switchNetwork, chainId } =
-    useEthers();
-  const [cosmosAddress, setCosmosAddress] = useState("");
+  const { activateBrowserWallet, switchNetwork } = useEthers();
   const [customAddress, setCustomAddress] = useState("");
-  const [hasPubKey, setHasPubKey] = useState(false);
 
   const { gravityTokens, gravityAddress } = useGravityTokens(
-    account,
-    chainId ?? 1
+    networkInfo.account,
+    Number(networkInfo.chainId)
   );
 
-  async function setPubKey(account: string) {
-    let hasPubKey = await checkPubKey(account);
-    setHasPubKey(hasPubKey);
-  }
 
-  useEffect(() => {
-    if (account) {
-      getCantoAddressFromMetaMask(account);
-    }
-  }, [account]);
 
   const [token, setToken] = useState({
     data: {
@@ -186,26 +175,7 @@ const BridgePage = () => {
     balanceOf: -1,
   });
 
-  async function getCantoAddressFromMetaMask(address: string | undefined) {
-    const nodeURLMain = ADDRESSES.cantoMainnet.NodeAPIEndpoint;
-    const result = await fetch(
-      nodeURLMain + "ethermint/evm/v1/cosmos_account/" + address,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-        },
-      }
-    );
-    console.log("setting canto address");
-    let cosmosAddress = (await result.json()).cosmos_address;
-    setCosmosAddress(cosmosAddress);
-    setPubKey(cosmosAddress);
-  }
-
-  Mixpanel.events.pageOpened("Bridge", account);
-
-  // getCantoAddressFromMetaMask(account, setCosmosAddress);
+  Mixpanel.events.pageOpened("Bridge", networkInfo.account);
 
   const ImageButton = ({ image, name, chainID }: IWallet) => (
     <div
@@ -234,12 +204,12 @@ const BridgePage = () => {
           textAlign: "center",
         }}
       >
-        {account
+        {networkInfo.account
           ? chainID != 1
             ? "switch to ethereum network"
-            : account.substring(0, 10) +
+            : networkInfo.account.substring(0, 10) +
               "..." +
-              account.substring(account.length - 10, account.length)
+              networkInfo.account.substring(networkInfo.account.length - 10, networkInfo.account.length)
           : "connect"}
       </span>
     </div>
@@ -248,7 +218,7 @@ const BridgePage = () => {
   return (
     <Container>
       <h1
-        hidden={hasPubKey}
+        hidden={networkInfo.hasPubKey}
         style={{ color: "#b73d3d", fontWeight: "bold", paddingTop: "15px", textShadow: "0px 0px black" }}
       >
         please{" "}
@@ -293,7 +263,7 @@ const BridgePage = () => {
           <p>canto</p>
         </div>
       </div>
-      <ImageButton chainID={chainId} name="connect" />
+      <ImageButton chainID={Number(networkInfo.chainId)} name="connect" />
       <Balance>
         <TokenWallet
           tokens={gravityTokens}
@@ -327,11 +297,11 @@ const BridgePage = () => {
         value={customAddress}
         placeholder={
           //@ts-ignore
-          cosmosAddress
+          networkInfo.cantoAddress
             ? "default address -> " +
-              cosmosAddress.slice(0, 7) +
+              networkInfo.cantoAddress.slice(0, 7) +
               "..." +
-              cosmosAddress.slice(-5)
+              networkInfo.cantoAddress.slice(-5)
             : "retrieving wallet"
         }
         onChange={(e) => {
@@ -340,12 +310,12 @@ const BridgePage = () => {
       />
 
       <ReactiveButton
-        destination={customAddress != "" ? customAddress : cosmosAddress}
+        destination={customAddress != "" ? customAddress : networkInfo.cantoAddress}
         amount={amount}
-        account={account}
+        account={networkInfo.account}
         token={token}
         gravityAddress={gravityAddress}
-        hasPubKey={hasPubKey}
+        hasPubKey={networkInfo.hasPubKey}
       />
       <br></br>
       <br></br>

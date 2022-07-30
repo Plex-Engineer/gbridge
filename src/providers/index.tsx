@@ -3,6 +3,7 @@ import { DAppProvider, Config, Mainnet as ETHMain } from "@usedapp/core";
 import React from "react";
 import TransactionStatusProvider from "./transactionContext";
 import { Chain } from "@usedapp/core";
+import {ETHMainnet, GravityTestnet} from "constants/networks"
 
 interface IProviderProps {
   children: React.ReactNode;
@@ -14,16 +15,16 @@ export const getTransactionLink = (explorerUrl: string) => (txnId: string) => `$
 
 
 export const Gravity: Chain = {
-  chainId: 15,
-  chainName: 'Gravity',
-  isTestChain: true,
+  chainId: GravityTestnet.chainId,
+  chainName: GravityTestnet.name,
+  isTestChain: GravityTestnet.isTestChain,
   isLocalChain: false,
   multicallAddress: '0x8a0540d474E8D1a96D1c5e5a138232D83f19c6aF',
   multicall2Address: '0x95a76bC37Eca834143E61d9F8c8F32da01BdeA1B',
-  blockExplorerUrl: "www.nothing.com",
+  blockExplorerUrl: GravityTestnet.blockExplorerUrl,
   getExplorerAddressLink: getAddressLink("kovanEtherscanUrl"),
   getExplorerTransactionLink: getTransactionLink("kovanEtherscanUrl"),
-  rpcUrl: "https://testnet.gravitychain.io"
+  rpcUrl: GravityTestnet.rpcUrl
 }
 
 
@@ -32,8 +33,8 @@ export const Gravity: Chain = {
 const config: Config = {
   networks: [Gravity, ETHMain],
   readOnlyUrls: {
-    [Gravity.chainId]: "https://testnet.gravitychain.io",
-    [ETHMain.chainId]: "https://mainnet.infura.io/v3/e5a334de8167419aaa717a990033db27",
+    [Gravity.chainId]: GravityTestnet.rpcUrl,
+    [ETHMain.chainId]: ETHMainnet.rpcUrl,
   },
   noMetamaskDeactivate: true,
 };

@@ -1,18 +1,17 @@
 import { useCalls} from "@usedapp/core";
 import { Contract } from "ethers";
-import { networkProperties } from "constants/networks";
-import { mainnetGravityTokensBase } from "constants/gravityBridgeTokens";
+import { GravityTestnet } from "constants/networks";
+import { gravityTokenBase, mainnetGravityTokensBase } from "constants/gravityBridgeTokens";
 import {abi } from "constants/abi"
 import { ethers } from "ethers";
-import { Gravity } from "providers/index";
 import ADDRESSES from "constants/addresses";
 
 
 export function useGravityTokens(
   account: string | undefined, chainId:number
 ): {gravityTokens : any[] | undefined, gravityAddress: string| undefined} {
-  const tokens = networkProperties.find((val) => val.chainId == chainId)?.gravityTokens;
-  const gravityAddress = chainId == Gravity.chainId ? ADDRESSES.gravityBridgeTest.GravityBridge : ADDRESSES.ETHMainnet.GravityBridge;
+  const tokens = chainId == GravityTestnet.chainId ? gravityTokenBase : mainnetGravityTokensBase
+  const gravityAddress = chainId == GravityTestnet.chainId ? ADDRESSES.gravityBridgeTest.GravityBridge : ADDRESSES.ETHMainnet.GravityBridge;
 
 
   
