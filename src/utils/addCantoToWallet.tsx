@@ -16,6 +16,7 @@ export async function connect() {
       //@ts-ignore
       window.ethereum.request({method: "eth_requestAccounts"});
     }
+    addEthMainToWallet();
   }
 
 export async function getAccountBalance(account: string | undefined) {
@@ -27,4 +28,17 @@ export async function getAccountBalance(account: string | undefined) {
     }
     return "0";
  
+}
+
+function addEthMainToWallet () {
+    //@ts-ignore 
+    if (window.ethereum) {
+        //@ts-ignore
+        window.ethereum.request({
+            method: "wallet_switchEthereumChain",
+            params: [{
+                chainId: "0x1",
+            }]
+        })
+    }
 }

@@ -317,7 +317,7 @@ const NavBar = () => {
           setIsNavOpen(!isNavOpen);
         }}
       />
-      {networkInfo.isConnected ? (
+      {networkInfo.isConnected && networkInfo.account? (
         <button onClick={()=>{
           // setIsModalOpen(true)
         }}>

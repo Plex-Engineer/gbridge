@@ -16,6 +16,8 @@ import { useGravityTokens } from "hooks/useGravityTokens";
 import { icons } from "constants/tokens";
 import ADDRESSES from "constants/addresses";
 import { useNetworkInfo } from "stores/networkInfo";
+import { ETHMainnet } from "constants/networks";
+import { useTokenStore } from "stores/tokens";
 
 const Container = styled.div`
   background-color: black;
@@ -154,6 +156,7 @@ const DestInput = styled.input`
 `;
 const BridgePage = () => {
   const networkInfo = useNetworkInfo();
+  const tokenStore = useTokenStore();
   const [amount, setAmount] = useState("");
   const { activateBrowserWallet, switchNetwork } = useEthers();
   const [customAddress, setCustomAddress] = useState("");
@@ -162,18 +165,7 @@ const BridgePage = () => {
     networkInfo.account,
     Number(networkInfo.chainId)
   );
-
-
-
-  const [token, setToken] = useState({
-    data: {
-      icon: emptyToken,
-      name: "select token",
-      address: "0x0412C7c846bb6b7DC462CF6B453f76D8440b2609",
-    },
-    allowance: -1,
-    balanceOf: -1,
-  });
+  console.log(gravityTokens)
 
   Mixpanel.events.pageOpened("Bridge", networkInfo.account);
 
@@ -184,7 +176,7 @@ const BridgePage = () => {
         //1 for ethereum mainnet, 15 for gravity bridge testnet
         activateBrowserWallet();
 
-        if (chainID != 1) switchNetwork(1);
+        if (chainID != 1) switchNetwork(ETHMainnet.chainId);
       }}
       style={{
         backgroundColor: "#1C1C1C",
@@ -267,9 +259,9 @@ const BridgePage = () => {
       <Balance>
         <TokenWallet
           tokens={gravityTokens}
-          activeToken={token}
+          activeToken={tokenStore.selectedToken}
           onSelect={(value) => {
-            setToken(value);
+            tokenStore.setSelectedToken(value);
           }}
         />
         <input
@@ -313,7 +305,7 @@ const BridgePage = () => {
         destination={customAddress != "" ? customAddress : networkInfo.cantoAddress}
         amount={amount}
         account={networkInfo.account}
-        token={token}
+        token={tokenStore.selectedToken}
         gravityAddress={gravityAddress}
         hasPubKey={networkInfo.hasPubKey}
       />
