@@ -283,26 +283,6 @@ const BridgePage = () => {
         />
       </Balance>
 
-      {/* <DestInput
-        autoComplete="off"
-        type="text"
-        name="amount"
-        id="amount"
-        value={customAddress}
-        placeholder={
-          //@ts-ignore
-          networkInfo.cantoAddress
-            ? "default address -> " +
-              networkInfo.cantoAddress.slice(0, 7) +
-              "..." +
-              networkInfo.cantoAddress.slice(-5)
-            : "retrieving wallet"
-        }
-        onChange={(e) => {
-          setCustomAddress(e.target.value);
-        }}
-      /> */}
-
       <ReactiveButton
         destination={networkInfo.cantoAddress}
         amount={amount}
