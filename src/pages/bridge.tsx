@@ -7,8 +7,6 @@ import { useState } from "react";
 import TokenModal from "components/modals/tokenModal";
 import { Contract, ethers, utils } from "ethers";
 import { abi } from "constants/abi";
-import emptyToken from "assets/empty.svg";
-
 import { useContractFunction, useEthers } from "@usedapp/core";
 import { Mixpanel } from "./../mixpanel";
 import { BigNumber } from "ethers";
@@ -159,13 +157,11 @@ const BridgePage = () => {
   const tokenStore = useTokenStore();
   const [amount, setAmount] = useState("");
   const { activateBrowserWallet, switchNetwork } = useEthers();
-  const [customAddress, setCustomAddress] = useState("");
 
   const { gravityTokens, gravityAddress } = useGravityTokens(
     networkInfo.account,
     Number(networkInfo.chainId)
   );
-  console.log(gravityTokens)
 
   Mixpanel.events.pageOpened("Bridge", networkInfo.account);
 
@@ -215,7 +211,7 @@ const BridgePage = () => {
       >
         please{" "}
         <a
-          href="https://generator-canto-testnet.netlify.app/"
+          href="https://generator-canto.netlify.app/"
           style={{ color: "red" }}
         >
           generate public key
@@ -256,6 +252,12 @@ const BridgePage = () => {
         </div>
       </div>
       <ImageButton chainID={Number(networkInfo.chainId)} name="connect" />
+      <br></br>
+      <h4 style={{color: 'white'}}>canto address: {networkInfo.cantoAddress ? 
+              networkInfo.cantoAddress.slice(0, 10) +
+              "..." +
+              networkInfo.cantoAddress.slice(-5)
+            : "retrieving wallet"}</h4>
       <Balance>
         <TokenWallet
           tokens={gravityTokens}
@@ -281,7 +283,7 @@ const BridgePage = () => {
         />
       </Balance>
 
-      <DestInput
+      {/* <DestInput
         autoComplete="off"
         type="text"
         name="amount"
@@ -299,10 +301,10 @@ const BridgePage = () => {
         onChange={(e) => {
           setCustomAddress(e.target.value);
         }}
-      />
+      /> */}
 
       <ReactiveButton
-        destination={customAddress != "" ? customAddress : networkInfo.cantoAddress}
+        destination={networkInfo.cantoAddress}
         amount={amount}
         account={networkInfo.account}
         token={tokenStore.selectedToken}

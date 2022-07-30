@@ -1,5 +1,4 @@
 import { ethers } from "ethers";
-import { CantoMain } from "constants/networks";
 
 
 export function getChainIdandAccount(): string[] | undefined[] {
