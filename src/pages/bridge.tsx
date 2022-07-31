@@ -3,19 +3,19 @@ import down from "assets/down.svg";
 import right from "assets/right.svg";
 import canto from "assets/logo.svg";
 import Popup from "reactjs-popup";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import TokenModal from "components/modals/tokenModal";
 import { Contract, ethers, utils } from "ethers";
 import { abi } from "constants/abi";
-import emptyToken from "assets/empty.svg";
-
 import { useContractFunction, useEthers } from "@usedapp/core";
 import { Mixpanel } from "./../mixpanel";
 import { BigNumber } from "ethers";
 import { useGravityTokens } from "hooks/useGravityTokens";
 import { icons } from "constants/tokens";
 import ADDRESSES from "constants/addresses";
-import { checkPubKey } from "utils/nodeTransactions";
+import { useNetworkInfo } from "stores/networkInfo";
+import { ETHMainnet } from "constants/networks";
+import { useTokenStore } from "stores/tokens";
 
 const Container = styled.div`
   background-color: black;
@@ -153,59 +153,17 @@ const DestInput = styled.input`
   }
 `;
 const BridgePage = () => {
+  const networkInfo = useNetworkInfo();
+  const tokenStore = useTokenStore();
   const [amount, setAmount] = useState("");
-  const { account, activateBrowserWallet, switchNetwork, chainId } =
-    useEthers();
-  const [cosmosAddress, setCosmosAddress] = useState("");
-  const [customAddress, setCustomAddress] = useState("");
-  const [hasPubKey, setHasPubKey] = useState(false);
+  const { activateBrowserWallet, switchNetwork } = useEthers();
 
   const { gravityTokens, gravityAddress } = useGravityTokens(
-    account,
-    chainId ?? 1
+    networkInfo.account,
+    Number(networkInfo.chainId)
   );
 
-  async function setPubKey(account: string) {
-    let hasPubKey = await checkPubKey(account);
-    setHasPubKey(hasPubKey);
-  }
-
-  useEffect(() => {
-    if (account) {
-      getCantoAddressFromMetaMask(account);
-    }
-  }, [account]);
-
-  const [token, setToken] = useState({
-    data: {
-      icon: emptyToken,
-      name: "select token",
-      address: "0x0412C7c846bb6b7DC462CF6B453f76D8440b2609",
-    },
-    allowance: -1,
-    balanceOf: -1,
-  });
-
-  async function getCantoAddressFromMetaMask(address: string | undefined) {
-    const nodeURLMain = ADDRESSES.cantoMainnet.NodeAPIEndpoint;
-    const result = await fetch(
-      nodeURLMain + "ethermint/evm/v1/cosmos_account/" + address,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-        },
-      }
-    );
-    console.log("setting canto address");
-    let cosmosAddress = (await result.json()).cosmos_address;
-    setCosmosAddress(cosmosAddress);
-    setPubKey(cosmosAddress);
-  }
-
-  Mixpanel.events.pageOpened("Bridge", account);
-
-  // getCantoAddressFromMetaMask(account, setCosmosAddress);
+  Mixpanel.events.pageOpened("Bridge", networkInfo.account);
 
   const ImageButton = ({ image, name, chainID }: IWallet) => (
     <div
@@ -214,7 +172,7 @@ const BridgePage = () => {
         //1 for ethereum mainnet, 15 for gravity bridge testnet
         activateBrowserWallet();
 
-        if (chainID != 1) switchNetwork(1);
+        if (chainID != 1) switchNetwork(ETHMainnet.chainId);
       }}
       style={{
         backgroundColor: "#1C1C1C",
@@ -234,12 +192,12 @@ const BridgePage = () => {
           textAlign: "center",
         }}
       >
-        {account
+        {networkInfo.account
           ? chainID != 1
             ? "switch to ethereum network"
-            : account.substring(0, 10) +
+            : networkInfo.account.substring(0, 10) +
               "..." +
-              account.substring(account.length - 10, account.length)
+              networkInfo.account.substring(networkInfo.account.length - 10, networkInfo.account.length)
           : "connect"}
       </span>
     </div>
@@ -248,12 +206,12 @@ const BridgePage = () => {
   return (
     <Container>
       <h1
-        hidden={hasPubKey}
+        hidden={networkInfo.hasPubKey}
         style={{ color: "#b73d3d", fontWeight: "bold", paddingTop: "15px", textShadow: "0px 0px black" }}
       >
         please{" "}
         <a
-          href="https://generator-canto-testnet.netlify.app/"
+          href="https://generator-canto.netlify.app/"
           style={{ color: "red" }}
         >
           generate public key
@@ -293,13 +251,19 @@ const BridgePage = () => {
           <p>canto</p>
         </div>
       </div>
-      <ImageButton chainID={chainId} name="connect" />
+      <ImageButton chainID={Number(networkInfo.chainId)} name="connect" />
+      <br></br>
+      <h4 style={{color: 'white'}}>canto address: {networkInfo.cantoAddress ? 
+              networkInfo.cantoAddress.slice(0, 10) +
+              "..." +
+              networkInfo.cantoAddress.slice(-5)
+            : "retrieving wallet"}</h4>
       <Balance>
         <TokenWallet
           tokens={gravityTokens}
-          activeToken={token}
+          activeToken={tokenStore.selectedToken}
           onSelect={(value) => {
-            setToken(value);
+            tokenStore.setSelectedToken(value);
           }}
         />
         <input
@@ -319,33 +283,13 @@ const BridgePage = () => {
         />
       </Balance>
 
-      <DestInput
-        autoComplete="off"
-        type="text"
-        name="amount"
-        id="amount"
-        value={customAddress}
-        placeholder={
-          //@ts-ignore
-          cosmosAddress
-            ? "default address -> " +
-              cosmosAddress.slice(0, 7) +
-              "..." +
-              cosmosAddress.slice(-5)
-            : "retrieving wallet"
-        }
-        onChange={(e) => {
-          setCustomAddress(e.target.value);
-        }}
-      />
-
       <ReactiveButton
-        destination={customAddress != "" ? customAddress : cosmosAddress}
+        destination={networkInfo.cantoAddress}
         amount={amount}
-        account={account}
-        token={token}
+        account={networkInfo.account}
+        token={tokenStore.selectedToken}
         gravityAddress={gravityAddress}
-        hasPubKey={hasPubKey}
+        hasPubKey={networkInfo.hasPubKey}
       />
       <br></br>
       <br></br>

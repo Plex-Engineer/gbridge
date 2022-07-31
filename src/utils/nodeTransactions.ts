@@ -1,5 +1,5 @@
 import { generateEndpointAccount } from '@tharsis/provider';
-import ADDRESSES from 'constants/addresses';
+import { CantoMain } from "constants/networks";
 
 
 
@@ -12,7 +12,7 @@ export async function checkPubKey(bech32Address : string) {
     }
     try {
         const addressRawData = await fetch(
-            ADDRESSES.cantoMainnet.NodeAPIEndpoint + endPointAccount,
+           CantoMain.cosmosAPIEndpoint + endPointAccount,
             options
         );
         const addressData = await addressRawData.json();
@@ -20,4 +20,19 @@ export async function checkPubKey(bech32Address : string) {
     } catch {
         return false;
     }
+}
+export async function getCantoAddressFromMetaMask(address: string | undefined) {
+    const nodeURLMain = CantoMain.cosmosAPIEndpoint;
+    const result = await fetch(
+      nodeURLMain + "ethermint/evm/v1/cosmos_account/" + address,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+        },
+      }
+    );
+    console.log("setting canto address");
+    let cosmosAddress = (await result.json()).cosmos_address;
+    return cosmosAddress;
 }

@@ -25,7 +25,6 @@ const ADDRESSES = {
         CCanto: "0xCDf56ceC9088c488B61E50A9d7F0BeFc438a2ea6",
         WCANTO: "0x3d04A6f4EAd3f9ee76b65192b89dd8C78189b366",
         PriceFeed:  "0x8526AC3c9c3Cc9FE83D68fcE477E717d3cb3F5bc",
-        NodeAPIEndpoint: "http://165.227.98.94:1317/"
       },
       cantoMainnet: {
         CantoNoteLP: "",
@@ -53,7 +52,6 @@ const ADDRESSES = {
         CCanto: "",
         WCANTO: "",
         PriceFeed: "",
-        NodeAPIEndpoint: "https://chain.plexnode.wtf/"
       },
       gravityBridgeTest: {
         E2H: "0x30dA8589BFa1E509A319489E014d384b87815D89",
