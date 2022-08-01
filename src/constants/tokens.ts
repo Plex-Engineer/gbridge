@@ -201,7 +201,7 @@ export const TOKENS = {
         CANTO:
         {
             symbol: 'CANTO',
-            name: 'CANTO',
+            name: 'Canto',
             decimals: decimals.CANTO,
             address: '0x0000000000000000000000000000000000000000',
             isERC20: false,

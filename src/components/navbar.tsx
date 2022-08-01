@@ -16,22 +16,27 @@ const Container = styled.div<propsStyle>`
   top: 0%;
   transition: all 0.1s ease-in-out;
   & > * {
-    flex : 1;
+    flex: 1;
   }
-border-bottom: ${(props) =>
+  border-bottom: ${(props) =>
     props.didScroll ? "1px solid var(--primary-color)" : "none"};
   background-color: ${(props) => (props.didScroll ? "#09221454" : "none")};
   backdrop-filter: ${(props) => (props.didScroll ? "blur(5px)" : "none")};
   z-index: 1;
-    justify-content: space-between;
-    align-items: center;
+  justify-content: space-between;
+  align-items: center;
   h1 {
-      /* text-shadow: none; */
-      color: var(--primary-color);
-      font-weight: 400;
-      text-align: center;
-      flex-grow: 2;
-    }
+    /* text-shadow: none; */
+    color: var(--primary-color);
+    font-weight: 400;
+    text-align: center;
+    flex-grow: 1.2;
+  }
+  .wallet {
+    display: flex;
+    align-items: flex-end;
+    justify-content: end ;
+  }
   #logo {
     color: var(--primary-color);
     font-weight: bold;
@@ -40,7 +45,6 @@ border-bottom: ${(props) =>
     align-items: center;
     margin: 0 2rem;
     text-align: center;
-
   }
   ul {
     display: flex;
@@ -66,19 +70,16 @@ border-bottom: ${(props) =>
       background-color: #06fc9a29;
       transition: all 0.2s ease-in-out;
     }
-
     & > span {
       color: var(--primary-color);
       padding: 8px 8px;
     }
   }
-
   .active {
     & > span {
       background-color: #06fc9a2b;
     }
   }
-
   .off {
     color: grey !important;
     text-shadow: 0 0 4px grey, 0 0 20px grey;
@@ -95,6 +96,7 @@ border-bottom: ${(props) =>
     font-family: "IBM Plex Mono";
     font-weight: 400;
     padding: 0.3rem 0.6rem;
+    /* flex: .6; */
     /* margin-right: 2rem; */
     color: var(--primary-color);
     transition: all 0.2s ease-in-out;
@@ -105,18 +107,15 @@ border-bottom: ${(props) =>
       color: black;
     }
   }
-
   #menu-checkbox {
     display: none;
   }
-
   //media queries for tablet
   @media (max-width: 1248px) {
     a {
       padding: 5px 5px;
     }
   }
-
   @media (max-width: 1000px) {
     ul.active {
       /* left: 0%; */
@@ -126,7 +125,6 @@ border-bottom: ${(props) =>
       position: absolute;
       flex-direction: column;
       top: 100vh;
-
       /* left: -100%; */
       border-top: 1px solid var(--primary-color);
       transition: all 0.2s ease-in-out;
@@ -143,9 +141,7 @@ border-bottom: ${(props) =>
         #021911 4px,
         #021911 8px
       );
-
       gap: 0.4rem;
-
       a {
         font-size: 2.4rem;
         font-weight: 300;
@@ -154,7 +150,6 @@ border-bottom: ${(props) =>
         letter-spacing: -0.1em;
       }
     }
-    
     /* ul {
     display: flex;
     justify-content: center;
@@ -170,13 +165,11 @@ border-bottom: ${(props) =>
       display: block;
       margin-right: 1rem;
     }
-    
     button {
       /* display: none; */
       background-color: var(--primary-color);
       color: black;
       font-size: 1rem;
-      /* width: 160px; */
     }
   }
 `;
@@ -188,33 +181,28 @@ const Glitch = styled.p`
     font-size: 26px;
     font-weight: 300;
     margin: 0 1rem;
-
     position: relative;
     text-shadow: 0.05em 0 0 #00ffd5, -0.03em -0.04em 0 #1d7407,
-        0.025em 0.04em 0 #8bff9f;
+      0.025em 0.04em 0 #8bff9f;
     animation: glitch 725ms infinite;
   }
-
   & span {
     position: absolute;
     top: 0;
     left: 0;
   }
-
   & span:first-child {
     animation: glitch 500ms infinite;
     clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
     transform: translate(-0.04em, -0.03em);
     opacity: 0.75;
   }
-
   & span:last-child {
     animation: glitch 375ms infinite;
     clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
     transform: translate(0.04em, 0.03em);
     opacity: 0.75;
   }
-
   @keyframes glitch {
     0% {
       text-shadow: 0.05em 0 0 #00ffd5, -0.03em -0.04em 0 #1d7407,
@@ -319,6 +307,7 @@ const NavBar = () => {
           setIsNavOpen(!isNavOpen);
         }}
       />
+      <div className="wallet">
       {networkInfo.isConnected && networkInfo.account? (
         <button onClick={()=>{
           // setIsModalOpen(true)
@@ -334,7 +323,7 @@ const NavBar = () => {
       ) : (
         <button onClick={() => connect()}>connect wallet</button>
       )}
-
+      </div>
       <label htmlFor="menu-checkbox" style={{display : "none"}}>
         <img id="nav-menu" src={menu} />
       </label>
