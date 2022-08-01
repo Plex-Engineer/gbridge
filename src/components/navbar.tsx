@@ -6,6 +6,7 @@ import { formatBigNumber } from "utils";
 import {GravityTestnet} from "constants/networks"
 import { useNetworkInfo } from "stores/networkInfo";
 import {getChainIdandAccount, getAccountBalance, connect} from "utils/addCantoToWallet"
+import { BurgerMenu } from "./menu";
 interface propsStyle {
   didScroll: boolean;
 }
@@ -293,6 +294,7 @@ const NavBar = () => {
     <Container didScroll={colorChange}>
 
       <div id="logo">
+      <BurgerMenu/>
       <a href="https://canto.io" style={{
         display : "flex"
       }}>
