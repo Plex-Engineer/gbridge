@@ -7,6 +7,7 @@ import {GravityTestnet} from "constants/networks"
 import { useNetworkInfo } from "stores/networkInfo";
 import {getChainIdandAccount, getAccountBalance, connect} from "utils/addCantoToWallet"
 import { BurgerMenu } from "./menu";
+import { useEthers } from "@usedapp/core";
 interface propsStyle {
   didScroll: boolean;
 }
@@ -243,6 +244,14 @@ const NavBar = () => {
     networkInfo.setAccount(account);
   },[])
 
+    /*
+  the account is the dapp provider that usedapp will use to make multicalls
+  the user may be connected through metamask, but not to usedapp, so if account it undefined,
+  the user must activateBorwserWallet to create a provider for themselves that multicall can use to instantiate a provider for them
+  !! networkInfo.account may have an account, but useEthers account must be checked
+  */
+  const {activateBrowserWallet, account } = useEthers()
+
     //@ts-ignore
     if (window.ethereum) {
       //@ts-ignore
@@ -308,7 +317,7 @@ const NavBar = () => {
         }}
       />
       <div className="wallet">
-      {networkInfo.isConnected && networkInfo.account? (
+      {networkInfo.isConnected && account? (
         <button onClick={()=>{
           // setIsModalOpen(true)
         }}>
@@ -321,7 +330,7 @@ const NavBar = () => {
           
         </button>
       ) : (
-        <button onClick={() => connect()}>connect wallet</button>
+        <button onClick={() => {activateBrowserWallet()}}>connect wallet</button>
       )}
       </div>
       <label htmlFor="menu-checkbox" style={{display : "none"}}>
