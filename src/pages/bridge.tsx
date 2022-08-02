@@ -292,6 +292,13 @@ const BridgePage = () => {
         hasPubKey={networkInfo.hasPubKey}
       />
       <br></br>
+      <div 
+      style={{color: "white", padding: "1rem", textAlign: "center"}}
+      >
+      it takes several minutes for your bridged assets to arrive on the canto network. 
+      go to the convert coin page to view your bridged assets and convert them into canto ERC20 tokens to view your assets in Metamask. 
+      for more details, please read <a href="\" style={{color: "white", textDecoration: "underline"}}>here</a>.
+      </div>
       <br></br>
       <div
         style={{

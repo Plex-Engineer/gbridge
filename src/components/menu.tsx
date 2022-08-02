@@ -29,7 +29,7 @@ const BurgerStyles = {
   },
   bmMenu: {
     background: "#000000",
-    padding: "2.5em 1.5em 0",
+    padding: "0em .5em 0",
     fontSize: "1.15em",
   },
   bmMorphShape: {
