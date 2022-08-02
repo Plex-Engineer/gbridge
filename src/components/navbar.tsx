@@ -250,7 +250,7 @@ const NavBar = () => {
   the user must activateBorwserWallet to create a provider for themselves that multicall can use to instantiate a provider for them
   !! networkInfo.account may have an account, but useEthers account must be checked
   */
-  const {activateBrowserWallet, account } = useEthers()
+  const {activateBrowserWallet, account, switchNetwork } = useEthers()
 
     //@ts-ignore
     if (window.ethereum) {
@@ -330,7 +330,10 @@ const NavBar = () => {
           
         </button>
       ) : (
-        <button onClick={() => {activateBrowserWallet()}}>connect wallet</button>
+        <button onClick={() => {
+          activateBrowserWallet();
+          switchNetwork(1);
+        }}>connect wallet</button>
       )}
       </div>
       <label htmlFor="menu-checkbox" style={{display : "none"}}>
