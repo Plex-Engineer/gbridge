@@ -211,8 +211,8 @@ const BridgePage = () => {
       >
         please{" "}
         <a
-          href="https://generator-canto.netlify.app/"
-          style={{ color: "red" }}
+          href="https://generator.canto.io"
+          style={{ color: "red" , textDecoration: "underline"}}
         >
           generate public key
         </a>{" "}
