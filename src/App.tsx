@@ -7,6 +7,7 @@ import BridgePage from "pages/bridge";
 import bgNoise from "assets/bg-noise.gif";
 import "react-toastify/dist/ReactToastify.css";
 import {ToastContainer } from "react-toastify";
+import { Overlay, ScanLine, ScanlinesOverlay, StaticNoiseOverlay } from "global/styled-components/Overlays";
 
 
 
@@ -31,14 +32,17 @@ function App() {
   return (
     <HelmetProvider>
       <ToastContainer />
+      <StaticNoiseOverlay/>
+      <ScanlinesOverlay />
+      <ScanLine/>
+      <Overlay/>
         <Container className="App">
+      
           <NavBar/> 
           <BridgePage />
         </Container>
     </HelmetProvider>
   );
 }
-
-
 
 export default App;
