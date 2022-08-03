@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import down from "assets/down.svg";
 import right from "assets/right.svg";
 import canto from "assets/logo.svg";
