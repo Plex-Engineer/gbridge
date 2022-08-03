@@ -3,7 +3,7 @@ import down from "assets/down.svg";
 import right from "assets/right.svg";
 import canto from "assets/logo.svg";
 import Popup from "reactjs-popup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TokenModal from "components/modals/tokenModal";
 import { Contract, ethers, utils } from "ethers";
 import { abi } from "constants/abi";
@@ -338,6 +338,13 @@ const ReactiveButton = ({
     return <Button>Loading</Button>;
   }
 
+  useEffect(()=>{
+    if(stateApprove.status == "Success"){
+      setTimeout(()=>{
+        window.location.reload();
+      },300)
+    }
+  },[stateApprove.status])
   function getStatus(value: string, status: string) {
     switch (status) {
       case "None":

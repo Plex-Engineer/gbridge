@@ -12,20 +12,14 @@ import { Overlay, ScanLine, ScanlinesOverlay, StaticNoiseOverlay } from "global/
 
 
 //Styling
-
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   background-color: #111;
-
   text-shadow: 0 0 4px #2cffab, 0 0 20px var(--primary-color);
-
-
 `;
 
-
-//View
 
 function App() {
 
@@ -36,11 +30,10 @@ function App() {
       <ScanlinesOverlay />
       <ScanLine/>
       <Overlay/>
-        <Container className="App">
-      
-          <NavBar/> 
-          <BridgePage />
-        </Container>
+      <Container className="App">
+      <NavBar/> 
+      <BridgePage />
+      </Container>
     </HelmetProvider>
   );
 }
