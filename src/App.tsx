@@ -1,13 +1,7 @@
 import "App.css";
-import styled from "styled-components";
-import GlobalStyles from "styles/global-styles";
+import styled from "@emotion/styled";
 import NavBar from "components/navbar";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  useLocation,
-} from "react-router-dom";
+
 import { HelmetProvider } from "react-helmet-async";
 import BridgePage from "pages/bridge";
 import bgNoise from "assets/bg-noise.gif";
@@ -138,7 +132,6 @@ function App() {
         <Container className="App">
           <StaticOverlay url={bgNoise} />
           <ScanlinesOverlay />
-          <GlobalStyles />
           <OverlayLines/>
           <NavBar/> 
           <Routes>
