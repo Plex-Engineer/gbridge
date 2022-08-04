@@ -9,7 +9,7 @@ import {
   getChainIdandAccount,
 } from "global/config/addCantoToWallet";
 
-import { useNetworkInfo } from "pages/main/hooks/networkInfo";
+import { useNetworkInfo } from "stores/networkInfo";
 import { BurgerMenu } from "global/components/menu";
 import { useEthers } from "@usedapp/core";
 
