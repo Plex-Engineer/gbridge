@@ -28,22 +28,31 @@ const BridgePage = () => {
   );
 
   //contracts for transactions
-  const { state: stateApprove, send: sendApprove, resetState : resetApprove } = useApprove(
-    tokenStore.selectedToken.data.address
-  );
-  const { state: stateCosmos, send: sendCosmos, resetState : resetCosmos } = useCosmos(
-    gravityAddress ?? ADDRESSES.ETHMainnet.GravityBridge
-  );
+  const {
+    state: stateApprove,
+    send: sendApprove,
+    resetState: resetApprove,
+  } = useApprove(tokenStore.selectedToken.data.address);
+  const {
+    state: stateCosmos,
+    send: sendCosmos,
+    resetState: resetCosmos,
+  } = useCosmos(gravityAddress ?? ADDRESSES.ETHMainnet.GravityBridge);
 
   //event tracker
-  useEffect(()=>{
-    tokenStore.setApproveStatus(stateApprove.status)
-    
-  },[stateApprove.status])
+  useEffect(() => {
+    tokenStore.setApproveStatus(stateApprove.status);
 
-  useEffect(()=>{
-    tokenStore.setCosmosStatus(stateCosmos.status)
-  },[stateCosmos.status])
+    if (stateApprove.status == "Success") {
+      setTimeout(() => {
+        resetApprove();
+      }, 1000);
+    }
+  }, [stateApprove.status]);
+
+  useEffect(() => {
+    tokenStore.setCosmosStatus(stateCosmos.status);
+  }, [stateCosmos.status]);
 
   //send function
   const send = () => {
@@ -66,23 +75,26 @@ const BridgePage = () => {
         ethers.utils.parseUnits(amount, activeToken.data.decimals)
       );
     }
-  }
+  };
 
-  
   Mixpanel.events.pageOpened("Bridge", activeToken.wallet);
 
-  
   // =========================
   return (
     <Container>
       <h1
         hidden={networkInfo.hasPubKey}
-        style={{ color: "#b73d3d", fontWeight: "bold", paddingTop: "15px", textShadow: "0px 0px black" }}
+        style={{
+          color: "#b73d3d",
+          fontWeight: "bold",
+          paddingTop: "15px",
+          textShadow: "0px 0px black",
+        }}
       >
         please{" "}
         <a
           href="https://generator.canto.io"
-          style={{ color: "red" , textDecoration: "underline"}}
+          style={{ color: "red", textDecoration: "underline" }}
         >
           generate public key
         </a>{" "}
@@ -123,11 +135,14 @@ const BridgePage = () => {
       </div>
       <ImageButton name="connect" />
       <br></br>
-      <h4 style={{color: 'white'}}>canto address: {networkInfo.cantoAddress ? 
-              networkInfo.cantoAddress.slice(0, 10) +
-              "..." +
-              networkInfo.cantoAddress.slice(-5)
-            : "retrieving wallet"}</h4>
+      <h4 style={{ color: "white" }}>
+        canto address:{" "}
+        {networkInfo.cantoAddress
+          ? networkInfo.cantoAddress.slice(0, 10) +
+            "..." +
+            networkInfo.cantoAddress.slice(-5)
+          : "retrieving wallet"}
+      </h4>
       <Balance>
         <TokenWallet
           tokens={gravityTokens}
@@ -147,9 +162,18 @@ const BridgePage = () => {
           value={amount}
           placeholder="0.00"
           onChange={(e) => {
-            const val = Number(e.target.value);
-            if (!isNaN(val)) {
-              setAmount(e.target.value);
+            if (
+              !(stateApprove.status == "PendingSignature" ||
+              stateCosmos.status == "PendingSignature" ||
+              stateApprove.status == "Mining" ||
+              stateCosmos.status == "Mining")
+            ) {
+              const val = Number(e.target.value);
+              if (!isNaN(val)) {
+                setAmount(e.target.value);
+              }
+              resetCosmos();
+              resetApprove();
             }
           }}
         />
@@ -165,12 +189,15 @@ const BridgePage = () => {
         onClick={send}
       />
       <br></br>
-      <div 
-      style={{color: "white", padding: "1rem", textAlign: "center"}}
-      >
-      it takes several minutes for your bridged assets to arrive on the canto network. 
-      go to the convert coin page to view your bridged assets and convert them into canto ERC20 tokens to view your assets in Metamask. 
-      for more details, please read <a href="\" style={{color: "white", textDecoration: "underline"}}>here</a>.
+      <div style={{ color: "white", padding: "1rem", textAlign: "center" }}>
+        it takes several minutes for your bridged assets to arrive on the canto
+        network. go to the convert coin page to view your bridged assets and
+        convert them into canto ERC20 tokens to view your assets in Metamask.
+        for more details, please read{" "}
+        <a href="\" style={{ color: "white", textDecoration: "underline" }}>
+          here
+        </a>
+        .
       </div>
       <br></br>
       <div
@@ -185,6 +212,5 @@ const BridgePage = () => {
     </Container>
   );
 };
-
 
 export default BridgePage;
