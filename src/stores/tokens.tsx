@@ -19,7 +19,7 @@ interface TokenStore {
   tokens: GTokens[];
   setTokens: (tokens: GTokens[]) => void;
   selectedToken: GTokens;
-  setSelectedToken: (token: any) => void;
+  setSelectedToken: (token: GTokens) => void;
   approveStatus: TransactionState ;
   setApproveStatus : (tx : TransactionState) => void;
   cosmosStatus: TransactionState;

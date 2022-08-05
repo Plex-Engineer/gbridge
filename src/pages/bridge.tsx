@@ -26,6 +26,7 @@ const BridgePage = () => {
     networkInfo.account,
     Number(networkInfo.chainId)
   );
+  
 
   //contracts for transactions
   const {
@@ -42,12 +43,16 @@ const BridgePage = () => {
   //event tracker
   useEffect(() => {
     tokenStore.setApproveStatus(stateApprove.status);
-
     if (stateApprove.status == "Success") {
+    // tokenStore.setSelectedToken(gravityTokens?.find(item => item.data.address == tokenStore.selectedToken.data.address))
+      tokenStore.setSelectedToken({
+        ...tokenStore.selectedToken, allowance : Number.MAX_VALUE
+      })
       setTimeout(() => {
         resetApprove();
       }, 1000);
     }
+    
   }, [stateApprove.status]);
 
   useEffect(() => {

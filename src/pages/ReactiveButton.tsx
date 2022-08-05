@@ -87,6 +87,7 @@ export const ReactiveButton = ({
   if (Number(amount) <= 0 && token.allowance != 0) {
     return <DisabledButton>Enter Amount</DisabledButton>;
   }
+  
   return (
     <Button
       onClick={onClick}
