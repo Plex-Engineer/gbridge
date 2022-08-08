@@ -28,7 +28,6 @@ export function useGravityTokens(
 ): { gravityTokens : GTokens[] | undefined, gravityAddress: string| undefined} {
   const tokens = chainId == GravityTestnet.chainId ? gravityTokenBase : mainnetGravityTokensBase
   const gravityAddress = chainId == GravityTestnet.chainId ? ADDRESSES.gravityBridgeTest.GravityBridge : ADDRESSES.ETHMainnet.GravityBridge;
-  console.log("🚀 ~ file: useGravityTokens.ts ~ line 31 ~ gravityAddress", gravityAddress)
 
   const calls =
     tokens?.map((token) => {
