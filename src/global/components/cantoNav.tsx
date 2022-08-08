@@ -7,7 +7,7 @@ import logo from "./../../assets/logo.svg"
 
 export const CantoNav = () => {
   const netWorkInfo = useNetworkInfo();
-  const { activateBrowserWallet, account } = useEthers();
+  const { activateBrowserWallet, account, switchNetwork } = useEthers();
 
   async function setChainInfo() {
     const [chainId, account] = await getChainIdandAccount();
@@ -18,7 +18,7 @@ export const CantoNav = () => {
   useEffect(() => {
     setChainInfo();
    //@ts-ignore
-}, [window.ethereum?.networkVersion, window.ethereum?.selectedAddress]);
+}, []);
 
   //@ts-ignore
   if (window.ethereum) {
@@ -47,7 +47,7 @@ export const CantoNav = () => {
       title="bridge"
       onClick={() => {
         activateBrowserWallet();
-        addNetwork();
+        switchNetwork(1);
       }}
       chainId={Number(netWorkInfo.chainId)}
       account={netWorkInfo.account ?? ""}
