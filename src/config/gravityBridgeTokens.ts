@@ -1,4 +1,4 @@
-import { TOKENS } from "./tokens"
+import { TOKENS } from "cantoui"
 
 export const gravityTokenBase = [
 TOKENS.GravityBridge.E2H,

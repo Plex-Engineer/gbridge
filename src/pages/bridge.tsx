@@ -5,8 +5,6 @@ import { ethers } from "ethers";
 import { Mixpanel } from "./../mixpanel";
 import { BigNumber } from "ethers";
 import { useGravityTokens } from "hooks/useGravityTokens";
-import { icons } from "constants/tokens";
-import ADDRESSES from "constants/addresses";
 import { useNetworkInfo } from "stores/networkInfo";
 import { useTokenStore } from "stores/tokens";
 import { ReactiveButton } from "./ReactiveButton";
@@ -14,6 +12,7 @@ import { useApprove, useCosmos } from "./useTransactions";
 import { TokenWallet } from "./TokenSelect";
 import { Container, Balance } from "./styledComponents";
 import { ImageButton } from "./ImageButton";
+import { TOKENS, ADDRESSES } from "cantoui";
 
 const BridgePage = () => {
   const networkInfo = useNetworkInfo();
@@ -123,7 +122,7 @@ const BridgePage = () => {
         }}
       >
         <div className="wallet-item">
-          <img src={icons.ETH} alt="eth" width={26} />
+          <img src={TOKENS.ETHMainnet.WETH.icon} alt="eth" width={26} />
           <p>ethereum</p>
         </div>
         <img

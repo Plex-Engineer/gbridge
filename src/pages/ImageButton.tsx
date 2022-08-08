@@ -1,5 +1,5 @@
 import { useEthers } from "@usedapp/core";
-import { ETHMainnet } from "constants/networks";
+import { ETHMainnet } from "config/networks";
 import { useNetworkInfo } from "stores/networkInfo";
 
 interface IWallet {

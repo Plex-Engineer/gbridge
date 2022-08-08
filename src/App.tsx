@@ -1,13 +1,11 @@
 import "App.css";
 import styled from "@emotion/styled";
-import NavBar from "components/navbar";
-
 import { HelmetProvider } from "react-helmet-async";
 import BridgePage from "pages/bridge";
-import bgNoise from "assets/bg-noise.gif";
 import "react-toastify/dist/ReactToastify.css";
 import {ToastContainer } from "react-toastify";
 import { Overlay, ScanLine, ScanlinesOverlay, StaticNoiseOverlay } from "global/styled-components/Overlays";
+import { CantoNav } from "global/components/cantoNav";
 
 
 
@@ -31,7 +29,7 @@ function App() {
       <ScanLine/>
       <Overlay/>
       <Container className="App">
-      <NavBar/> 
+      <CantoNav/>
       <BridgePage />
       </Container>
     </HelmetProvider>

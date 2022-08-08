@@ -1,5 +1,5 @@
 import { Contract, utils } from "ethers";
-import { abi } from "constants/abi";
+import { abi } from "config/abi";
 import { useContractFunction } from "@usedapp/core";
 
 

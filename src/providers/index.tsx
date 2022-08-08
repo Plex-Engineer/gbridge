@@ -3,7 +3,7 @@ import { DAppProvider, Config, Mainnet as ETHMain } from "@usedapp/core";
 import React from "react";
 import TransactionStatusProvider from "./transactionContext";
 import { Chain } from "@usedapp/core";
-import {ETHMainnet, GravityTestnet} from "constants/networks"
+import {ETHMainnet, GravityTestnet} from "config/networks"
 
 interface IProviderProps {
   children: React.ReactNode;

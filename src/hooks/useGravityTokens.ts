@@ -1,10 +1,10 @@
 import { useCalls} from "@usedapp/core";
 import { Contract } from "ethers";
-import { GravityTestnet } from "constants/networks";
-import { gravityTokenBase, mainnetGravityTokensBase } from "constants/gravityBridgeTokens";
-import {abi } from "constants/abi"
+import { GravityTestnet } from "config/networks";
+import { gravityTokenBase, mainnetGravityTokensBase } from "config/gravityBridgeTokens";
+import {abi } from "config/abi"
 import { ethers } from "ethers";
-import ADDRESSES from "constants/addresses";
+import { ADDRESSES } from "cantoui";
 
 
 export interface GTokens  {
