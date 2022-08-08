@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import backBtn from "../../assets/back-btn.svg";
 import emptyToken from "assets/empty.svg"
 

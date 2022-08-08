@@ -1,13 +1,19 @@
 import styled from "@emotion/styled";
-import logo from "../assets/logo.svg";
-import { useState, useEffect } from "react";
-import menu from "../assets/menu.svg";
-import { formatBigNumber } from "utils";
-import {GravityTestnet} from "constants/networks"
+import logo from "assets/logo.svg";
+import { useEffect, useState } from "react";
+import menu from "assets/menu.svg";
+import { formatBigNumber } from "global/utils/utils";
+import {
+  connect,
+  getAccountBalance,
+  getChainIdandAccount,
+} from "global/config/addCantoToWallet";
+
 import { useNetworkInfo } from "stores/networkInfo";
-import {getChainIdandAccount, getAccountBalance} from "utils/addCantoToWallet"
-import { BurgerMenu } from "./menu";
+import { BurgerMenu } from "global/components/menu";
 import { useEthers } from "@usedapp/core";
+
+
 interface propsStyle {
   didScroll: boolean;
 }
@@ -33,6 +39,7 @@ const Container = styled.div<propsStyle>`
     text-align: center;
     flex-grow: 1.2;
   }
+
   .wallet {
     display: flex;
     align-items: flex-end;
@@ -71,16 +78,19 @@ const Container = styled.div<propsStyle>`
       background-color: #06fc9a29;
       transition: all 0.2s ease-in-out;
     }
+
     & > span {
       color: var(--primary-color);
       padding: 8px 8px;
     }
   }
+
   .active {
     & > span {
       background-color: #06fc9a2b;
     }
   }
+
   .off {
     color: grey !important;
     text-shadow: 0 0 4px grey, 0 0 20px grey;
@@ -108,15 +118,18 @@ const Container = styled.div<propsStyle>`
       color: black;
     }
   }
+
   #menu-checkbox {
     display: none;
   }
+
   //media queries for tablet
   @media (max-width: 1248px) {
     a {
       padding: 5px 5px;
     }
   }
+
   @media (max-width: 1000px) {
     ul.active {
       /* left: 0%; */
@@ -126,6 +139,7 @@ const Container = styled.div<propsStyle>`
       position: absolute;
       flex-direction: column;
       top: 100vh;
+
       /* left: -100%; */
       border-top: 1px solid var(--primary-color);
       transition: all 0.2s ease-in-out;
@@ -142,7 +156,9 @@ const Container = styled.div<propsStyle>`
         #021911 4px,
         #021911 8px
       );
+
       gap: 0.4rem;
+
       a {
         font-size: 2.4rem;
         font-weight: 300;
@@ -151,6 +167,7 @@ const Container = styled.div<propsStyle>`
         letter-spacing: -0.1em;
       }
     }
+
     /* ul {
     display: flex;
     justify-content: center;
@@ -166,6 +183,7 @@ const Container = styled.div<propsStyle>`
       display: block;
       margin-right: 1rem;
     }
+
     button {
       /* display: none; */
       background-color: var(--primary-color);
@@ -182,28 +200,33 @@ const Glitch = styled.p`
     font-size: 26px;
     font-weight: 300;
     margin: 0 1rem;
+
     position: relative;
     text-shadow: 0.05em 0 0 #00ffd5, -0.03em -0.04em 0 #1d7407,
       0.025em 0.04em 0 #8bff9f;
     animation: glitch 725ms infinite;
   }
+
   & span {
     position: absolute;
     top: 0;
     left: 0;
   }
+
   & span:first-child {
     animation: glitch 500ms infinite;
     clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
     transform: translate(-0.04em, -0.03em);
     opacity: 0.75;
   }
+
   & span:last-child {
     animation: glitch 375ms infinite;
     clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
     transform: translate(0.04em, 0.03em);
     opacity: 0.75;
   }
+
   @keyframes glitch {
     0% {
       text-shadow: 0.05em 0 0 #00ffd5, -0.03em -0.04em 0 #1d7407,
@@ -237,43 +260,45 @@ const Glitch = styled.p`
 `;
 
 const NavBar = () => {
-  const networkInfo = useNetworkInfo();
+  const netWorkInfo = useNetworkInfo();
+
   useEffect(() => {
     const [chainId, account] = getChainIdandAccount();
-    networkInfo.setChainId(chainId);
-    networkInfo.setAccount(account);
+    netWorkInfo.setChainId(chainId);
+    netWorkInfo.setAccount(account);
   },[])
-
-    /*
+ 
+  /*
   the account is the dapp provider that usedapp will use to make multicalls
   the user may be connected through metamask, but not to usedapp, so if account it undefined,
   the user must activateBorwserWallet to create a provider for themselves that multicall can use to instantiate a provider for them
   !! networkInfo.account may have an account, but useEthers account must be checked
   */
-  const {activateBrowserWallet, account, switchNetwork } = useEthers()
-
+  const {activateBrowserWallet, account } = useEthers()
+  
+  //@ts-ignore
+  if (window.ethereum) {
     //@ts-ignore
-    if (window.ethereum) {
-      //@ts-ignore
-      window.ethereum.on("accountsChanged", () => {
-        window.location.reload();
-      });
-   
-      //@ts-ignore
-      window.ethereum.on("networkChanged", () => {
-        window.location.reload();
-      });
+    window.ethereum.on("accountsChanged", () => {
+      window.location.reload();
+    });
+ 
+    //@ts-ignore
+    window.ethereum.on("networkChanged", () => {
+      window.location.reload();
+    });
+  }
+
+  async function getBalance() {
+    if (netWorkInfo.account != undefined) {
+      netWorkInfo.setBalance(await getAccountBalance(netWorkInfo.account))
     }
-  
-    async function getBalance() {
-      if (networkInfo.account != undefined) {
-        networkInfo.setBalance(await getAccountBalance(networkInfo.account))
-      }
-    }
-  
-    useEffect(() => {
-      getBalance();
-    },[networkInfo.account])
+  }
+
+  useEffect(() => {
+    getBalance();
+  },[netWorkInfo.account])
+
 
 
   const [colorChange, setColorchange] = useState(false);
@@ -289,24 +314,24 @@ const NavBar = () => {
 
   return (
     <Container didScroll={colorChange}>
-
       <div id="logo">
-      <BurgerMenu/>
-      <a href="https://canto.io" style={{
-        display : "flex"
-      }}>
-
+        <BurgerMenu/>
+        <a
+          href="https://canto.io"
+          style={{
+            display: "flex",
+          }}
+        >
           <img src={logo} alt="Canto" />
 
-        <Glitch>
-          <span aria-hidden="true">Canto</span>
-          Canto
-          <span aria-hidden="true">Canto</span>
-        </Glitch>
-      </a>
-
+          <Glitch>
+            <span aria-hidden="true">Canto</span>
+            Canto
+            <span aria-hidden="true">Canto</span>
+          </Glitch>
+        </a>
       </div>
-      <h1>bridge</h1>
+      <h1>lp interface</h1>
       <input
         type="checkbox"
         name="nav-menu"
@@ -317,31 +342,34 @@ const NavBar = () => {
         }}
       />
       <div className="wallet">
-      {networkInfo.isConnected && account? (
-        <button onClick={()=>{
-          // setIsModalOpen(true)
-        }}>
-          {formatBigNumber(networkInfo.balance)}&nbsp;  
-          <span style={{
-            fontWeight : "600",
-            
-          }}>{(GravityTestnet.chainId == Number(networkInfo.chainId)) ? "DIODE" : "ETH"}</span> |{" "}
-          {networkInfo.account?.substring(0, 5) + ".."}
-          
+      {netWorkInfo.isConnected && account ? (
+        <button
+          onClick={() => {
+            // setIsModalOpen(true)
+          }}
+        >
+          {formatBigNumber(netWorkInfo.balance)}&nbsp;
+          <span
+            style={{
+              fontWeight: "600",
+            }}
+          >
+            CANTO
+          </span>{" "}
+          | {netWorkInfo.account?.substring(0, 5) + ".."}
         </button>
       ) : (
-        <button onClick={() => {
-          activateBrowserWallet();
-          switchNetwork(1);
-        }}>connect wallet</button>
+        <button onClick={() => activateBrowserWallet()}>connect wallet</button>
       )}
       </div>
-      <label htmlFor="menu-checkbox" style={{display : "none"}}>
+     
+
+      <label htmlFor="menu-checkbox" style={{ display: "none" }}>
         <img id="nav-menu" src={menu} />
       </label>
+      
     </Container>
   );
 };
-
 
 export default NavBar;

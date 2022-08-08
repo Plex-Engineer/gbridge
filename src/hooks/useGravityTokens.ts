@@ -7,15 +7,28 @@ import { ethers } from "ethers";
 import ADDRESSES from "constants/addresses";
 
 
+export interface GTokens  {
+  data: {
+      symbol: string;
+      name: string;
+      decimals: number;
+      address: string;
+      isERC20: boolean;
+      isLP: boolean;
+      icon: string;
+      cTokenAddress: string;
+  };
+  wallet: string;
+  balanceOf: number;
+  allowance: number;
+}[]
+
 export function useGravityTokens(
   account: string | undefined, chainId:number
-): {gravityTokens : any[] | undefined, gravityAddress: string| undefined} {
+): { gravityTokens : GTokens[] | undefined, gravityAddress: string| undefined} {
   const tokens = chainId == GravityTestnet.chainId ? gravityTokenBase : mainnetGravityTokensBase
   const gravityAddress = chainId == GravityTestnet.chainId ? ADDRESSES.gravityBridgeTest.GravityBridge : ADDRESSES.ETHMainnet.GravityBridge;
 
-
-  
-  
   const calls =
     tokens?.map((token) => {
       const ERC20Contract = new Contract(token.address, abi.Erc20);
@@ -65,6 +78,7 @@ export function useGravityTokens(
         allowance,
       };
     });
+
     if(val[0].balanceOf == undefined)
     return {gravityTokens: undefined, gravityAddress: gravityAddress}
 
