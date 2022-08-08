@@ -1,4 +1,4 @@
-import { CantoTestnet, CantoMainnet } from "global/config/networks";
+import { CantoMainnet } from "cantoui";
 import { ethers } from "ethers";
 
 export function addNetwork() {

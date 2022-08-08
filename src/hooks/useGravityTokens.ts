@@ -1,10 +1,10 @@
 import { useCalls} from "@usedapp/core";
 import { Contract } from "ethers";
-import { GravityTestnet } from "constants/networks";
-import { gravityTokenBase, mainnetGravityTokensBase } from "constants/gravityBridgeTokens";
-import {abi } from "constants/abi"
+import { GravityTestnet } from "config/networks";
+import { gravityTokenBase, mainnetGravityTokensBase } from "config/gravityBridgeTokens";
+import {abi } from "config/abi"
 import { ethers } from "ethers";
-import ADDRESSES from "constants/addresses";
+import { ADDRESSES } from "cantoui";
 
 
 export interface GTokens  {
@@ -28,6 +28,7 @@ export function useGravityTokens(
 ): { gravityTokens : GTokens[] | undefined, gravityAddress: string| undefined} {
   const tokens = chainId == GravityTestnet.chainId ? gravityTokenBase : mainnetGravityTokensBase
   const gravityAddress = chainId == GravityTestnet.chainId ? ADDRESSES.gravityBridgeTest.GravityBridge : ADDRESSES.ETHMainnet.GravityBridge;
+  console.log("🚀 ~ file: useGravityTokens.ts ~ line 31 ~ gravityAddress", gravityAddress)
 
   const calls =
     tokens?.map((token) => {

@@ -1,4 +1,4 @@
-import { GravityTestnet, ETHMainnet, CantoMain } from "constants/networks";
+import { GravityTestnet, ETHMainnet } from "config/networks";
 import { checkPubKey, getCantoAddressFromMetaMask } from "utils/nodeTransactions";
 import create from "zustand";
 import { devtools } from "zustand/middleware";
