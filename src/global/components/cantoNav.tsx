@@ -17,7 +17,8 @@ export const CantoNav = () => {
 
   useEffect(() => {
     setChainInfo();
-  }, []);
+   //@ts-ignore
+}, [window.ethereum?.networkVersion, window.ethereum?.selectedAddress]);
 
   //@ts-ignore
   if (window.ethereum) {
