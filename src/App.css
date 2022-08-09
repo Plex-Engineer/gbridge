@@ -1,12 +1,10 @@
+@import "./global/styles/base/colors.scss";
+@import "./global/styles/base/typography.scss";
+
 :root{
-  --primary-color : #06fc99;
-  --primary-color-dark : #05de87;
-  --off-white-color : #EFEFEF;
-  --error-color : #FE4256;
+
   scrollbar-color: var(--primary-color);
   scroll-behavior: smooth;
-  /* width */
-
 }
   
 ::-webkit-scrollbar {

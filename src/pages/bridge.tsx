@@ -13,6 +13,8 @@ import { TokenWallet } from "./TokenSelect";
 import { Container, Balance } from "./styledComponents";
 import { ImageButton } from "./ImageButton";
 import { TOKENS, ADDRESSES } from "cantoui";
+import "./bridge.module.scss";
+import { FilledButton, OutlinedButton, PrimaryButton } from "global/styled-components/Button";
 
 const BridgePage = () => {
   const networkInfo = useNetworkInfo();
@@ -20,13 +22,13 @@ const BridgePage = () => {
   const activeToken = useTokenStore().selectedToken;
   const [amount, setAmount] = useState("");
 
+
   //get tokens from the contract call
   const { gravityTokens, gravityAddress } = useGravityTokens(
     networkInfo.account,
     Number(networkInfo.chainId)
   );
   
-
   //contracts for transactions
   const {
     state: stateApprove,
@@ -86,6 +88,25 @@ const BridgePage = () => {
   // =========================
   return (
     <Container>
+      <div style={{
+        display : "flex",
+        gap : "2rem",
+        marginTop: "2rem"
+      }}>
+        <PrimaryButton padding="lg" size="sm">Primary</PrimaryButton>
+        <OutlinedButton padding="md" size="lg">Outlined</OutlinedButton>
+        <FilledButton padding="md" size="x-lg">Filled</FilledButton>
+      </div>
+
+      <div style={{
+        display : "flex",
+        gap : "2rem",
+        marginTop: "2rem"
+      }}>
+        <PrimaryButton disabled padding="lg" size="lg">Primary</PrimaryButton>
+        <OutlinedButton disabled padding="md" size="md">Outlined</OutlinedButton>
+        <FilledButton disabled padding="md" size="x-sm">Filled</FilledButton>
+      </div>
       <h1
         hidden={networkInfo.hasPubKey}
         style={{

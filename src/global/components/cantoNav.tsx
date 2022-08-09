@@ -3,7 +3,7 @@ import { NavBar } from "cantoui";
 import { addNetwork, getAccountBalance, getChainIdandAccount } from "global/utils/walletConnect/addCantoToWallet";
 import { useEffect } from "react";
 import { useNetworkInfo } from "stores/networkInfo";
-import logo from "./../../assets/logo.svg"
+import logo from "assets/logo.svg"
 
 export const CantoNav = () => {
   const netWorkInfo = useNetworkInfo();
