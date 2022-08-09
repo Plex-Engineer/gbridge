@@ -8,13 +8,16 @@ import { useNetworkInfo } from "stores/networkInfo";
 import {getChainIdandAccount, getAccountBalance} from "utils/addCantoToWallet"
 import { BurgerMenu } from "./menu";
 import { useEthers } from "@usedapp/core";
+import Alert from "global/components/alert";
 interface propsStyle {
   didScroll: boolean;
 }
 const Container = styled.div<propsStyle>`
-  display: flex;
-  position: sticky;
+position: sticky;
   top: 0%;
+  .nav {
+    display: flex;
+  
   transition: all 0.1s ease-in-out;
   & > * {
     flex: 1;
@@ -173,6 +176,7 @@ const Container = styled.div<propsStyle>`
       font-size: 1rem;
     }
   }
+  }
 `;
 
 const Glitch = styled.p`
@@ -289,8 +293,10 @@ const NavBar = () => {
 
   return (
     <Container didScroll={colorChange}>
+      <Alert/>
 
-      <div id="logo">
+     <div className="nav">
+     <div id="logo">
       <BurgerMenu/>
       <a href="https://canto.io" style={{
         display : "flex"
@@ -339,6 +345,7 @@ const NavBar = () => {
       <label htmlFor="menu-checkbox" style={{display : "none"}}>
         <img id="nav-menu" src={menu} />
       </label>
+     </div>
     </Container>
   );
 };

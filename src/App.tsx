@@ -8,6 +8,7 @@ import bgNoise from "assets/bg-noise.gif";
 import "react-toastify/dist/ReactToastify.css";
 import {ToastContainer } from "react-toastify";
 import { Overlay, ScanLine, ScanlinesOverlay, StaticNoiseOverlay } from "global/styled-components/Overlays";
+import Alert from "global/components/alert";
 
 
 

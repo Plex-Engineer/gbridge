@@ -14,6 +14,7 @@ import { useApprove, useCosmos } from "./useTransactions";
 import { TokenWallet } from "./TokenSelect";
 import { Container, Balance } from "./styledComponents";
 import { ImageButton } from "./ImageButton";
+import useAlert from "hooks/useAlert";
 
 const BridgePage = () => {
   const networkInfo = useNetworkInfo();
@@ -59,6 +60,8 @@ const BridgePage = () => {
     tokenStore.setCosmosStatus(stateCosmos.status);
   }, [stateCosmos.status]);
 
+
+  const alertProvider = useAlert();
   //send function
   const send = () => {
     //Checking if amount enter is greater than balance available in wallet and token has been approved.
@@ -124,7 +127,11 @@ const BridgePage = () => {
       >
         <div className="wallet-item">
           <img src={icons.ETH} alt="eth" width={26} />
-          <p>ethereum</p>
+          <p onClick={()=>{
+            console.log("dummy data");
+            alertProvider.show("Success",<p>You are connected to the right network</p> )
+       
+          }}>ethereum</p>
         </div>
         <img
           src={right}
