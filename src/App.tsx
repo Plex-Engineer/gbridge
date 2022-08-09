@@ -1,6 +1,7 @@
-import "App.css";
+import "App.module.scss";
 import styled from "@emotion/styled";
-import NavBar from "components/navbar";
+// import NavBar from "components/navbar";
+import NavBar from "cantoui";
 
 import { HelmetProvider } from "react-helmet-async";
 import BridgePage from "pages/bridge";
@@ -32,7 +33,7 @@ function App() {
       <ScanLine/>
       <Overlay/>
       <Container className="App">
-      <NavBar/> 
+      <Navbar/> 
       <BridgePage />
       </Container>
     </HelmetProvider>
