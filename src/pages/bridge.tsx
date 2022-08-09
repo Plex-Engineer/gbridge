@@ -61,7 +61,7 @@ const BridgePage = () => {
   }, [stateCosmos.status]);
 
 
-  const alertProvider = useAlert();
+  const alert = useAlert();
   //send function
   const send = () => {
     //Checking if amount enter is greater than balance available in wallet and token has been approved.
@@ -129,7 +129,7 @@ const BridgePage = () => {
           <img src={icons.ETH} alt="eth" width={26} />
           <p onClick={()=>{
             console.log("dummy data");
-            alertProvider.show("Success",<p>You are connected to the right network</p> )
+            alert.show("Warning",<p>You are connected to the right network</p>);
        
           }}>ethereum</p>
         </div>
@@ -142,7 +142,11 @@ const BridgePage = () => {
         />
         <div className="wallet-item">
           <img src={canto} alt="eth" width={26} />
-          <p>canto</p>
+          <p onClick={()=>{
+            console.log("dummy data");
+            alert.close();
+       
+          }}>canto</p>
         </div>
       </div>
       <ImageButton name="connect" />

@@ -13,7 +13,7 @@ const useAlert = create<AlertProps>((set) => ({
     id : "1",
     type : "Success",
     show : (type, child, closeAfter) => {
-        if(type == "Success" && closeAfter != 0){
+        if(type == "Success" && closeAfter != undefined){
             setTimeout(()=>set({open : false}),closeAfter)
         }
         return set({type, child, open : true})},

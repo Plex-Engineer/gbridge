@@ -20,6 +20,12 @@ const ErrorStyle = styled(SuccessStyle)`
   color: #ff4141;
 `;
 
+const WarningStyle = styled(SuccessStyle)`
+  background-color: #ffdb5823;
+  border-bottom: 1px solid #FFDA58;
+  color: #FFDA58;
+`;
+
 const Container = styled.div`
   height: 4rem;
   transition: all .3s;
@@ -34,7 +40,7 @@ const Alert = () => {
     { type == "Success" ? <SuccessStyle>{child}</SuccessStyle> :
       type == "Failure" ?
          <ErrorStyle>{child}</ErrorStyle> :
-      type == "Warning" ? <SuccessStyle>{child}</SuccessStyle> : null
+      type == "Warning" ? <WarningStyle>{child}</WarningStyle> : null
     }
     
   </Container>
