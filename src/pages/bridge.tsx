@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { Mixpanel } from "./../mixpanel";
 import { BigNumber } from "ethers";
-import { useGravityTokens } from "hooks/useGravityTokens";
+import { GTokens, useGravityTokens } from "hooks/useGravityTokens";
 import { useNetworkInfo } from "stores/networkInfo";
 import { useTokenStore } from "stores/tokens";
 import { ReactiveButton } from "./ReactiveButton";
@@ -14,11 +14,12 @@ import { Container, Balance } from "./styledComponents";
 import { ImageButton } from "./ImageButton";
 import { TOKENS, ADDRESSES, Button, CantoMainnet } from "cantoui";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
-import { useCosmosTokens } from "hooks/useCosmosTokens";
+import { getCantoBalance, useCosmosTokens } from "hooks/useCosmosTokens";
 import { chain, fee, memo } from "config/networks";
-import {txConvertERC20} from "utils/convertCoin/convertTransactions.js"
+import {txIBCTransfer} from "utils/IBC/IBCTransfer"
 
 const BridgePage = () => {
+  const gravReceiver = "gravity1tk63mxs2jws0s0ule4t9lgddrs4s2uw7nvwuju"
   const networkInfo = useNetworkInfo();
   const tokenStore = useTokenStore();
   const activeToken = useTokenStore().selectedToken;
@@ -31,8 +32,8 @@ const BridgePage = () => {
     networkInfo.account,
     Number(networkInfo.chainId)
   );
-  const {cantoTokens} = useCosmosTokens(networkInfo.account, Number(networkInfo.chainId))
-
+  
+  const [cantoTokens, setCantoTokens] = useState<any[]>([]);
   //contracts for transactions
   const {
     state: stateApprove,
@@ -64,6 +65,12 @@ const BridgePage = () => {
     tokenStore.setCosmosStatus(stateCosmos.status);
   }, [stateCosmos.status]);
 
+  useEffect(() => {
+    if (networkInfo.cantoAddress) {
+      getBalances();
+    }
+  }, [networkInfo.cantoAddress])
+
   //send function
   const send = () => {
     //Checking if amount enter is greater than balance available in wallet and token has been approved.
@@ -88,6 +95,11 @@ const BridgePage = () => {
   };
 
   Mixpanel.events.pageOpened("Bridge", activeToken.wallet);
+
+  async function getBalances() {
+    const tokensWithBalances = await getCantoBalance(CantoMainnet.cosmosAPIEndpoint, networkInfo.cantoAddress);
+    setCantoTokens(tokensWithBalances)
+  }
 
   // =========================
   return (
@@ -211,15 +223,17 @@ const BridgePage = () => {
         gravityAddress={gravityAddress}
         hasPubKey={networkInfo.hasPubKey}
         onClick={bridgeOut ? async () => {
-          await txConvertERC20(
-            tokenStore.selectedToken.data.address,
+          await txIBCTransfer(
+            gravReceiver,
+            "channel-0",
             ethers.utils.parseUnits(amount, tokenStore.selectedToken.data.decimals).toString(),
-            networkInfo.cantoAddress,
+            tokenStore.selectedToken.data.nativeName,
             CantoMainnet.cosmosAPIEndpoint,
+            'https://gravitychain.io:1317',
             fee,
             chain,
             memo
-          )
+            )
         } : send}
       />
       <br></br>

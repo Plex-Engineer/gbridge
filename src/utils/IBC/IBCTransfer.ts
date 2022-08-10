@@ -1,9 +1,10 @@
 import { generateEndpointIBCChannels } from "@tharsis/provider";
-import { getSenderObj, signAndBroadcastTxMsg } from "../convertCoin/convertTransactions5";
 import { createTxIBCMsgTransfer } from "./IBCMsgTransfer";
+import { signAndBroadcastTxMsg, getSenderObj } from "./signAndBroadcast";
 
 
-export async function txIBCTransfer(receiver, channel_id, amount, denom, nodeAddressIP, counterPartyChain, fee, chain, memo) {
+
+export async function txIBCTransfer(receiver:any, channel_id:any, amount:any, denom:any, nodeAddressIP:any, counterPartyChain:any, fee:any, chain:any, memo:any) {
     // check metamask
     if (typeof window.ethereum !== 'undefined') {
         console.log('MetaMask is installed!');
@@ -35,7 +36,7 @@ export async function txIBCTransfer(receiver, channel_id, amount, denom, nodeAdd
         receiver: receiver,
         sender: senderObj.accountAddress, 
         revisionNumber: ibcData['height']['revision_number'],
-        revisionHeight: String(revisionHeight),
+        revisionHeight: revisionHeight,
         timeoutTimestamp: timeoutTimestamp
     }   
 
@@ -47,7 +48,7 @@ export async function txIBCTransfer(receiver, channel_id, amount, denom, nodeAdd
 
 
 
-export async function getIBCData(nodeAddress) {
+export async function getIBCData(nodeAddress:string) {
     let resp = await fetch(nodeAddress + generateEndpointIBCChannels(), {
         method: 'GET',
         headers: {
@@ -61,7 +62,7 @@ export async function getIBCData(nodeAddress) {
 /**
  * @param {string} nodeAddress rest endpoint to request counter-party chain timestamp
  */
- export async function getBlockTimestamp(nodeAddress) {
+ export async function getBlockTimestamp(nodeAddress:string) {
     let resp = await fetch(nodeAddress + '/blocks/latest', {
         method: 'GET',
         headers: {
@@ -76,3 +77,4 @@ export async function getIBCData(nodeAddress) {
     // return as nano-seconds
     return Number((ms * 1e7) + (600 * 1e9)).toString()
 }
+
