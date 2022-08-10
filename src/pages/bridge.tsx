@@ -290,7 +290,15 @@ const BridgePage = () => {
       <br></br>
       {bridgeOut ? (
         <div style={{ color: "white", padding: "1rem", textAlign: "center" }}>
-          to bridge out convert to canto native
+          in order to bridge out of canto, you must convert all of your ERC20 assets 
+          {" (Metamask)"} to native canto tokens {" "} 
+          <a
+            href="https://convert.canto.io"
+            style={{ color: "white", textDecoration: "underline" }}
+          >
+            here.
+          </a> {" "}
+          the balances in your Metamask will not reflect your bridgeable assets
         </div>
       ) : (
         <div style={{ color: "white", padding: "1rem", textAlign: "center" }}>
