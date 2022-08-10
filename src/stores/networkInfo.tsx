@@ -1,3 +1,4 @@
+import { CantoMainnet } from "cantoui";
 import { GravityTestnet, ETHMainnet } from "config/networks";
 import { checkPubKey, getCantoAddressFromMetaMask } from "utils/nodeTransactions";
 import create from "zustand";
@@ -25,7 +26,8 @@ export const useNetworkInfo = create<NetworkProps>()(
       set({ chainId: chainId });
       if (
         Number(chainId) == GravityTestnet.chainId ||
-        Number(chainId) == ETHMainnet.chainId
+        Number(chainId) == ETHMainnet.chainId ||
+        Number(chainId) == CantoMainnet.chainId
       ) {
         set({ isConnected: true });
       } else {

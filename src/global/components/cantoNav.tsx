@@ -1,6 +1,6 @@
 import { useEthers } from "@usedapp/core";
 import { NavBar } from "cantoui";
-import { addNetwork, getAccountBalance, getChainIdandAccount } from "global/utils/walletConnect/addCantoToWallet";
+import { getAccountBalance, getChainIdandAccount } from "global/utils/walletConnect/addCantoToWallet";
 import { useEffect } from "react";
 import { useNetworkInfo } from "stores/networkInfo";
 import logo from "./../../assets/logo.svg"
@@ -18,7 +18,7 @@ export const CantoNav = () => {
   useEffect(() => {
     setChainInfo();
    //@ts-ignore
-}, []);
+}, [window.ethereum?.networkVersion]);
 
   //@ts-ignore
   if (window.ethereum) {
@@ -27,10 +27,10 @@ export const CantoNav = () => {
       window.location.reload();
     });
 
-    //@ts-ignore
-    window.ethereum.on("networkChanged", () => {
-      window.location.reload();
-    });
+  //   //@ts-ignore
+  //   window.ethereum.on("networkChanged", () => {
+  //     window.location.reload();
+  //   });
   }
 
   async function getBalance() {
@@ -40,7 +40,7 @@ export const CantoNav = () => {
   }
   useEffect(() => {
     getBalance();
-  },[netWorkInfo.account])
+  },[netWorkInfo.account, netWorkInfo.chainId])
 
   return (
     <NavBar
@@ -53,7 +53,7 @@ export const CantoNav = () => {
       account={netWorkInfo.account ?? ""}
       isConnected={netWorkInfo.isConnected && account ? true : false}
       balance={netWorkInfo.balance}
-      currency={"CANTO"}
+      currency={netWorkInfo.chainId == "1" ? "ETH" : "CANTO"}
       logo={logo}
     />
   );

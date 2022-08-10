@@ -6,9 +6,10 @@ interface IWallet {
     image?: string;
     name: string;
     onSelect?: (value: any) => void;
+    networkSwitch: number;
   }
   
-  export const ImageButton = ({ image, name }: IWallet) => {
+  export const ImageButton = ({ image, name, networkSwitch }: IWallet) => {
 
   const { activateBrowserWallet, switchNetwork } = useEthers();
   const networkInfo = useNetworkInfo();
@@ -21,8 +22,8 @@ interface IWallet {
                   //1 for ethereum mainnet, 15 for gravity bridge testnet
                   activateBrowserWallet();
 
-                  if (Number(networkInfo.chainId) != 1)
-                      switchNetwork(ETHMainnet.chainId);
+                  if (Number(networkInfo.chainId) != networkSwitch)
+                      switchNetwork(networkSwitch);
               } }
               style={{
                   backgroundColor: "#1C1C1C",
@@ -43,8 +44,8 @@ interface IWallet {
                   }}
               >
                   {networkInfo.account
-                      ? Number(networkInfo.chainId) != 1
-                          ? "switch to ethereum network"
+                      ? Number(networkInfo.chainId) != networkSwitch
+                          ? "switch network"
                           : networkInfo.account.substring(0, 10) +
                           "..." +
                           networkInfo.account.substring(networkInfo.account.length - 10, networkInfo.account.length)

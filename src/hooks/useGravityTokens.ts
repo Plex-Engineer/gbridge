@@ -17,6 +17,7 @@ export interface GTokens  {
       isLP: boolean;
       icon: string;
       cTokenAddress: string;
+      nativeName?: string
   };
   wallet: string;
   balanceOf: number;

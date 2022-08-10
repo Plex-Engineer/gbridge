@@ -27,3 +27,15 @@ export const GravityTestnet = {
   isTestChain: true,
   blockExplorerUrl: "https://www.nothing.com",
 };
+
+//convert coin constants
+export const fee = {
+  amount: "10000",
+  denom: "acanto",
+  gas: "3000000",
+};
+export const chain = {
+  chainId: 7700,
+  cosmosChainId: "canto_7700-1",
+};
+export const memo = "";

@@ -12,7 +12,11 @@ import { useApprove, useCosmos } from "./useTransactions";
 import { TokenWallet } from "./TokenSelect";
 import { Container, Balance } from "./styledComponents";
 import { ImageButton } from "./ImageButton";
-import { TOKENS, ADDRESSES } from "cantoui";
+import { TOKENS, ADDRESSES, Button, CantoMainnet } from "cantoui";
+import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
+import { useCosmosTokens } from "hooks/useCosmosTokens";
+import { txConvertERC20 } from "utils/convertCoin/convertTransactions";
+import { chain, fee, memo } from "config/networks";
 
 const BridgePage = () => {
   const networkInfo = useNetworkInfo();
@@ -20,12 +24,14 @@ const BridgePage = () => {
   const activeToken = useTokenStore().selectedToken;
   const [amount, setAmount] = useState("");
 
+  const [bridgeOut, setBridgeOut] = useState(false);
+
   //get tokens from the contract call
   const { gravityTokens, gravityAddress } = useGravityTokens(
     networkInfo.account,
     Number(networkInfo.chainId)
   );
-  
+  const {cantoTokens} = useCosmosTokens(networkInfo.account, Number(networkInfo.chainId))
 
   //contracts for transactions
   const {
@@ -86,6 +92,18 @@ const BridgePage = () => {
   // =========================
   return (
     <Container>
+      {/* <Tabs 
+        disabledTabClassName="disabled"
+        selectedTabClassName="selected"
+        className={"tabs"}>
+          <TabList className={"tablist"}>
+            <Tab className={"tab"} selectedClassName="tab-selected">bridge in</Tab>
+            <Tab className={"tab"} selectedClassName="tab-selected">bridge out</Tab>
+          </TabList>
+          <TabPanel>
+            <BridgeOutPage></BridgeOutPage>
+          </TabPanel>
+      </Tabs> */}
       <h1
         hidden={networkInfo.hasPubKey}
         style={{
@@ -97,7 +115,7 @@ const BridgePage = () => {
       >
         please{" "}
         <a
-          href="https://generator.canto.io"
+          href="https://account.canto.io"
           style={{ color: "red", textDecoration: "underline" }}
         >
           generate public key
@@ -109,7 +127,7 @@ const BridgePage = () => {
           margin: "2rem",
         }}
       >
-        send funds to canto
+        send funds {bridgeOut ? "from" : "to"} canto
       </h1>
       <div
         className="row"
@@ -123,21 +141,23 @@ const BridgePage = () => {
       >
         <div className="wallet-item">
           <img src={TOKENS.ETHMainnet.WETH.icon} alt="eth" width={26} />
-          <p>ethereum</p>
+          <p>{bridgeOut ? "gravity bridge" : "ethereum"}</p>
         </div>
         <img
           src={right}
           height={30}
           style={{
             margin: "1rem 1rem 1rem 0rem",
+            transform: bridgeOut ? "rotate(180deg)" : ""
           }}
+          onClick={() => setBridgeOut(!bridgeOut)}
         />
         <div className="wallet-item">
           <img src={canto} alt="eth" width={26} />
           <p>canto</p>
         </div>
       </div>
-      <ImageButton name="connect" />
+      <ImageButton name="connect" networkSwitch={bridgeOut ? CantoMainnet.chainId : 1} />
       <br></br>
       <h4 style={{ color: "white" }}>
         canto address:{" "}
@@ -149,7 +169,7 @@ const BridgePage = () => {
       </h4>
       <Balance>
         <TokenWallet
-          tokens={gravityTokens}
+          tokens={bridgeOut ? cantoTokens : gravityTokens}
           activeToken={tokenStore.selectedToken}
           onSelect={(value) => {
             tokenStore.setSelectedToken(value);
@@ -190,7 +210,17 @@ const BridgePage = () => {
         token={tokenStore.selectedToken}
         gravityAddress={gravityAddress}
         hasPubKey={networkInfo.hasPubKey}
-        onClick={send}
+        onClick={bridgeOut ? async () => {
+          await txConvertERC20(
+            tokenStore.selectedToken.data.address,
+            amount,
+            networkInfo.cantoAddress,
+            CantoMainnet.cosmosAPIEndpoint,
+            fee,
+            chain,
+            memo
+          )
+        } : send}
       />
       <br></br>
       <div 

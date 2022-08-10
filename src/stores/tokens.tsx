@@ -50,7 +50,8 @@ export const useTokenStore = create<TokenStore>()(
       cTokenAddress: "",
       decimals: 0,
       icon: emptyToken,
-      name: "select token"
+      name: "select token",
+      nativeName: "none"
     },
       wallet : "",
       allowance: -1,

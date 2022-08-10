@@ -4,6 +4,7 @@ import React from "react";
 import TransactionStatusProvider from "./transactionContext";
 import { Chain } from "@usedapp/core";
 import {ETHMainnet, GravityTestnet} from "config/networks"
+import {CantoMainnet as CantoMain} from "cantoui"
 
 interface IProviderProps {
   children: React.ReactNode;
@@ -26,15 +27,28 @@ export const Gravity: Chain = {
   getExplorerTransactionLink: getTransactionLink("kovanEtherscanUrl"),
   rpcUrl: GravityTestnet.rpcUrl
 }
+export const CantoMainnet: Chain = {
+  chainId: CantoMain.chainId,
+  chainName: CantoMain.name,
+  rpcUrl : CantoMain.rpcUrl,
+  isTestChain: CantoMain.isTestChain,
+  isLocalChain: false,
+  multicallAddress: '0x210b88d5Ad4BEbc8FAC4383cC7F84Cd4F03d18c6',
+  multicall2Address: '0x637490E68AA50Ea810688a52D7464E10c25A77c1',
+  blockExplorerUrl: CantoMain.blockExplorerUrl,
+  getExplorerAddressLink: getAddressLink("kovanEtherscanUrl"),
+  getExplorerTransactionLink: getTransactionLink("kovanEtherscanUrl"),
+}
 
 
 
 
 const config: Config = {
-  networks: [Gravity, ETHMain],
+  networks: [Gravity, ETHMain, CantoMainnet],
   readOnlyUrls: {
     [Gravity.chainId]: GravityTestnet.rpcUrl,
     [ETHMain.chainId]: ETHMainnet.rpcUrl,
+    [CantoMainnet.chainId]: CantoMain.rpcUrl
   },
   noMetamaskDeactivate: true,
 };
