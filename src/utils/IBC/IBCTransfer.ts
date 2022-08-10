@@ -6,12 +6,14 @@ import { signAndBroadcastTxMsg, getSenderObj } from "./signAndBroadcast";
 
 export async function txIBCTransfer(receiver:any, channel_id:any, amount:any, denom:any, nodeAddressIP:any, counterPartyChain:any, fee:any, chain:any, memo:any) {
     // check metamask
+    //@ts-ignore
     if (typeof window.ethereum !== 'undefined') {
         console.log('MetaMask is installed!');
     } else {
         console.log('Please install Metamask!');
     }
     //retrieve account data
+    //@ts-ignore
     const accounts = await window.ethereum.request({method: 'eth_requestAccounts'})
     const account = accounts[0]
     const senderObj = await getSenderObj(account, nodeAddressIP)
@@ -56,6 +58,7 @@ export async function getIBCData(nodeAddress:string) {
         }
     })
     .catch(error => console.log("getIBCData::error: ", error))
+    //@ts-ignore
     return resp.json()
 }
 
@@ -69,6 +72,7 @@ export async function getIBCData(nodeAddress:string) {
             "Accept": "application/json"
         }
     }).catch(error => console.log("getBlockTimestamp::error: ", error))
+    //@ts-ignore
     let obj = await resp.json()
     // get iso formatted time stamp from latest block
     let ts = obj['block']['header']['time']
