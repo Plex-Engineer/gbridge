@@ -16,6 +16,7 @@ import { TOKENS, ADDRESSES, Button, CantoMainnet } from "cantoui";
 import { getCantoBalance, useCosmosTokens } from "hooks/useCosmosTokens";
 import { chain, fee, memo } from "config/networks";
 import { txIBCTransfer } from "utils/IBC/IBCTransfer";
+import { toast } from "react-toastify";
 
 const BridgePage = () => {
   const [gravReceiver, setGravReceiver] = useState("");
@@ -25,7 +26,9 @@ const BridgePage = () => {
   const [amount, setAmount] = useState("");
 
   const [bridgeOut, setBridgeOut] = useState(false);
-  const [bridgeOutSuccess, setBridgeOutSuccess] = useState<boolean | null>(null)
+  const [bridgeOutSuccess, setBridgeOutSuccess] = useState<boolean | null>(
+    null
+  );
 
   //get tokens from the contract call
   const { gravityTokens, gravityAddress } = useGravityTokens(
@@ -146,15 +149,18 @@ const BridgePage = () => {
           <img src={TOKENS.ETHMainnet.WETH.icon} alt="eth" width={26} />
           <p>{bridgeOut ? "gravity bridge" : "ethereum"}</p>
         </div>
-        <img
-          src={right}
-          height={30}
-          style={{
-            margin: "1rem 1rem 1rem 0rem",
-            transform: bridgeOut ? "rotate(180deg)" : "",
-          }}
-          onClick={() => setBridgeOut(!bridgeOut)}
-        />
+        <div>
+          <img
+            className="imgBtn"
+            src={right}
+            height={40}
+            style={{
+              margin: "1rem 1rem 1rem 0rem",
+              transform: bridgeOut ? "rotate(180deg)" : "",
+            }}
+            onClick={() => setBridgeOut(!bridgeOut)}
+          />
+        </div>
         <div className="wallet-item">
           <img src={canto} alt="eth" width={26} />
           <p>canto</p>
@@ -210,21 +216,23 @@ const BridgePage = () => {
           }}
         />
       </Balance>
-      <div hidden={!bridgeOut}>
+      <div className="input" hidden={!bridgeOut}>
+        <label htmlFor="address">gbridge address: </label>
+
         <input
           className="amount"
           autoComplete="off"
           type="text"
-          name="amount"
-          id="amount"
+          name="address"
+          id="address"
           value={gravReceiver}
-          placeholder="gravity bridge address: "
+          placeholder="gravity..."
           onChange={(e) => {
             setGravReceiver(e.target.value);
           }}
           style={{ width: "120%" }}
         />
-        {bridgeOutSuccess != null ? bridgeOutSuccess ? "successful bridge out" : "unsuccessful bridge out" : ""}
+        {/* {bridgeOutSuccess != null ? bridgeOutSuccess ? "successful bridge out" : "unsuccessful bridge out" : ""} */}
       </div>
 
       <ReactiveButton
@@ -237,8 +245,7 @@ const BridgePage = () => {
         onClick={
           bridgeOut
             ? async () => {
-              const response = 
-                await txIBCTransfer(
+                const response = await txIBCTransfer(
                   gravReceiver,
                   "channel-0",
                   ethers.utils
@@ -252,9 +259,29 @@ const BridgePage = () => {
                   memo
                 );
                 if (response.tx_response?.txhash) {
-                  setBridgeOutSuccess(true)
+                  toast("msg", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progressStyle: {
+                      color: "var(--primary-color)",
+                    },
+                    style: {
+                      border: "1px solid var(--primary-color)",
+                      borderRadius: "0px",
+                      paddingBottom: "3px",
+                      background: "black",
+                      color: "var(--primary-color)",
+                      height: "100px",
+                      fontSize: "20px",
+                    },
+                  });
+
                 } else {
-                  setBridgeOutSuccess(false)
+                  //TODO: Show an error
                 }
               }
             : send

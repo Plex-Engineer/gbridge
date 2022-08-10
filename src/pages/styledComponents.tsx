@@ -70,17 +70,51 @@ export const Container = styled.div`
 
   .row {
     display: flex;
-    gap: 6rem;
+    justify-content: center;
+    align-items: center;
+   
+   
+  }
+
+  .imgBtn {
+    &:hover {
+      border: 1px solid var(--primary-color);
+      border-radius: 50%;
+      cursor: pointer;
+    }
+  }
+
+  .input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border : 1px solid #444;
+    padding: 1rem;
+    width: 80%;
+    margin-top: 2rem;
+    label {
+      color: white;
+      width: 18rem;
+    }
   }
 
   .wallet-item {
     display: flex;
+    width: 100%;
+
+    &:first-of-type {
+      justify-content: start;
+    }
+    &:last-of-type {
+      justify-content: end;
+    }
     p {
       margin: 1rem;
       font-size: 22px;
       color: white;
     }
   }
+
 `;
 export const Balance = styled.div`
   display: flex;
