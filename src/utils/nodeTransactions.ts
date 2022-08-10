@@ -25,7 +25,7 @@ export async function checkPubKey(bech32Address : string) {
 export async function getCantoAddressFromMetaMask(address: string | undefined) {
     const nodeURLMain = CantoMainnet.cosmosAPIEndpoint;
     const result = await fetch(
-      nodeURLMain + "ethermint/evm/v1/cosmos_account/" + address,
+      nodeURLMain + "/ethermint/evm/v1/cosmos_account/" + address,
       {
         method: "GET",
         headers: {

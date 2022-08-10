@@ -13,26 +13,26 @@ import { TokenWallet } from "./TokenSelect";
 import { Container, Balance } from "./styledComponents";
 import { ImageButton } from "./ImageButton";
 import { TOKENS, ADDRESSES, Button, CantoMainnet } from "cantoui";
-import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import { getCantoBalance, useCosmosTokens } from "hooks/useCosmosTokens";
 import { chain, fee, memo } from "config/networks";
-import {txIBCTransfer} from "utils/IBC/IBCTransfer"
+import { txIBCTransfer } from "utils/IBC/IBCTransfer";
 
 const BridgePage = () => {
-  const gravReceiver = "gravity1tk63mxs2jws0s0ule4t9lgddrs4s2uw7nvwuju"
+  const [gravReceiver, setGravReceiver] = useState("");
   const networkInfo = useNetworkInfo();
   const tokenStore = useTokenStore();
   const activeToken = useTokenStore().selectedToken;
   const [amount, setAmount] = useState("");
 
   const [bridgeOut, setBridgeOut] = useState(false);
+  const [bridgeOutSuccess, setBridgeOutSuccess] = useState<boolean | null>(null)
 
   //get tokens from the contract call
   const { gravityTokens, gravityAddress } = useGravityTokens(
     networkInfo.account,
     Number(networkInfo.chainId)
   );
-  
+
   const [cantoTokens, setCantoTokens] = useState<any[]>([]);
   //contracts for transactions
   const {
@@ -50,15 +50,15 @@ const BridgePage = () => {
   useEffect(() => {
     tokenStore.setApproveStatus(stateApprove.status);
     if (stateApprove.status == "Success") {
-    // tokenStore.setSelectedToken(gravityTokens?.find(item => item.data.address == tokenStore.selectedToken.data.address))
+      // tokenStore.setSelectedToken(gravityTokens?.find(item => item.data.address == tokenStore.selectedToken.data.address))
       tokenStore.setSelectedToken({
-        ...tokenStore.selectedToken, allowance : Number.MAX_VALUE
-      })
+        ...tokenStore.selectedToken,
+        allowance: Number.MAX_VALUE,
+      });
       setTimeout(() => {
         resetApprove();
       }, 1000);
     }
-    
   }, [stateApprove.status]);
 
   useEffect(() => {
@@ -69,7 +69,7 @@ const BridgePage = () => {
     if (networkInfo.cantoAddress) {
       getBalances();
     }
-  }, [networkInfo.cantoAddress])
+  }, [networkInfo.cantoAddress]);
 
   //send function
   const send = () => {
@@ -97,25 +97,16 @@ const BridgePage = () => {
   Mixpanel.events.pageOpened("Bridge", activeToken.wallet);
 
   async function getBalances() {
-    const tokensWithBalances = await getCantoBalance(CantoMainnet.cosmosAPIEndpoint, networkInfo.cantoAddress);
-    setCantoTokens(tokensWithBalances)
+    const tokensWithBalances = await getCantoBalance(
+      CantoMainnet.cosmosAPIEndpoint,
+      networkInfo.cantoAddress
+    );
+    setCantoTokens(tokensWithBalances);
   }
 
   // =========================
   return (
     <Container>
-      {/* <Tabs 
-        disabledTabClassName="disabled"
-        selectedTabClassName="selected"
-        className={"tabs"}>
-          <TabList className={"tablist"}>
-            <Tab className={"tab"} selectedClassName="tab-selected">bridge in</Tab>
-            <Tab className={"tab"} selectedClassName="tab-selected">bridge out</Tab>
-          </TabList>
-          <TabPanel>
-            <BridgeOutPage></BridgeOutPage>
-          </TabPanel>
-      </Tabs> */}
       <h1
         hidden={networkInfo.hasPubKey}
         style={{
@@ -160,7 +151,7 @@ const BridgePage = () => {
           height={30}
           style={{
             margin: "1rem 1rem 1rem 0rem",
-            transform: bridgeOut ? "rotate(180deg)" : ""
+            transform: bridgeOut ? "rotate(180deg)" : "",
           }}
           onClick={() => setBridgeOut(!bridgeOut)}
         />
@@ -169,7 +160,10 @@ const BridgePage = () => {
           <p>canto</p>
         </div>
       </div>
-      <ImageButton name="connect" networkSwitch={bridgeOut ? CantoMainnet.chainId : 1} />
+      <ImageButton
+        name="connect"
+        networkSwitch={bridgeOut ? CantoMainnet.chainId : 1}
+      />
       <br></br>
       <h4 style={{ color: "white" }}>
         canto address:{" "}
@@ -199,10 +193,12 @@ const BridgePage = () => {
           placeholder="0.00"
           onChange={(e) => {
             if (
-              !(stateApprove.status == "PendingSignature" ||
-              stateCosmos.status == "PendingSignature" ||
-              stateApprove.status == "Mining" ||
-              stateCosmos.status == "Mining")
+              !(
+                stateApprove.status == "PendingSignature" ||
+                stateCosmos.status == "PendingSignature" ||
+                stateApprove.status == "Mining" ||
+                stateCosmos.status == "Mining"
+              )
             ) {
               const val = Number(e.target.value);
               if (!isNaN(val)) {
@@ -214,6 +210,22 @@ const BridgePage = () => {
           }}
         />
       </Balance>
+      <div hidden={!bridgeOut}>
+        <input
+          className="amount"
+          autoComplete="off"
+          type="text"
+          name="amount"
+          id="amount"
+          value={gravReceiver}
+          placeholder="gravity bridge address: "
+          onChange={(e) => {
+            setGravReceiver(e.target.value);
+          }}
+          style={{ width: "120%" }}
+        />
+        {bridgeOutSuccess != null ? bridgeOutSuccess ? "successful bridge out" : "unsuccessful bridge out" : ""}
+      </div>
 
       <ReactiveButton
         destination={networkInfo.cantoAddress}
@@ -222,28 +234,58 @@ const BridgePage = () => {
         token={tokenStore.selectedToken}
         gravityAddress={gravityAddress}
         hasPubKey={networkInfo.hasPubKey}
-        onClick={bridgeOut ? async () => {
-          await txIBCTransfer(
-            gravReceiver,
-            "channel-0",
-            ethers.utils.parseUnits(amount, tokenStore.selectedToken.data.decimals).toString(),
-            tokenStore.selectedToken.data.nativeName,
-            CantoMainnet.cosmosAPIEndpoint,
-            'https://gravitychain.io:1317',
-            fee,
-            chain,
-            memo
-            )
-        } : send}
+        onClick={
+          bridgeOut
+            ? async () => {
+              const response = 
+                await txIBCTransfer(
+                  gravReceiver,
+                  "channel-0",
+                  ethers.utils
+                    .parseUnits(amount, tokenStore.selectedToken.data.decimals)
+                    .toString(),
+                  tokenStore.selectedToken.data.nativeName,
+                  CantoMainnet.cosmosAPIEndpoint,
+                  "https://gravitychain.io:1317",
+                  fee,
+                  chain,
+                  memo
+                );
+                if (response.tx_response?.txhash) {
+                  setBridgeOutSuccess(true)
+                } else {
+                  setBridgeOutSuccess(false)
+                }
+              }
+            : send
+        }
       />
       <br></br>
-      <div 
-      style={{color: "white", padding: "1rem", textAlign: "center"}}
-      >
-      it takes several minutes for your bridged assets to arrive on the canto network. 
-      go to the <a href="https://convert.canto.io" style={{color: "white", textDecoration: "underline"}}>convert coin</a> page to view your bridged assets and convert them into canto ERC20 tokens to view your assets in Metamask. 
-      for more details, please read <a href="https://canto.gitbook.io/canto/user-guides/bridging-assets-to-canto/transfering-canto-assets-to-canto-evm" style={{color: "white", textDecoration: "underline"}}>here</a>.
-      </div>
+      {bridgeOut ? (
+        <div style={{ color: "white", padding: "1rem", textAlign: "center" }}>
+          to bridge out convert to canto native
+        </div>
+      ) : (
+        <div style={{ color: "white", padding: "1rem", textAlign: "center" }}>
+          it takes several minutes for your bridged assets to arrive on the
+          canto network. go to the{" "}
+          <a
+            href="https://convert.canto.io"
+            style={{ color: "white", textDecoration: "underline" }}
+          >
+            convert coin
+          </a>{" "}
+          page to view your bridged assets and convert them into canto ERC20
+          tokens to view your assets in Metamask. for more details, please read{" "}
+          <a
+            href="https://canto.gitbook.io/canto/user-guides/bridging-assets-to-canto/transfering-canto-assets-to-canto-evm"
+            style={{ color: "white", textDecoration: "underline" }}
+          >
+            here
+          </a>
+          .
+        </div>
+      )}
       <br></br>
       <div
         style={{

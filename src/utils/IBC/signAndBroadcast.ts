@@ -22,13 +22,14 @@ import { createTxRawEIP712, signatureToWeb3Extension, createTxMsgDelegate, creat
         headers: { 'Content-Type': 'application/json' },
         body: generatePostBodyBroadcast(raw),
     };
-
+    console.log(     nodeAddress + generateEndpointBroadcast(),
+    postOptions)
     const broadcastPost = await fetch(
         nodeAddress + generateEndpointBroadcast(),
         postOptions
     );
     const response = await broadcastPost.json();
-    console.log("🚀 ~ file: signAndBroadcast.ts ~ line 31 ~ signAndBroadcastTxMsg ~ response", response)
+    return response
 }
 
 function generateRawTx(chain:any, senderObj:any, signature:any, msg:any) {

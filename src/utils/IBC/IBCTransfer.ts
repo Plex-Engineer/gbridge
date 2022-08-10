@@ -45,7 +45,8 @@ export async function txIBCTransfer(receiver:any, channel_id:any, amount:any, de
     const msg = createTxIBCMsgTransfer(chain, senderObj, fee, memo, params)
     console.log(msg)
 
-    signAndBroadcastTxMsg(msg, senderObj, chain, nodeAddressIP, account)
+    let response = await signAndBroadcastTxMsg(msg, senderObj, chain, nodeAddressIP, account)
+    return response;
 }
 
 

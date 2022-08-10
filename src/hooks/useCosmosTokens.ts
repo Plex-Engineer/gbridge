@@ -77,7 +77,7 @@ export async function getCantoBalance(
   nodeAddressIP: string,
   cantoAddress: string
 ) {
-  const url = nodeAddressIP + generateEndpointBalances(cantoAddress);
+  const url = nodeAddressIP + "/" + generateEndpointBalances(cantoAddress);
   const options = {
     method: "GET",
     headers: {
