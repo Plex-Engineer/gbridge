@@ -7,7 +7,7 @@ import { ADDRESSES } from "cantoui";
 
 //Gravity Bridge Chains
 export const ETHMainnet = {
-  name: "Etheruem Mainnet",
+  name: "Ethereum Mainnet",
   symbol: "ETH",
   chainId: 1,
   addresses: ADDRESSES.ETHMainnet,

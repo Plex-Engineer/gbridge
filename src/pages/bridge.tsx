@@ -15,8 +15,8 @@ import { ImageButton } from "./ImageButton";
 import { TOKENS, ADDRESSES, Button, CantoMainnet } from "cantoui";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import { useCosmosTokens } from "hooks/useCosmosTokens";
-import { txConvertERC20 } from "utils/convertCoin/convertTransactions";
 import { chain, fee, memo } from "config/networks";
+import {txConvertERC20} from "utils/convertCoin/convertTransactions.js"
 
 const BridgePage = () => {
   const networkInfo = useNetworkInfo();
@@ -213,7 +213,7 @@ const BridgePage = () => {
         onClick={bridgeOut ? async () => {
           await txConvertERC20(
             tokenStore.selectedToken.data.address,
-            amount,
+            ethers.utils.parseUnits(amount, tokenStore.selectedToken.data.decimals).toString(),
             networkInfo.cantoAddress,
             CantoMainnet.cosmosAPIEndpoint,
             fee,

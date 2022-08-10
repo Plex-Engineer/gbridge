@@ -1,5 +1,5 @@
 import { generateEndpointIBCChannels } from "@tharsis/provider";
-import { getSenderObj, signAndBroadcastTxMsg } from "../convertCoin/convertTransactions";
+import { getSenderObj, signAndBroadcastTxMsg } from "../convertCoin/convertTransactions5";
 import { createTxIBCMsgTransfer } from "./IBCMsgTransfer";
 
 
