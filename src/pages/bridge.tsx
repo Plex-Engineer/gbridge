@@ -26,9 +26,6 @@ const BridgePage = () => {
   const [amount, setAmount] = useState("");
 
   const [bridgeOut, setBridgeOut] = useState(false);
-  const [bridgeOutSuccess, setBridgeOutSuccess] = useState<boolean | null>(
-    null
-  );
 
   //get tokens from the contract call
   const { gravityTokens, gravityAddress } = useGravityTokens(
@@ -216,7 +213,7 @@ const BridgePage = () => {
           }}
         />
       </Balance>
-      <div className="input" hidden={!bridgeOut}>
+      <div className="input" style={!bridgeOut ? {display: 'none'} : {}}>
         <label htmlFor="address">gbridge address: </label>
 
         <input
@@ -232,7 +229,6 @@ const BridgePage = () => {
           }}
           style={{ width: "120%" }}
         />
-        {/* {bridgeOutSuccess != null ? bridgeOutSuccess ? "successful bridge out" : "unsuccessful bridge out" : ""} */}
       </div>
 
       <ReactiveButton
@@ -242,6 +238,7 @@ const BridgePage = () => {
         token={tokenStore.selectedToken}
         gravityAddress={gravityAddress}
         hasPubKey={networkInfo.hasPubKey}
+        disabled={bridgeOut && gravReceiver.slice(0,7) != "gravity"}
         onClick={
           bridgeOut
             ? async () => {
