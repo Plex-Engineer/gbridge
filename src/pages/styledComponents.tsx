@@ -70,17 +70,77 @@ export const Container = styled.div`
 
   .row {
     display: flex;
-    gap: 6rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    /* padding: 2rem; */
+    h3 {
+      padding-left: 1rem;
+      color: white;
+    }
+  }
+  .switchBtn {
+    width: 100%;
+    position: absolute;
+    z-index: 1;
+    hr{
+      border: none;
+      border-bottom : 1px solid #444;
+      position: absolute;
+      width: 100%;
+      top: 50%;
+      z-index: -1;
+    }
+  }
+  .imgBtn {
+    &:hover {
+      border: 1px solid var(--primary-color);
+      border-radius: 50%;
+      cursor: pointer;
+    }
+  }
+
+  .input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border : 1px solid #444;
+    padding: 1rem;
+    width: 80%;
+    margin-top: 2rem;
+    label {
+      color: white;
+      width: 30rem;
+    }
   }
 
   .wallet-item {
     display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 1rem;
+    &>* {
+      width: 100%;
+      
+    }
+   
+    .center {
+      width: 60rem;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    img {
+      width: 30px;
+    }
     p {
       margin: 1rem;
       font-size: 22px;
       color: white;
     }
   }
+
 `;
 export const Balance = styled.div`
   display: flex;
@@ -120,7 +180,11 @@ export const Button = styled.button`
     cursor: pointer;
   }
 `;
-
+export const Center = styled.div`
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+`
 export const DisabledButton = styled(Button)`
   background-color: #222;
   color: #999;
