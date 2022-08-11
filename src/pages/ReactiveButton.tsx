@@ -11,9 +11,10 @@ interface RBProps {
   gravityAddress: string | undefined;
   hasPubKey: boolean;
   onClick: () => void;
+  disabled: boolean
 }
 export const ReactiveButton = ({
-  amount, token, hasPubKey, onClick
+  amount, token, hasPubKey, onClick, disabled
 }: RBProps) => {
 
   if (token == undefined) {
@@ -76,7 +77,7 @@ export const ReactiveButton = ({
   }
   //if the token hasn't been approved
   if (token?.allowance == -1) {
-    return <DisabledButton>Select a token</DisabledButton>;
+    return <DisabledButton>select a token</DisabledButton>;
   }
   //if the amount enter is greater than balance available in the wallet && the token has been approved
   if (Number(amount) > Number(token.balanceOf) && token.allowance != 0) {
@@ -85,7 +86,10 @@ export const ReactiveButton = ({
 
   //if amount entered is greater than allowance approved for the token
   if (Number(amount) <= 0 && token.allowance != 0) {
-    return <DisabledButton>Enter Amount</DisabledButton>;
+    return <DisabledButton>enter amount</DisabledButton>;
+  }
+  if (disabled) {
+    return <DisabledButton>enter gravity address</DisabledButton>;
   }
   
   return (
