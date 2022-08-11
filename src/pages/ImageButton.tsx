@@ -28,6 +28,7 @@ interface IWallet {
               style={{
                   backgroundColor: "#1C1C1C",
                   padding: "1rem 1.4rem",
+                  marginTop : "1rem",
                   color: "white",
                   display: "flex",
                   alignItems: "center",

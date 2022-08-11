@@ -1,4 +1,4 @@
-import right from "assets/right.svg";
+import sendImg from "assets/send.svg";
 import canto from "assets/logo.svg";
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
@@ -146,20 +146,20 @@ const BridgePage = () => {
         <div className="wallet-item">
           
 
-          <h3>from:</h3>
-          <Center className="center"><img src={TOKENS.ETHMainnet.WETH.icon} alt="eth" width={26} />
+          <h3>{bridgeOut ?"from" : "to:"}</h3>
+          <Center className="center"><img src={ bridgeOut ? "https://raw.githubusercontent.com/Gravity-Bridge/Gravity-Docs/main/assets/Graviton-Grey.svg" : TOKENS.ETHMainnet.WETH.icon} alt="eth" width={26} />
           <p>{bridgeOut ? "gravity bridge" : "ethereum"}</p></Center>
           <h4 style={{ color: "white", textAlign : "right" }}>
-            {networkInfo.account?.slice(0,6) + "..." + networkInfo.account?.slice(-6,-1)}
+            { bridgeOut ? "" : networkInfo.account?.slice(0,6) + "..." + networkInfo.account?.slice(-6,-1)}
             </h4>
         </div>
         <div className="switchBtn">
           <Center><img
             className="imgBtn"
-            src={right}
+            src={sendImg}
             height={40}
             style={{
-              transform: bridgeOut ? "rotate(90deg)" : "rotate(90deg)",
+              // transform: bridgeOut ? "rotate(90deg)" : "rotate(90deg)",
               transition: "transform .3s"
             }}
             onClick={() => setBridgeOut(!bridgeOut)}
@@ -167,7 +167,7 @@ const BridgePage = () => {
           <hr />
         </div>
         <div className="wallet-item">
-          <h3>to:</h3>
+          <h3>{bridgeOut ? "to:" : "from"}</h3>
           <Center className="center"><img src={canto} alt="canto" height={26} width={26} />
           <p>canto</p></Center>
           <h4 style={{ color: "white", textAlign : "right" }}>
@@ -182,9 +182,9 @@ const BridgePage = () => {
       </div>
       <ImageButton
         name="connect"
+        
         networkSwitch={bridgeOut ? CantoMainnet.chainId : 1}
       />
-      <br></br>
       
       <Balance>
         <TokenWallet
