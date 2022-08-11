@@ -70,12 +70,29 @@ export const Container = styled.div`
 
   .row {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-   
-   
+    position: relative;
+    /* padding: 2rem; */
+    h3 {
+      padding-left: 1rem;
+      color: white;
+    }
   }
-
+  .switchBtn {
+    width: 100%;
+    position: absolute;
+    z-index: 1;
+    hr{
+      border: none;
+      border-bottom : 1px solid #444;
+      position: absolute;
+      width: 100%;
+      top: 50%;
+      z-index: -1;
+    }
+  }
   .imgBtn {
     &:hover {
       border: 1px solid var(--primary-color);
@@ -94,19 +111,28 @@ export const Container = styled.div`
     margin-top: 2rem;
     label {
       color: white;
-      width: 18rem;
+      width: 30rem;
     }
   }
 
   .wallet-item {
     display: flex;
+    align-items: center;
     width: 100%;
-
-    &:first-of-type {
-      justify-content: start;
+    padding: 1rem;
+    &>* {
+      width: 100%;
+      
     }
-    &:last-of-type {
-      justify-content: end;
+   
+    .center {
+      width: 60rem;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    img {
+      width: 30px;
     }
     p {
       margin: 1rem;
@@ -154,7 +180,11 @@ export const Button = styled.button`
     cursor: pointer;
   }
 `;
-
+export const Center = styled.div`
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+`
 export const DisabledButton = styled(Button)`
   background-color: #222;
   color: #999;

@@ -10,13 +10,14 @@ import { useTokenStore } from "stores/tokens";
 import { ReactiveButton } from "./ReactiveButton";
 import { useApprove, useCosmos } from "./useTransactions";
 import { TokenWallet } from "./TokenSelect";
-import { Container, Balance } from "./styledComponents";
+import { Container, Balance, Center } from "./styledComponents";
 import { ImageButton } from "./ImageButton";
 import { TOKENS, ADDRESSES, Button, CantoMainnet } from "cantoui";
 import { getCantoBalance, useCosmosTokens } from "hooks/useCosmosTokens";
 import { chain, fee, memo } from "config/networks";
 import { txIBCTransfer } from "utils/IBC/IBCTransfer";
 import { toast } from "react-toastify";
+import { useEthers } from "@usedapp/core";
 
 const BridgePage = () => {
   const [gravReceiver, setGravReceiver] = useState("");
@@ -139,31 +140,47 @@ const BridgePage = () => {
         className="row"
         style={{
           border: "1px solid #444",
-          padding: ".1rem 1rem",
           marginBottom: "1rem",
           width: "40rem",
           justifyContent: "space-around",
+          flexDirection : bridgeOut ? "column-reverse" : "column"
         }}
       >
         <div className="wallet-item">
-          <img src={TOKENS.ETHMainnet.WETH.icon} alt="eth" width={26} />
-          <p>{bridgeOut ? "gravity bridge" : "ethereum"}</p>
+          
+
+          <h3>from:</h3>
+          <Center className="center"><img src={TOKENS.ETHMainnet.WETH.icon} alt="eth" width={26} />
+          <p>{bridgeOut ? "gravity bridge" : "ethereum"}</p></Center>
+          <h4 style={{ color: "white", textAlign : "right" }}>
+            {networkInfo.account?.slice(0,6) + "..." + networkInfo.account?.slice(-6,-1)}
+            </h4>
         </div>
-        <div>
-          <img
+        <div className="switchBtn">
+          <Center><img
             className="imgBtn"
             src={right}
             height={40}
             style={{
-              margin: "1rem 1rem 1rem 0rem",
-              transform: bridgeOut ? "rotate(180deg)" : "",
+              transform: bridgeOut ? "rotate(90deg)" : "rotate(90deg)",
+              transition: "transform .3s"
             }}
             onClick={() => setBridgeOut(!bridgeOut)}
-          />
+          /></Center>
+          <hr />
         </div>
         <div className="wallet-item">
-          <img src={canto} alt="eth" width={26} />
-          <p>canto</p>
+          <h3>to:</h3>
+          <Center className="center"><img src={canto} alt="canto" height={26} width={26} />
+          <p>canto</p></Center>
+          <h4 style={{ color: "white", textAlign : "right" }}>
+        
+        {networkInfo.cantoAddress
+          ? networkInfo.cantoAddress.slice(0, 10) +
+            "..." +
+            networkInfo.cantoAddress.slice(-5)
+          : "retrieving wallet"}
+      </h4>
         </div>
       </div>
       <ImageButton
@@ -171,14 +188,7 @@ const BridgePage = () => {
         networkSwitch={bridgeOut ? CantoMainnet.chainId : 1}
       />
       <br></br>
-      <h4 style={{ color: "white" }}>
-        canto address:{" "}
-        {networkInfo.cantoAddress
-          ? networkInfo.cantoAddress.slice(0, 10) +
-            "..." +
-            networkInfo.cantoAddress.slice(-5)
-          : "retrieving wallet"}
-      </h4>
+      
       <Balance>
         <TokenWallet
           tokens={bridgeOut ? cantoTokens : gravityTokens}
@@ -217,7 +227,7 @@ const BridgePage = () => {
         />
       </Balance>
       <div className="input" hidden={!bridgeOut}>
-        <label htmlFor="address">gbridge address: </label>
+        <label htmlFor="address">gravity bridge address: </label>
 
         <input
           className="amount"
