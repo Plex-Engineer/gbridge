@@ -1,4 +1,4 @@
-import { TOKENS } from "cantoui"
+import { TOKENS } from "../../../../blockchain/canto/src/index"
 
 export const gravityTokenBase = [
 TOKENS.GravityBridge.E2H,
