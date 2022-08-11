@@ -185,7 +185,12 @@ const BridgePage = () => {
         
         networkSwitch={bridgeOut ? CantoMainnet.chainId : 1}
       />
-      
+
+      {/* display only if on the right network */}
+      {
+        networkInfo.account
+        ? Number(networkInfo.chainId) == (bridgeOut ? CantoMainnet.chainId : 1)
+      ?
       <Balance>
         <TokenWallet
           tokens={bridgeOut ? cantoTokens : gravityTokens}
@@ -223,6 +228,8 @@ const BridgePage = () => {
           }}
         />
       </Balance>
+      : null : null}
+      
       <div className="input" hidden={!bridgeOut}>
         <label htmlFor="address">gravity bridge address: </label>
 
