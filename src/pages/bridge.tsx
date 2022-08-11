@@ -18,9 +18,11 @@ import { chain, fee, memo } from "config/networks";
 import { txIBCTransfer } from "utils/IBC/IBCTransfer";
 import { toast } from "react-toastify";
 import { useEthers } from "@usedapp/core";
+import { generatePubKey } from "utils/nodeTransactions";
 
 const BridgePage = () => {
   const [gravReceiver, setGravReceiver] = useState("");
+  const [pubKeySuccess, setPubKeySuccess] = useState("")
   const networkInfo = useNetworkInfo();
   const tokenStore = useTokenStore();
   const activeToken = useTokenStore().selectedToken;
@@ -119,12 +121,13 @@ const BridgePage = () => {
       >
         please{" "}
         <a
-          href="https://account.canto.io"
-          style={{ color: "red", textDecoration: "underline" }}
+          style={{ color: "red", textDecoration: "underline", cursor: "pointer"}}
+          onClick={() => generatePubKey(networkInfo.account, setPubKeySuccess)}
         >
           generate public key
         </a>{" "}
         before bridging assets
+        <div>{pubKeySuccess}</div>
       </h1>
       <h1
         style={{

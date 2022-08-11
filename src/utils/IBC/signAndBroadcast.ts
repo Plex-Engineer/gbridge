@@ -1,5 +1,9 @@
+//@ts-nocheck
 import { generateEndpointAccount, generateEndpointBroadcast, generatePostBodyBroadcast, generateEndpointProposals } from '@tharsis/provider';
 import { createTxRawEIP712, signatureToWeb3Extension, createTxMsgDelegate, createTxMsgVote } from '@tharsis/transactions';
+import {signatureToPubkey} from "@hanchon/signature-to-pubkey"
+import { ethers } from 'ethers';
+import {Buffer} from 'buffer'
 /**
  * Signs msg using metamask and broadcasts to node
  * @param {object} msg msg object
@@ -79,6 +83,7 @@ function generateRawTx(chain:any, senderObj:any, signature:any, msg:any) {
     })
         .then(response => response.json())
         .then(result => {
+            console.log(result)
             address = result.cosmos_address
             return address;
         })
@@ -90,11 +95,30 @@ function generateRawTx(chain:any, senderObj:any, signature:any, msg:any) {
  * @param {object} addressData The eth address
  * @return {string} The sender object
  */
-function reformatSender(addressData:any) {
-    return {
-        accountNumber : addressData['account_number'],
-        pubkey : addressData['pub_key']['key'],
-        sequence : addressData['sequence'],
-        accountAddress : addressData['address'],
+
+ async function reformatSender(addressData : string) {
+    let pubkey;
+    if (addressData['pub_key'] == null) {
+        const provider = new ethers.providers.Web3Provider(window.ethereum, 'any');
+        await provider.send("eth_requestAccounts", [1]);
+        const signer = provider.getSigner();
+        const signature = await signer.signMessage('generate_pubkey');
+
+        pubkey = signatureToPubkey(
+            signature,
+            Buffer.from([
+                50, 215, 18, 245, 169, 63, 252, 16, 225, 169, 71, 95, 254, 165, 146, 216,
+                40, 162, 115, 78, 147, 125, 80, 182, 25, 69, 136, 250, 65, 200, 94, 178,
+            ]),
+        );
+    } else {
+        pubkey = addressData['pub_key']['key'];
     }
+    return {
+        accountNumber: addressData['account_number'],
+        pubkey: pubkey,
+        sequence: addressData['sequence'],
+        accountAddress: addressData['address'],
+    }
+    
 }
