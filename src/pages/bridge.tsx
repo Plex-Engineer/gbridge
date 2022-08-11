@@ -223,7 +223,7 @@ const BridgePage = () => {
           }}
         />
       </Balance>
-      <div className="input" hidden={!bridgeOut}>
+      <div className="input" style={!bridgeOut ? {visibility: "hidden"} : {}}>
         <label htmlFor="address">gravity bridge address: </label>
 
         <input
