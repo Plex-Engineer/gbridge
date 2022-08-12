@@ -1,3 +1,4 @@
+import { CantoMainnet } from "cantoui";
 import { ethers } from "ethers";
 
 
@@ -40,4 +41,31 @@ function addEthMainToWallet () {
             }]
         })
     }
+}
+
+export function addNetwork() {
+  //@ts-ignore
+if (window.ethereum) {
+  //@ts-ignore
+  window?.ethereum
+    .request({
+      method: "wallet_addEthereumChain",
+      params: [
+        {
+          chainId: "0x" + CantoMainnet.chainId.toString(16),
+          chainName: "Canto",
+          nativeCurrency: {
+            name: "Canto Coin",
+            symbol: "CANTO",
+            decimals: 18,
+          },
+          rpcUrls: [CantoMainnet.rpcUrl],
+          blockExplorerUrls: [CantoMainnet.blockExplorerUrl],
+        },
+      ],
+    })
+    .catch((error: any) => {
+      // console.log(error);
+    });
+}
 }

@@ -17,12 +17,10 @@ import { getCantoBalance, useCosmosTokens } from "hooks/useCosmosTokens";
 import { chain, fee, memo } from "config/networks";
 import { txIBCTransfer } from "utils/IBC/IBCTransfer";
 import { toast } from "react-toastify";
-import { useEthers } from "@usedapp/core";
-import { generatePubKey } from "utils/nodeTransactions";
+import { GenPubKey } from "./genPubKey";
 
 const BridgePage = () => {
   const [gravReceiver, setGravReceiver] = useState("");
-  const [pubKeySuccess, setPubKeySuccess] = useState("")
   const networkInfo = useNetworkInfo();
   const tokenStore = useTokenStore();
   const activeToken = useTokenStore().selectedToken;
@@ -110,25 +108,7 @@ const BridgePage = () => {
   // =========================
   return (
     <Container>
-      <h1
-        hidden={networkInfo.hasPubKey}
-        style={{
-          color: "#b73d3d",
-          fontWeight: "bold",
-          paddingTop: "15px",
-          textShadow: "0px 0px black",
-        }}
-      >
-        please{" "}
-        <a
-          style={{ color: "red", textDecoration: "underline", cursor: "pointer"}}
-          onClick={() => generatePubKey(networkInfo.account, setPubKeySuccess)}
-        >
-          generate public key
-        </a>{" "}
-        before bridging assets
-        <div>{pubKeySuccess}</div>
-      </h1>
+    <GenPubKey/>
       <h1
         style={{
           margin: "2rem",
