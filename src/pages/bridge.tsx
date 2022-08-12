@@ -1,6 +1,6 @@
 import sendImg from "assets/send.svg";
 import canto from "assets/logo.svg";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { Mixpanel } from "./../mixpanel";
 import { BigNumber } from "ethers";
@@ -17,7 +17,7 @@ import { getCantoBalance, useCosmosTokens } from "hooks/useCosmosTokens";
 import { chain, fee, memo } from "config/networks";
 import { txIBCTransfer } from "utils/IBC/IBCTransfer";
 import { toast } from "react-toastify";
-import { useEthers } from "@usedapp/core";
+import GeneratePubKey from "../components/pubKey/generatePubKey";
 
 const BridgePage = () => {
   const [gravReceiver, setGravReceiver] = useState("");
@@ -108,6 +108,9 @@ const BridgePage = () => {
   // =========================
   return (
     <Container>
+      {!networkInfo.hasPubKey ? 
+     <GeneratePubKey/> :  
+     <React.Fragment>
       <h1
         hidden={networkInfo.hasPubKey}
         style={{
@@ -345,6 +348,7 @@ const BridgePage = () => {
       >
         powered by Gravity Bridge
       </div>
+      </React.Fragment> }
     </Container>
   );
 };
