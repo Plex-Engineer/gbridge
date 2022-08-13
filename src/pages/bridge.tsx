@@ -12,7 +12,7 @@ import { useApprove, useCosmos } from "./useTransactions";
 import { TokenWallet } from "./TokenSelect";
 import { Container, Balance, Center } from "./styledComponents";
 import { ImageButton } from "./ImageButton";
-import { TOKENS, ADDRESSES, CantoMainnet } from "cantoui";
+import { TOKENS, ADDRESSES, CantoMainnet, useAlert } from "cantoui";
 import { getCantoBalance, useCosmosTokens } from "hooks/useCosmosTokens";
 import { chain, fee, memo } from "config/networks";
 import { txIBCTransfer } from "utils/IBC/IBCTransfer";
@@ -27,6 +27,7 @@ const BridgePage = () => {
   const [amount, setAmount] = useState("");
 
   const [bridgeOut, setBridgeOut] = useState(false);
+  const alert = useAlert();
 
   //get tokens from the contract call
   const { gravityTokens, gravityAddress } = useGravityTokens(
@@ -46,6 +47,9 @@ const BridgePage = () => {
     send: sendCosmos,
     resetState: resetCosmos,
   } = useCosmos(gravityAddress ?? ADDRESSES.ETHMainnet.GravityBridge);
+
+
+
 
   //event tracker
   useEffect(() => {
@@ -70,8 +74,16 @@ const BridgePage = () => {
     if (networkInfo.cantoAddress) {
       getBalances();
     }
+    if (!networkInfo.hasPubKey) {
+      alert.show("Failure", <GenPubKey />);
+    }
   }, [networkInfo.cantoAddress]);
 
+  useEffect(()=>{
+    if (networkInfo.hasPubKey) {
+      alert.close();
+    }
+  },[networkInfo.hasPubKey])
   //send function
   const send = () => {
     //Checking if amount enter is greater than balance available in wallet and token has been approved.
@@ -108,7 +120,6 @@ const BridgePage = () => {
   // =========================
   return (
     <Container>
-    <GenPubKey/>
       <h1
         style={{
           margin: "2rem",
@@ -123,52 +134,66 @@ const BridgePage = () => {
           marginBottom: "1rem",
           width: "40rem",
           justifyContent: "space-around",
-          flexDirection : bridgeOut ? "column-reverse" : "column"
+          flexDirection: bridgeOut ? "column-reverse" : "column",
         }}
       >
         <div className="wallet-item">
-          
-
-          <h3>{bridgeOut ?"to:" : "from:"}</h3>
-          <Center className="center"><img src={ bridgeOut ? "https://raw.githubusercontent.com/Gravity-Bridge/Gravity-Docs/main/assets/Graviton-Grey.svg" : TOKENS.ETHMainnet.WETH.icon} alt="eth" width={26} />
-          <p>{bridgeOut ? "gravity bridge" : "ethereum"}</p></Center>
-          <h4 style={{ color: "white", textAlign : "right" }}>
-            { bridgeOut ? "" : networkInfo.account?.slice(0,6) + "..." + networkInfo.account?.slice(-6,-1)}
-            </h4>
+          <h3>{bridgeOut ? "to:" : "from:"}</h3>
+          <Center className="center">
+            <img
+              src={
+                bridgeOut
+                  ? "https://raw.githubusercontent.com/Gravity-Bridge/Gravity-Docs/main/assets/Graviton-Grey.svg"
+                  : TOKENS.ETHMainnet.WETH.icon
+              }
+              alt="eth"
+              width={26}
+            />
+            <p>{bridgeOut ? "gravity bridge" : "ethereum"}</p>
+          </Center>
+          <h4 style={{ color: "white", textAlign: "right" }}>
+            {bridgeOut
+              ? ""
+              : networkInfo.account?.slice(0, 6) +
+                "..." +
+                networkInfo.account?.slice(-6, -1)}
+          </h4>
         </div>
         <div className="switchBtn">
-          <Center><img
-            className="imgBtn"
-            src={sendImg}
-            height={40}
-            style={{
-              // transform: bridgeOut ? "rotate(90deg)" : "rotate(90deg)",
-              transition: "transform .3s"
-            }}
-            onClick={() => setBridgeOut(!bridgeOut)}
-          /></Center>
+          <Center>
+            <img
+              className="imgBtn"
+              src={sendImg}
+              height={40}
+              style={{
+                // transform: bridgeOut ? "rotate(90deg)" : "rotate(90deg)",
+                transition: "transform .3s",
+              }}
+              onClick={() => setBridgeOut(!bridgeOut)}
+            />
+          </Center>
           <hr />
         </div>
         <div className="wallet-item">
           <h3>{bridgeOut ? "from:" : "to:"}</h3>
-          <Center className="center"><img src={canto} alt="canto" height={26} width={26} />
-          <p>canto</p></Center>
-          <h4 style={{ color: "white", textAlign : "right" }}>
-        
-        {networkInfo.cantoAddress
-          ? networkInfo.cantoAddress.slice(0, 10) +
-            "..." +
-            networkInfo.cantoAddress.slice(-5)
-          : "retrieving wallet"}
-      </h4>
+          <Center className="center">
+            <img src={canto} alt="canto" height={26} width={26} />
+            <p>canto</p>
+          </Center>
+          <h4 style={{ color: "white", textAlign: "right" }}>
+            {networkInfo.cantoAddress
+              ? networkInfo.cantoAddress.slice(0, 10) +
+                "..." +
+                networkInfo.cantoAddress.slice(-5)
+              : "retrieving wallet"}
+          </h4>
         </div>
       </div>
       <ImageButton
         name="connect"
-        
         networkSwitch={bridgeOut ? CantoMainnet.chainId : 1}
       />
-      
+
       <Balance>
         <TokenWallet
           tokens={bridgeOut ? cantoTokens : gravityTokens}
@@ -206,7 +231,7 @@ const BridgePage = () => {
           }}
         />
       </Balance>
-      <div className="input" style={!bridgeOut ? {visibility: "hidden"} : {}}>
+      <div className="input" style={!bridgeOut ? { visibility: "hidden" } : {}}>
         <label htmlFor="address">gravity bridge address: </label>
 
         <input
@@ -231,7 +256,7 @@ const BridgePage = () => {
         token={tokenStore.selectedToken}
         gravityAddress={gravityAddress}
         hasPubKey={networkInfo.hasPubKey}
-        disabled={bridgeOut && gravReceiver.slice(0,7) != "gravity"}
+        disabled={bridgeOut && gravReceiver.slice(0, 7) != "gravity"}
         onClick={
           bridgeOut
             ? async () => {
@@ -269,7 +294,6 @@ const BridgePage = () => {
                       fontSize: "20px",
                     },
                   });
-
                 } else {
                   //TODO: Show an error
                 }
@@ -280,14 +304,15 @@ const BridgePage = () => {
       <br></br>
       {bridgeOut ? (
         <div style={{ color: "white", padding: "1rem", textAlign: "center" }}>
-          in order to bridge out of canto, you must convert all of your ERC20 assets 
-          {" (Metamask)"} to native canto tokens {" "} 
+          in order to bridge out of canto, you must convert all of your ERC20
+          assets
+          {" (Metamask)"} to native canto tokens{" "}
           <a
             href="https://convert.canto.io"
             style={{ color: "white", textDecoration: "underline" }}
           >
             here.
-          </a> {" "}
+          </a>{" "}
           the balances in your Metamask will not reflect your bridgeable assets
         </div>
       ) : (
