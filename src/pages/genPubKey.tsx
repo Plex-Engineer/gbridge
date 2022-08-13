@@ -9,8 +9,6 @@ export const GenPubKey = () => {
     const [pubKeySuccess, setPubKeySuccess] = useState("");
     const networkInfo = useNetworkInfo();
     
-    
-    
     return (
         <h1
         hidden={networkInfo.hasPubKey}

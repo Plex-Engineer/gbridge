@@ -12,7 +12,7 @@ import { useApprove, useCosmos } from "./useTransactions";
 import { TokenWallet } from "./TokenSelect";
 import { Container, Balance, Center } from "./styledComponents";
 import { ImageButton } from "./ImageButton";
-import { TOKENS, ADDRESSES, Button, CantoMainnet } from "cantoui";
+import { TOKENS, ADDRESSES, CantoMainnet } from "cantoui";
 import { getCantoBalance, useCosmosTokens } from "hooks/useCosmosTokens";
 import { chain, fee, memo } from "config/networks";
 import { txIBCTransfer } from "utils/IBC/IBCTransfer";
@@ -129,7 +129,7 @@ const BridgePage = () => {
         <div className="wallet-item">
           
 
-          <h3>{bridgeOut ?"from:" : "to:"}</h3>
+          <h3>{bridgeOut ?"to:" : "from:"}</h3>
           <Center className="center"><img src={ bridgeOut ? "https://raw.githubusercontent.com/Gravity-Bridge/Gravity-Docs/main/assets/Graviton-Grey.svg" : TOKENS.ETHMainnet.WETH.icon} alt="eth" width={26} />
           <p>{bridgeOut ? "gravity bridge" : "ethereum"}</p></Center>
           <h4 style={{ color: "white", textAlign : "right" }}>
@@ -150,7 +150,7 @@ const BridgePage = () => {
           <hr />
         </div>
         <div className="wallet-item">
-          <h3>{bridgeOut ? "to:" : "from:"}</h3>
+          <h3>{bridgeOut ? "from:" : "to:"}</h3>
           <Center className="center"><img src={canto} alt="canto" height={26} width={26} />
           <p>canto</p></Center>
           <h4 style={{ color: "white", textAlign : "right" }}>
