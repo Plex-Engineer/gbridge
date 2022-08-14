@@ -108,4 +108,25 @@ export async function getCantoBalance(
 
   return processedTokens;
 }
+
+export async function getGravityTokenBalance (gravityAddress: string) {
+    const url = "https://gravitychain.io:1317/" + generateEndpointBalances(gravityAddress);
+    const options = {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+        },
+      };
+      const result = await fetch(url, options)
+    .then((response) => response.json())
+    .then((result) => {
+      return result["balances"];
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+    console.log("🚀 ~ file: useCosmosTokens.ts ~ line 130 ~ getGravityTokenBalance ~ result", result)
+    return result
+}
+    
   
