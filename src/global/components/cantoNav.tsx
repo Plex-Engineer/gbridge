@@ -55,6 +55,7 @@ export const CantoNav = () => {
       balance={netWorkInfo.balance}
       currency={netWorkInfo.chainId == "1" ? "ETH" : "CANTO"}
       logo={logo}
+      currentPage="bridge"
     />
   );
 };

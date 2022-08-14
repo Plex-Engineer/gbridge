@@ -168,7 +168,7 @@ const BridgePage = () => {
         
         networkSwitch={bridgeOut ? CantoMainnet.chainId : 1}
       />
-      
+
       <Balance>
         <TokenWallet
           tokens={bridgeOut ? cantoTokens : gravityTokens}
@@ -179,6 +179,7 @@ const BridgePage = () => {
             resetApprove();
           }}
         />
+        <div style={{marginTop: "1.5rem"}}>
         <input
           className="amount"
           autoComplete="off"
@@ -205,6 +206,10 @@ const BridgePage = () => {
             }
           }}
         />
+        <div style={{textAlign: "right", color: "gray", paddingTop: "0rem", cursor: "pointer"}} onClick={() => {setAmount(tokenStore.selectedToken.balanceOf)}}>
+          {tokenStore.selectedToken.balanceOf < 0 ? "" : "max " + tokenStore.selectedToken.balanceOf}
+        </div>
+        </div>
       </Balance>
       <div className="input" style={!bridgeOut ? {visibility: "hidden"} : {}}>
         <label htmlFor="address">gravity bridge address: </label>
