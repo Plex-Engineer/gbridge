@@ -10,6 +10,23 @@ interface TxStatus {
     send: (...args: any[]) => Promise<providers.TransactionReceipt | undefined>;
     resetState: () => void;
 }
+export const selectedEmptyToken = 
+{
+  data : {
+  isERC20: false,
+  isLP: false,
+  symbol: "NOTHIN",
+  address: "0x0412C7c846bb6b7DC462CF6B453f76D8440b2609",
+  cTokenAddress: "",
+  decimals: 0,
+  icon: emptyToken,
+  name: "select token",
+  nativeName: "none"
+},
+  wallet : "",
+  allowance: -1,
+  balanceOf: -1,
+}
 
 interface TokenStore {
   network : {
@@ -41,22 +58,7 @@ export const useTokenStore = create<TokenStore>()(
     },
     tokens: [],
     setTokens: (tokens: GTokens[]) => set({ tokens: tokens }),
-    selectedToken: {
-      data : {
-      isERC20: false,
-      isLP: false,
-      symbol: "NOTHIN",
-      address: "0x0412C7c846bb6b7DC462CF6B453f76D8440b2609",
-      cTokenAddress: "",
-      decimals: 0,
-      icon: emptyToken,
-      name: "select token",
-      nativeName: "none"
-    },
-      wallet : "",
-      allowance: -1,
-      balanceOf: -1,
-    },
+    selectedToken: selectedEmptyToken,
     setSelectedToken: (token: GTokens) => {
       set({
         selectedToken: token,
@@ -74,5 +76,7 @@ export const useTokenStore = create<TokenStore>()(
   
   ))
 );
+
+
 
 

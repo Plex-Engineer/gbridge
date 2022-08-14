@@ -12,7 +12,7 @@ export const ETHMainnet = {
   chainId: 1,
   addresses: ADDRESSES.ETHMainnet,
   gravityTokens: mainnetGravityTokensBase,
-  rpcUrl: "https://mainnet.infura.io/v3/e5a334de8167419aaa717a990033db27",
+  rpcUrl: "https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
   isTestChain: false,
   blockExplorerUrl: "https://www.nothing.com",
 };

@@ -6,7 +6,7 @@ import { Mixpanel } from "./../mixpanel";
 import { BigNumber } from "ethers";
 import { GTokens, useGravityTokens } from "hooks/useGravityTokens";
 import { useNetworkInfo } from "stores/networkInfo";
-import { useTokenStore } from "stores/tokens";
+import { selectedEmptyToken, useTokenStore } from "stores/tokens";
 import { ReactiveButton } from "./ReactiveButton";
 import { useApprove, useCosmos } from "./useTransactions";
 import { TokenWallet } from "./TokenSelect";
@@ -145,7 +145,11 @@ const BridgePage = () => {
               // transform: bridgeOut ? "rotate(90deg)" : "rotate(90deg)",
               transition: "transform .3s"
             }}
-            onClick={() => setBridgeOut(!bridgeOut)}
+            onClick={() => {
+              setBridgeOut(!bridgeOut);
+              tokenStore.setSelectedToken(selectedEmptyToken)
+            }
+          }
           /></Center>
           <hr />
         </div>
