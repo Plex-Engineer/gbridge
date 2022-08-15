@@ -1,4 +1,4 @@
-import { CantoMainnet } from "cantoui";
+import { CantoMainnet, NodeAddresses } from "cantoui";
 import { ethers } from "ethers";
 
 
@@ -59,7 +59,7 @@ if (window.ethereum) {
             symbol: "CANTO",
             decimals: 18,
           },
-          rpcUrls: [CantoMainnet.rpcUrl],
+          rpcUrls: [NodeAddresses.CantoMainnet.ChandraRPC],
           blockExplorerUrls: [CantoMainnet.blockExplorerUrl],
         },
       ],
