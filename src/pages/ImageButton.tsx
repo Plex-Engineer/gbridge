@@ -1,6 +1,7 @@
 import { useEthers } from "@usedapp/core";
 import { ETHMainnet } from "config/networks";
 import { useNetworkInfo } from "stores/networkInfo";
+import { addEthMainToWallet, addNetwork } from "utils/addCantoToWallet";
 
 interface IWallet {
     image?: string;
@@ -21,10 +22,9 @@ interface IWallet {
               onClick={async () => {
                   //1 for ethereum mainnet, 15 for gravity bridge testnet
                   activateBrowserWallet();
-
-                  if (Number(networkInfo.chainId) != networkSwitch)
-                      switchNetwork(networkSwitch);
-              } }
+                  networkSwitch == 1 ? addEthMainToWallet() : addNetwork();
+              } 
+            }
               style={{
                   backgroundColor: "#1C1C1C",
                   padding: "1rem 1.4rem",

@@ -30,7 +30,7 @@ export async function getAccountBalance(account: string | undefined) {
  
 }
 
-function addEthMainToWallet () {
+export function addEthMainToWallet () {
     //@ts-ignore 
     if (window.ethereum) {
         //@ts-ignore
