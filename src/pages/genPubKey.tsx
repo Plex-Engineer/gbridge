@@ -10,11 +10,12 @@ export const GenPubKey = () => {
     const networkInfo = useNetworkInfo();
     
     return (
-        <p
+        <h1
         hidden={networkInfo.hasPubKey}
         style={{
           color: "#b73d3d",
           fontWeight: "bold",
+          textShadow: "0px 0px black",
         }}
       >
         please{" "}
@@ -34,6 +35,6 @@ export const GenPubKey = () => {
         </a>{" "}
         before bridging assets
         <div>{pubKeySuccess}</div>
-      </p>
+      </h1>
     )
 }

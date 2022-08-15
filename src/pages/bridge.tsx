@@ -12,7 +12,7 @@ import { useApprove, useCosmos } from "./useTransactions";
 import { TokenWallet } from "./TokenSelect";
 import { Container, Balance, Center } from "./styledComponents";
 import { ImageButton } from "./ImageButton";
-import { TOKENS, ADDRESSES, CantoMainnet, useAlert } from "cantoui";
+import { TOKENS, ADDRESSES, CantoMainnet } from "cantoui";
 import { getCantoBalance, getGravityTokenBalance, useCosmosTokens } from "hooks/useCosmosTokens";
 import { chain, fee, memo } from "config/networks";
 import { txIBCTransfer } from "utils/IBC/IBCTransfer";
@@ -27,7 +27,7 @@ const BridgePage = () => {
   const [amount, setAmount] = useState("");
 
   const [bridgeOut, setBridgeOut] = useState(false);
-  const alert = useAlert();
+  // const alert = useAlert();
 
   //get tokens from the contract call
   const { gravityTokens, gravityAddress } = useGravityTokens(
@@ -74,16 +74,16 @@ const BridgePage = () => {
     if (networkInfo.cantoAddress) {
       getBalances();
     }
-    if (!networkInfo.hasPubKey) {
-      alert.show("Failure", <GenPubKey />);
-    }
+    // if (!networkInfo.hasPubKey) {
+    //   alert.show("Failure", <GenPubKey />);
+    // }
   }, [networkInfo.cantoAddress]);
 
-  useEffect(()=>{
-    if (networkInfo.hasPubKey) {
-      alert.close();
-    }
-  },[networkInfo.hasPubKey])
+  // useEffect(()=>{
+  //   if (networkInfo.hasPubKey) {
+  //     alert.close();
+  //   }
+  // },[networkInfo.hasPubKey])
   //send function
   const send = () => {
     //Checking if amount enter is greater than balance available in wallet and token has been approved.
@@ -111,7 +111,7 @@ const BridgePage = () => {
 
   async function getBalances() {
     const tokensWithBalances = await getCantoBalance(
-      CantoMainnet.cosmosAPIEndpoint,
+      "https://mainnode.plexnode.org:1317",
       networkInfo.cantoAddress
     );
     setCantoTokens(tokensWithBalances);
@@ -120,6 +120,7 @@ const BridgePage = () => {
   // =========================
   return (
     <Container>
+      <GenPubKey/>
       <h1
         style={{
           margin: "2rem",
@@ -276,7 +277,7 @@ const BridgePage = () => {
                     .parseUnits(amount, tokenStore.selectedToken.data.decimals)
                     .toString(),
                   tokenStore.selectedToken.data.nativeName,
-                  CantoMainnet.cosmosAPIEndpoint,
+                  "https://mainnode.plexnode.org:1317",
                   "https://gravitychain.io:1317",
                   fee,
                   chain,

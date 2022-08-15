@@ -3,11 +3,13 @@ import { NavBar } from "cantoui";
 import { getAccountBalance, getChainIdandAccount } from "global/utils/walletConnect/addCantoToWallet";
 import { useEffect } from "react";
 import { useNetworkInfo } from "stores/networkInfo";
+import { addNetwork } from "utils/addCantoToWallet";
 import logo from "./../../assets/logo.svg"
 
 export const CantoNav = () => {
   const netWorkInfo = useNetworkInfo();
   const { activateBrowserWallet, account, switchNetwork } = useEthers();
+  // const alert = useAlert();
 
   async function setChainInfo() {
     const [chainId, account] = await getChainIdandAccount();
@@ -39,6 +41,11 @@ export const CantoNav = () => {
     }
   }
   useEffect(() => {
+    // if (!netWorkInfo.isConnected) {
+    //   alert.show("Failure", <p>this network is not supported on gravity bridge, please <a onClick={addNetwork} style={{cursor: "pointer"}}>switch networks</a></p>)
+    // } else {
+    //   alert.close();
+    // }
     getBalance();
   },[netWorkInfo.account, netWorkInfo.chainId])
 

@@ -59,7 +59,7 @@ if (window.ethereum) {
             symbol: "CANTO",
             decimals: 18,
           },
-          rpcUrls: [CantoMainnet.rpcUrl],
+          rpcUrls: ["https://mainnode.plexnode.org:8545"],
           blockExplorerUrls: [CantoMainnet.blockExplorerUrl],
         },
       ],
