@@ -4,9 +4,8 @@ import { HelmetProvider } from "react-helmet-async";
 import BridgePage from "pages/bridge";
 import "react-toastify/dist/ReactToastify.css";
 import {ToastContainer } from "react-toastify";
-import { Overlay, ScanLine, ScanlinesOverlay, StaticNoiseOverlay } from "global/styled-components/Overlays";
+import { Overlay, ScanLine, ScanlinesOverlay, StaticNoiseOverlay } from "cantoui"
 import { CantoNav } from "global/components/cantoNav";
-
 
 
 //Styling
