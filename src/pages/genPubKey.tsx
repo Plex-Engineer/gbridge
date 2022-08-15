@@ -31,7 +31,7 @@ export const GenPubKey = () => {
 
           } 
         >
-          generate public key
+          generate a public key
         </a>{" "}
         before bridging assets
         <div>{pubKeySuccess}</div>
