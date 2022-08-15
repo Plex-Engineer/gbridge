@@ -15,7 +15,7 @@ export function addNetwork() {
             symbol: "CANTO",
             decimals: 18,
           },
-          rpcUrls: ["https://mainnode.plexnode.org:8545"],
+          rpcUrls: [CantoMainnet.rpcUrl],
           blockExplorerUrls: [CantoMainnet.blockExplorerUrl],
         },
       ],

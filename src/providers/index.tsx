@@ -48,7 +48,7 @@ const config: Config = {
   readOnlyUrls: {
     [Gravity.chainId]: GravityTestnet.rpcUrl,
     [ETHMain.chainId]: ETHMainnet.rpcUrl,
-    [CantoMainnet.chainId]: "https://mainnode.plexnode.org:8545"
+    [CantoMainnet.chainId]: CantoMain.rpcUrl
   },
   noMetamaskDeactivate: true,
 };
