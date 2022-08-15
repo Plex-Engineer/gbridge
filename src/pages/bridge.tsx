@@ -336,7 +336,7 @@ const BridgePage = () => {
           page to view your bridged assets and convert them into canto ERC20
           tokens to view your assets in Metamask. for more details, please read{" "}
           <a
-            href="https://canto.gitbook.io/canto/user-guides/bridging-assets-to-canto/transfering-canto-assets-to-canto-evm"
+            href="https://docs.canto.io/user-guides/getting-started"
             style={{ color: "white", textDecoration: "underline" }}
           >
             here
