@@ -1,5 +1,6 @@
 import sendImg from "assets/send.svg";
 import canto from "assets/logo.svg";
+import copyIcon from "assets/copyIcon.svg"
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { Mixpanel } from "./../mixpanel";
@@ -47,6 +48,13 @@ const BridgePage = () => {
     send: sendCosmos,
     resetState: resetCosmos,
   } = useCosmos(gravityAddress ?? ADDRESSES.ETHMainnet.GravityBridge);
+
+  function copyAddress(value : string | undefined) {
+    navigator.clipboard.writeText(value ?? "");
+    toast("copied address", {
+      autoClose: 300
+    })
+  }
 
 
 
@@ -150,7 +158,7 @@ const BridgePage = () => {
             />
             <p>{bridgeOut ? "gravity bridge" : "ethereum"}</p>
           </Center>
-          <h4 style={{ color: "white", textAlign: "right" }}>
+          <h4 style={{ color: "white", textAlign: "right", cursor: "pointer" }} id="ethAddress" onClick={() => copyAddress(networkInfo.account)}>
             {bridgeOut
               ? ""
               : networkInfo.account?.slice(0, 6) +
@@ -183,13 +191,14 @@ const BridgePage = () => {
             <img src={canto} alt="canto" height={26} width={26} />
             <p>canto</p>
           </Center>
-          <h4 style={{ color: "white", textAlign: "right" }}>
+          <h4 style={{ color: "white", textAlign: "right", cursor: "pointer" }} id="cantoAddress" onClick={() => copyAddress(networkInfo.cantoAddress)}>
             {networkInfo.cantoAddress
               ? networkInfo.cantoAddress.slice(0, 10) +
                 "..." +
                 networkInfo.cantoAddress.slice(-5)
               : "retrieving wallet"}
           </h4>
+          {/* <img src={copyIcon} style={{zIndex: "80", background: "gray", height: "15px", marginLeft: "5px", cursor: "pointer"}} onClick={() => copyAddress(networkInfo.cantoAddress)}/> */}
         </div>
       </div>
       <ImageButton
