@@ -1,4 +1,5 @@
 import { ADDRESSES, CantoMainnet, Text } from "cantoui";
+import CopyIcon from "assets/copyIcon.svg"
 import TransferBox from "components/TransferBox";
 import { GTokens, useGravityTokens } from "hooks/useGravityTokens";
 import React, { useEffect, useState } from "react";
@@ -15,11 +16,10 @@ import { addNetwork } from "utils/addCantoToWallet";
 const BridgeIn = () => {
   const networkInfo = useNetworkInfo();
   const tokenStore = useTokenStore();
-  const [cantoTokens, setCantoTokens] = useState<GTokens[] | undefined>([]);
-  const { switchNetwork } = useEthers();
+  const [cantoGravityTokens, setCantoGravityTokens] = useState<GTokens[] | undefined>([]);
+  const { switchNetwork, activateBrowserWallet } = useEthers();
   const { gravityTokens, gravityAddress } = useGravityTokens(
-    networkInfo.account,
-    Number(networkInfo.chainId)
+    networkInfo.account
   );
 
   async function getBalances(gravityTokens: GTokens[]) {
@@ -29,7 +29,7 @@ const BridgeIn = () => {
       gravityTokens
     );
 
-    setCantoTokens(tokensWithBalances);
+    setCantoGravityTokens(tokensWithBalances);
   }
 
   useEffect(() => {
@@ -81,7 +81,7 @@ const BridgeIn = () => {
         Send funds to canto
       </Text>
       <TokenWallet
-        tokens={gravityTokens}
+        tokens={cantoGravityTokens}
         activeToken={tokenStore.selectedToken}
         onSelect={(value) => {
           tokenStore.setSelectedToken(value);
@@ -95,16 +95,19 @@ const BridgeIn = () => {
           style={{
             fontSize: "20px",
             marginLeft: "30px",
+            cursor: "pointer"
           }}
+          onClick={() => copyAddress(networkInfo.account)}
         >
           {networkInfo.account?.slice(0, 6) +
             "..." +
             networkInfo.account?.slice(-6, -1)}
         </span>
+        <img src={CopyIcon} style={{background: "white", height: "15px", marginLeft: "5px"}}/>
       </Text>
       <TransferBox
         tokenIcon={tokenStore.selectedToken.data.icon}
-        networkName="Ethereum"
+        networkName="ethereum"
         onBridge={() => {
           console.log("bridedsasdlaksjh");
         }}
@@ -112,6 +115,7 @@ const BridgeIn = () => {
           switchNetwork(1);
         }}
         tokenSymbol={tokenStore.selectedToken.data.symbol}
+        connected={1 == Number(networkInfo.chainId)}
       />
       <img src={arrow} alt="next" />
 
@@ -121,15 +125,17 @@ const BridgeIn = () => {
 
       <TransferBox
         tokenIcon={tokenStore.selectedToken.data.icon}
-        networkName="Canto"
+        networkName="canto"
         onBridge={() => {}}
         onSwitch={() => {
           console.log(
             "🚀 ~ file: bridgeIn.tsx ~ line 100 ~ onSwitch ~ networkInfo"
           );
-          //   addNetwork();
+          activateBrowserWallet();
+            addNetwork();
         }}
         tokenSymbol={tokenStore.selectedToken.data.symbol}
+        connected={CantoMainnet.chainId == Number(networkInfo.chainId)}
       />
       <img src={arrow} alt="next" />
       <Text type="title" color="primary">

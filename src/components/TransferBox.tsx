@@ -1,4 +1,5 @@
 import { FilledButton, PrimaryButton, Text } from "cantoui";
+import { DisabledButton } from "pages/styledComponents";
 import styled from "styled-components";
 
 interface Props {
@@ -8,6 +9,7 @@ interface Props {
   onBridge: () => void;
   onSwitch: () => void;
   disabled?: boolean;
+  connected: boolean;
 }
 const TransferBox = (props: Props) => (
   <TransferBoxStyled>
@@ -31,6 +33,7 @@ const TransferBox = (props: Props) => (
       </div>
     </div>
     <div className="row">
+      {!props.connected ? 
       <PrimaryButton
         style={{
           width: "100%",
@@ -38,7 +41,13 @@ const TransferBox = (props: Props) => (
         onClick={props.onSwitch}
       >
         Switch to {props.networkName}
-      </PrimaryButton>
+      </PrimaryButton> 
+      : 
+      <DisabledButton>connected to {props.networkName}</DisabledButton>
+      
+      }
+
+
       <PrimaryButton onClick={props.onBridge}>Bridge</PrimaryButton>
     </div>
   </TransferBoxStyled>

@@ -8,25 +8,10 @@ import {
   createMsgConvertERC20,
   MSG_CONVERT_ERC20_TYPES,
 } from "@tharsis/eip712";
-import * as erc20 from './prototypes/proto-tx';
+import * as erc20 from '../prototypes/proto-tx';
+import { Chain, Fee, Sender } from "config/networks";
 
-export interface Fee {
-  amount: string;
-  denom: string;
-  gas: string;
-}
 
-export interface Sender {
-  accountAddress: string;
-  sequence: number;
-  accountNumber: number;
-  pubkey: string;
-}
-
-export interface Chain {
-  chainId: number;
-  cosmosChainId: string;
-}
 
 /* eslint-disable camelcase */
 export interface MessageMsgConvertERC20 {
@@ -99,12 +84,6 @@ export function createTxMsgConvertERC20(
     eipToSign,
   };
 }
-
-
-
-
-
-
 
 export function protoMsgConvertERC20(
     contractAddress: string,

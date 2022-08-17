@@ -1,23 +1,16 @@
 import { useCalls } from "@usedapp/core";
 import { Contract } from "ethers";
-import { GravityTestnet } from "config/networks";
-import {
-  CantoGravityTokens,
-  gravityTokenBase,
-  mainnetGravityTokensBase,
-} from "config/gravityBridgeTokens";
+import { CantoGravityTokens } from "config/gravityBridgeTokens";
 import { abi } from "config/abi";
 import { ethers } from "ethers";
-import { ADDRESSES, CantoMainnet } from "cantoui";
 import { GTokens } from "./useGravityTokens";
 import { generateEndpointBalances } from "@tharsis/provider";
+import { CantoMainnet } from "cantoui";
 
-export function useCosmosTokens(
-  account: string | undefined,
-  chainId: number
-): { cantoTokens: GTokens[] | undefined } {
-  const tokens =
-    chainId == CantoMainnet.chainId ? CantoGravityTokens : CantoGravityTokens;
+export function useCosmosTokens(account: string | undefined): {
+  cantoTokens: GTokens[] | undefined;
+} {
+  const tokens = CantoGravityTokens;
 
   const calls =
     tokens?.map((token) => {
@@ -31,7 +24,9 @@ export function useCosmosTokens(
         },
       ];
     }) ?? [];
-  const results = useCalls(calls.flat()) ?? {};
+  const results =
+    useCalls(tokens ? calls.flat() : [], { chainId: CantoMainnet.chainId }) ??
+    {};
 
   if (account == undefined) {
     return { cantoTokens: undefined };

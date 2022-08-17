@@ -25,7 +25,7 @@ export interface GTokens  {
 }[]
 
 export function useGravityTokens(
-  account: string | undefined, chainId:number
+  account: string | undefined
 ): { gravityTokens : GTokens[] | undefined, gravityAddress: string| undefined} {
   const tokens = ETHGravityTokens
   const gravityAddress = ADDRESSES.ETHMainnet.GravityBridge;
@@ -47,7 +47,7 @@ export function useGravityTokens(
         },
       ];
     }) ?? [];
-  const results = useCalls(typeof tokens == typeof mainnetGravityTokensBase ? calls.flat(): []) ?? {};
+  const results = useCalls(typeof tokens == typeof mainnetGravityTokensBase ? calls.flat(): [], {chainId: 1}) ?? {};
 
   if (account == undefined) {
     return {gravityTokens: undefined, gravityAddress: undefined};

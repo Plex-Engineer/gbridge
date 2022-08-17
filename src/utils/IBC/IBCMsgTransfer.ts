@@ -11,8 +11,7 @@ import {
     createIBCMsgTransfer,
     IBC_MSG_TRANSFER_TYPES,
   } from '@tharsis/eip712'
-import { Chain, Fee, Sender } from 'utils/convertCoin/msgConvertERC20'
-    
+import { Chain, Fee, Sender } from 'config/networks'
   export interface MessageIBCMsgTransfer {
     // Channel
     sourcePort: string
