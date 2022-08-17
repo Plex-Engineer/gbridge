@@ -1,7 +1,7 @@
 import { useCalls} from "@usedapp/core";
 import { Contract } from "ethers";
 import { GravityTestnet } from "config/networks";
-import { gravityTokenBase, mainnetGravityTokensBase } from "config/gravityBridgeTokens";
+import { ETHGravityTokens, gravityTokenBase, mainnetGravityTokensBase } from "config/gravityBridgeTokens";
 import {abi } from "config/abi"
 import { ethers } from "ethers";
 import { ADDRESSES } from "cantoui";
@@ -27,8 +27,8 @@ export interface GTokens  {
 export function useGravityTokens(
   account: string | undefined, chainId:number
 ): { gravityTokens : GTokens[] | undefined, gravityAddress: string| undefined} {
-  const tokens = chainId == GravityTestnet.chainId ? gravityTokenBase : mainnetGravityTokensBase
-  const gravityAddress = chainId == GravityTestnet.chainId ? ADDRESSES.gravityBridgeTest.GravityBridge : ADDRESSES.ETHMainnet.GravityBridge;
+  const tokens = ETHGravityTokens
+  const gravityAddress = ADDRESSES.ETHMainnet.GravityBridge;
 
   const calls =
     tokens?.map((token) => {

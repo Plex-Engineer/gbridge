@@ -1,6 +1,7 @@
 import { CantoMainnet } from "cantoui";
 import { GravityTestnet, ETHMainnet } from "config/networks";
-import { checkPubKey, getCantoAddressFromMetaMask } from "utils/nodeTransactions";
+import { checkPubKey } from "utils/cantoTransactions/publicKey";
+import { getCantoAddressFromMetaMask } from "utils/nodeTransactions";
 import create from "zustand";
 import { devtools } from "zustand/middleware";
 

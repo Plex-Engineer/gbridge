@@ -1,6 +1,6 @@
 //@ts-nocheck
-import { generateEndpointAccount, generateEndpointBroadcast, generatePostBodyBroadcast, generateEndpointProposals } from '@tharsis/provider';
-import { createTxRawEIP712, signatureToWeb3Extension, createTxMsgDelegate, createTxMsgVote } from '@tharsis/transactions';
+import { generateEndpointAccount, generateEndpointBroadcast, generatePostBodyBroadcast } from '@tharsis/provider';
+import { createTxRawEIP712, signatureToWeb3Extension } from '@tharsis/transactions';
 import {signatureToPubkey} from "@hanchon/signature-to-pubkey"
 import { ethers } from 'ethers';
 import {Buffer} from 'buffer'
@@ -74,7 +74,7 @@ function generateRawTx(chain:any, senderObj:any, signature:any, msg:any) {
  * @param {string} address The eth address to convert into a canto address
  * @return {string} The converted address
  */
- async function ethToCanto(address:string, nodeAddress:string) {
+ export async function ethToCanto(address:string, nodeAddress:string) {
     return fetch(nodeAddress+ "/ethermint/evm/v1/cosmos_account/" + address, {
         method: "GET",
         headers: {

@@ -2,7 +2,7 @@ import { CantoMainnet } from "cantoui";
 import { useState } from "react"
 import { useNetworkInfo } from "stores/networkInfo";
 import { addNetwork } from "utils/addCantoToWallet";
-import { generatePubKey } from "utils/nodeTransactions";
+import { generatePubKey } from "utils/cantoTransactions/publicKey";
 
 export const GenPubKey = () => {
     

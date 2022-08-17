@@ -75,7 +75,8 @@ export function useCosmosTokens(
 
 export async function getCantoBalance(
   nodeAddressIP: string,
-  cantoAddress: string
+  cantoAddress: string,
+  gravityTokens: GTokens[]
 ) {
   const url = nodeAddressIP + "/" + generateEndpointBalances(cantoAddress);
   const options = {
@@ -93,16 +94,14 @@ export async function getCantoBalance(
     .catch((err) => {
       console.log(err);
     });
-
-  let processedTokens = CantoGravityTokens.map((token) => {
-    let allowance = Number.MAX_SAFE_INTEGER;
-    let balanceOf = result.find((data : any) => data.denom == token.nativeName)?.amount ?? "0";
+    console.log(result)
+  let processedTokens = gravityTokens.map((token) => {
+    console.log(token)
+    let nativeBalanceOf = result.find((data : any) => data.denom == token.data.nativeName)?.amount ?? "0";
 
     return {
-      data: token,
-      wallet: cantoAddress,
-      balanceOf: ethers.utils.formatUnits(balanceOf, token.decimals),
-      allowance,
+      ...token,
+      nativeBalanceOf: ethers.utils.formatUnits(nativeBalanceOf, token.data.decimals),
     };
   });
 

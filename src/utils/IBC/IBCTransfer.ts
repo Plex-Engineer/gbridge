@@ -1,6 +1,6 @@
 import { generateEndpointIBCChannels } from "@tharsis/provider";
 import { createTxIBCMsgTransfer } from "./IBCMsgTransfer";
-import { signAndBroadcastTxMsg, getSenderObj } from "./signAndBroadcast";
+import { signAndBroadcastTxMsg, getSenderObj } from "../cantoTransactions/helpers";
 
 
 

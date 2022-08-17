@@ -120,7 +120,7 @@ const BridgePage = () => {
   async function getBalances() {
     const tokensWithBalances = await getCantoBalance(
       CantoMainnet.cosmosAPIEndpoint,
-      networkInfo.cantoAddress
+      networkInfo.cantoAddress,
     );
     setCantoTokens(tokensWithBalances);
   }
