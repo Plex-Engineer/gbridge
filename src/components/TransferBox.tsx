@@ -9,41 +9,40 @@ interface Props {
   onSwitch: () => void;
   disabled?: boolean;
 }
-const TransferBox = (props: Props) => {
-  return (
-    <TransferBoxStyled>
-      <div className="amount">
-        <div className="token">
-          <img src={props.tokenIcon} alt="eth" width={26} />
-          <Text type="text" align="left" color="white">
-            {props.tokenSymbol}
-          </Text>
-        </div>
-        <div className="amount-input">
-          <Text type="text" align="left" color="primary">
-            amount :
-          </Text>
-          <input
-            type="text"
-            name="amount-bridge"
-            id="amount-bridge"
-            placeholder="0.00"
-          />
-        </div>
+const TransferBox = (props: Props) => (
+  <TransferBoxStyled>
+    <div className="amount">
+      <div className="token">
+        <img src={props.tokenIcon} alt="eth" width={26} />
+        <Text type="text" align="left" color="white">
+          {props.tokenSymbol}
+        </Text>
       </div>
-      <div className="row">
-        <PrimaryButton
-          style={{
-            width: "100%",
-          }}
-        >
-          Switch to {props.networkName}
-        </PrimaryButton>
-        <PrimaryButton>Bridge</PrimaryButton>
+      <div className="amount-input">
+        <Text type="text" align="left" color="primary">
+          amount :
+        </Text>
+        <input
+          type="text"
+          name="amount-bridge"
+          id="amount-bridge"
+          placeholder="0.00"
+        />
       </div>
-    </TransferBoxStyled>
-  );
-};
+    </div>
+    <div className="row">
+      <PrimaryButton
+        style={{
+          width: "100%",
+        }}
+        onClick={props.onSwitch}
+      >
+        Switch to {props.networkName}
+      </PrimaryButton>
+      <PrimaryButton onClick={props.onBridge}>Bridge</PrimaryButton>
+    </div>
+  </TransferBoxStyled>
+);
 
 const TransferBoxStyled = styled.div`
   background-color: #242222;

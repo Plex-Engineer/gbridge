@@ -35,95 +35,95 @@ const BridgePage = () => {
   const alert = useAlert();
 
   //get tokens from the contract call
-  const { gravityTokens, gravityAddress } = useGravityTokens(
-    networkInfo.account,
-    Number(networkInfo.chainId)
-  );
+  //   const { gravityTokens, gravityAddress } = useGravityTokens(
+  //     networkInfo.account,
+  //     Number(networkInfo.chainId)
+  //   );
 
-  const [cantoTokens, setCantoTokens] = useState<any[]>([]);
-  //contracts for transactions
-  const {
-    state: stateApprove,
-    send: sendApprove,
-    resetState: resetApprove,
-  } = useApprove(tokenStore.selectedToken.data.address);
-  const {
-    state: stateCosmos,
-    send: sendCosmos,
-    resetState: resetCosmos,
-  } = useCosmos(gravityAddress ?? ADDRESSES.ETHMainnet.GravityBridge);
+  //   const [cantoTokens, setCantoTokens] = useState<any[]>([]);
+  //   //contracts for transactions
+  //   const {
+  //     state: stateApprove,
+  //     send: sendApprove,
+  //     resetState: resetApprove,
+  //   } = useApprove(tokenStore.selectedToken.data.address);
+  //   const {
+  //     state: stateCosmos,
+  //     send: sendCosmos,
+  //     resetState: resetCosmos,
+  //   } = useCosmos(gravityAddress ?? ADDRESSES.ETHMainnet.GravityBridge);
 
-  function copyAddress(value: string | undefined) {
-    navigator.clipboard.writeText(value ?? "");
-    toast("copied address", {
-      autoClose: 300,
-    });
-  }
+  //   function copyAddress(value: string | undefined) {
+  //     navigator.clipboard.writeText(value ?? "");
+  //     toast("copied address", {
+  //       autoClose: 300,
+  //     });
+  //   }
 
-  //event tracker
-  useEffect(() => {
-    tokenStore.setApproveStatus(stateApprove.status);
-    if (stateApprove.status == "Success") {
-      // tokenStore.setSelectedToken(gravityTokens?.find(item => item.data.address == tokenStore.selectedToken.data.address))
-      tokenStore.setSelectedToken({
-        ...tokenStore.selectedToken,
-        allowance: Number.MAX_VALUE,
-      });
-      setTimeout(() => {
-        resetApprove();
-      }, 1000);
-    }
-  }, [stateApprove.status]);
+  //   //event tracker
+  //   useEffect(() => {
+  //     tokenStore.setApproveStatus(stateApprove.status);
+  //     if (stateApprove.status == "Success") {
+  //       // tokenStore.setSelectedToken(gravityTokens?.find(item => item.data.address == tokenStore.selectedToken.data.address))
+  //       tokenStore.setSelectedToken({
+  //         ...tokenStore.selectedToken,
+  //         allowance: Number.MAX_VALUE,
+  //       });
+  //       setTimeout(() => {
+  //         resetApprove();
+  //       }, 1000);
+  //     }
+  //   }, [stateApprove.status]);
 
-  useEffect(() => {
-    tokenStore.setCosmosStatus(stateCosmos.status);
-  }, [stateCosmos.status]);
+  //   useEffect(() => {
+  //     tokenStore.setCosmosStatus(stateCosmos.status);
+  //   }, [stateCosmos.status]);
 
-  useEffect(() => {
-    if (networkInfo.cantoAddress) {
-      getBalances();
-    }
-  }, [networkInfo.cantoAddress]);
+  //   useEffect(() => {
+  //     if (networkInfo.cantoAddress) {
+  //       getBalances();
+  //     }
+  //   }, [networkInfo.cantoAddress]);
 
-  useEffect(() => {
-    if (!networkInfo.hasPubKey) {
-      alert.show("Failure", <GenPubKey />);
-    } else {
-      alert.close();
-    }
-  }, [networkInfo.hasPubKey]);
-  //send function
-  const send = () => {
-    //Checking if amount enter is greater than balance available in wallet and token has been approved.
-    if (!networkInfo.cantoAddress) return;
-    if (
-      (Number(amount) >= activeToken.allowance || activeToken.allowance <= 0) &&
-      stateApprove.status == "None"
-    ) {
-      sendApprove(
-        gravityAddress,
-        BigNumber.from(
-          "115792089237316195423570985008687907853269984665640564039457584007913129639935"
-        )
-      );
-    } else if (Number(amount) > 0 && stateCosmos.status == "None") {
-      sendCosmos(
-        activeToken.data.address,
-        networkInfo.cantoAddress,
-        ethers.utils.parseUnits(amount, activeToken.data.decimals)
-      );
-    }
-  };
+  //   useEffect(() => {
+  //     if (!networkInfo.hasPubKey) {
+  //       alert.show("Failure", <GenPubKey />);
+  //     } else {
+  //       alert.close();
+  //     }
+  //   }, [networkInfo.hasPubKey]);
+  //   //send function
+  //   const send = () => {
+  //     //Checking if amount enter is greater than balance available in wallet and token has been approved.
+  //     if (!networkInfo.cantoAddress) return;
+  //     if (
+  //       (Number(amount) >= activeToken.allowance || activeToken.allowance <= 0) &&
+  //       stateApprove.status == "None"
+  //     ) {
+  //       sendApprove(
+  //         gravityAddress,
+  //         BigNumber.from(
+  //           "115792089237316195423570985008687907853269984665640564039457584007913129639935"
+  //         )
+  //       );
+  //     } else if (Number(amount) > 0 && stateCosmos.status == "None") {
+  //       sendCosmos(
+  //         activeToken.data.address,
+  //         networkInfo.cantoAddress,
+  //         ethers.utils.parseUnits(amount, activeToken.data.decimals)
+  //       );
+  //     }
+  //   };
 
   Mixpanel.events.pageOpened("Bridge", activeToken.wallet);
 
-  async function getBalances() {
-    const tokensWithBalances = await getCantoBalance(
-      CantoMainnet.cosmosAPIEndpoint,
-      networkInfo.cantoAddress,
-    );
-    setCantoTokens(tokensWithBalances);
-  }
+  //   async function getBalances() {
+  //     const tokensWithBalances = await getCantoBalance(
+  //       CantoMainnet.cosmosAPIEndpoint,
+  //       networkInfo.cantoAddress,
+  //     );
+  //     setCantoTokens(tokensWithBalances);
+  //   }
 
   // =========================
   return (

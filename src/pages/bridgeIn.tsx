@@ -1,20 +1,79 @@
-import { Text } from "cantoui";
+import { ADDRESSES, CantoMainnet, Text } from "cantoui";
 import TransferBox from "components/TransferBox";
-import { useGravityTokens } from "hooks/useGravityTokens";
-import React from "react";
+import { GTokens, useGravityTokens } from "hooks/useGravityTokens";
+import React, { useEffect, useState } from "react";
 import { useNetworkInfo } from "stores/networkInfo";
 import { useTokenStore } from "stores/tokens";
 import styled from "styled-components";
 import { TokenWallet } from "./TokenSelect";
 import arrow from "assets/arrow.svg";
+import { getCantoBalance } from "hooks/useCosmosTokens";
+import { toast } from "react-toastify";
+import { useApprove, useCosmos } from "./useTransactions";
+import { useEthers } from "@usedapp/core";
+import { addNetwork } from "utils/addCantoToWallet";
 const BridgeIn = () => {
   const networkInfo = useNetworkInfo();
   const tokenStore = useTokenStore();
-
+  const [cantoTokens, setCantoTokens] = useState<GTokens[] | undefined>([]);
+  const { switchNetwork } = useEthers();
   const { gravityTokens, gravityAddress } = useGravityTokens(
     networkInfo.account,
     Number(networkInfo.chainId)
   );
+
+  async function getBalances(gravityTokens: GTokens[]) {
+    const tokensWithBalances = await getCantoBalance(
+      CantoMainnet.cosmosAPIEndpoint,
+      networkInfo.cantoAddress,
+      gravityTokens
+    );
+
+    setCantoTokens(tokensWithBalances);
+  }
+
+  useEffect(() => {
+    if (gravityTokens) {
+      getBalances(gravityTokens);
+    }
+  }, [gravityTokens?.length]);
+
+  const {
+    state: stateApprove,
+    send: sendApprove,
+    resetState: resetApprove,
+  } = useApprove(tokenStore.selectedToken.data.address);
+  const {
+    state: stateCosmos,
+    send: sendCosmos,
+    resetState: resetCosmos,
+  } = useCosmos(gravityAddress ?? ADDRESSES.ETHMainnet.GravityBridge);
+
+  function copyAddress(value: string | undefined) {
+    navigator.clipboard.writeText(value ?? "");
+    toast("copied address", {
+      autoClose: 300,
+    });
+  }
+
+  //event tracker
+  useEffect(() => {
+    tokenStore.setApproveStatus(stateApprove.status);
+    if (stateApprove.status == "Success") {
+      // tokenStore.setSelectedToken(gravityTokens?.find(item => item.data.address == tokenStore.selectedToken.data.address))
+      tokenStore.setSelectedToken({
+        ...tokenStore.selectedToken,
+        allowance: Number.MAX_VALUE,
+      });
+      setTimeout(() => {
+        resetApprove();
+      }, 1000);
+    }
+  }, [stateApprove.status]);
+
+  useEffect(() => {
+    tokenStore.setCosmosStatus(stateCosmos.status);
+  }, [stateCosmos.status]);
 
   return (
     <Container>
@@ -26,8 +85,8 @@ const BridgeIn = () => {
         activeToken={tokenStore.selectedToken}
         onSelect={(value) => {
           tokenStore.setSelectedToken(value);
-          //   resetCosmos();
-          //   resetApprove();
+          resetCosmos();
+          resetApprove();
         }}
       />
       <Text type="title" color="white">
@@ -46,8 +105,12 @@ const BridgeIn = () => {
       <TransferBox
         tokenIcon={tokenStore.selectedToken.data.icon}
         networkName="Ethereum"
-        onBridge={() => {}}
-        onSwitch={() => {}}
+        onBridge={() => {
+          console.log("bridedsasdlaksjh");
+        }}
+        onSwitch={() => {
+          switchNetwork(1);
+        }}
         tokenSymbol={tokenStore.selectedToken.data.symbol}
       />
       <img src={arrow} alt="next" />
@@ -60,7 +123,12 @@ const BridgeIn = () => {
         tokenIcon={tokenStore.selectedToken.data.icon}
         networkName="Canto"
         onBridge={() => {}}
-        onSwitch={() => {}}
+        onSwitch={() => {
+          console.log(
+            "🚀 ~ file: bridgeIn.tsx ~ line 100 ~ onSwitch ~ networkInfo"
+          );
+          //   addNetwork();
+        }}
         tokenSymbol={tokenStore.selectedToken.data.symbol}
       />
       <img src={arrow} alt="next" />

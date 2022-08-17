@@ -94,29 +94,35 @@ export async function getCantoBalance(
     .catch((err) => {
       console.log(err);
     });
-    console.log(result)
+  //   console.log(result);
   let processedTokens = gravityTokens.map((token) => {
-    console.log(token)
-    let nativeBalanceOf = result.find((data : any) => data.denom == token.data.nativeName)?.amount ?? "0";
+    // console.log(token);
+    let nativeBalanceOf =
+      result.find((data: any) => data.denom == token.data.nativeName)?.amount ??
+      "0";
 
     return {
       ...token,
-      nativeBalanceOf: ethers.utils.formatUnits(nativeBalanceOf, token.data.decimals),
+      nativeBalanceOf: ethers.utils.formatUnits(
+        nativeBalanceOf,
+        token.data.decimals
+      ),
     };
   });
 
   return processedTokens;
 }
 
-export async function getGravityTokenBalance (gravityAddress: string) {
-    const url = "https://gravitychain.io:1317/" + generateEndpointBalances(gravityAddress);
-    const options = {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-        },
-      };
-      const result = await fetch(url, options)
+export async function getGravityTokenBalance(gravityAddress: string) {
+  const url =
+    "https://gravitychain.io:1317/" + generateEndpointBalances(gravityAddress);
+  const options = {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+    },
+  };
+  const result = await fetch(url, options)
     .then((response) => response.json())
     .then((result) => {
       return result["balances"];
@@ -124,8 +130,9 @@ export async function getGravityTokenBalance (gravityAddress: string) {
     .catch((err) => {
       console.log(err);
     });
-    console.log("🚀 ~ file: useCosmosTokens.ts ~ line 130 ~ getGravityTokenBalance ~ result", result)
-    return result
+  console.log(
+    "🚀 ~ file: useCosmosTokens.ts ~ line 130 ~ getGravityTokenBalance ~ result",
+    result
+  );
+  return result;
 }
-    
-  

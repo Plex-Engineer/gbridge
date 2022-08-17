@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
-import BridgeIn from "./BridgeIn";
+import BridgeIn from "./bridgeIn";
 import BridgeOut from "./BridgeOut";
 
 const BridgingPage = () => {
