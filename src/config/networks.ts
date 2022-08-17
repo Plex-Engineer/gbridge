@@ -30,9 +30,9 @@ export const GravityTestnet = {
 
 //convert coin constants
 export const fee = {
-  amount: "10000",
+  amount: "50000000000000000",
   denom: "acanto",
-  gas: "3000000",
+  gas: "300000",
 };
 export const chain = {
   chainId: 7700,
