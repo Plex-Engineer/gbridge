@@ -1,6 +1,6 @@
 import sendImg from "assets/send.svg";
 import canto from "assets/logo.svg";
-import copyIcon from "assets/copyIcon.svg"
+import copyIcon from "assets/copyIcon.svg";
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { Mixpanel } from "./../mixpanel";
@@ -14,7 +14,11 @@ import { TokenWallet } from "./TokenSelect";
 import { Container, Balance, Center } from "./styledComponents";
 import { ImageButton } from "./ImageButton";
 import { TOKENS, ADDRESSES, CantoMainnet, useAlert } from "cantoui";
-import { getCantoBalance, getGravityTokenBalance, useCosmosTokens } from "hooks/useCosmosTokens";
+import {
+  getCantoBalance,
+  getGravityTokenBalance,
+  useCosmosTokens,
+} from "hooks/useCosmosTokens";
 import { chain, fee, memo } from "config/networks";
 import { txIBCTransfer } from "utils/IBC/IBCTransfer";
 import { toast } from "react-toastify";
@@ -49,15 +53,12 @@ const BridgePage = () => {
     resetState: resetCosmos,
   } = useCosmos(gravityAddress ?? ADDRESSES.ETHMainnet.GravityBridge);
 
-  function copyAddress(value : string | undefined) {
+  function copyAddress(value: string | undefined) {
     navigator.clipboard.writeText(value ?? "");
     toast("copied address", {
-      autoClose: 300
-    })
+      autoClose: 300,
+    });
   }
-
-
-
 
   //event tracker
   useEffect(() => {
@@ -84,13 +85,13 @@ const BridgePage = () => {
     }
   }, [networkInfo.cantoAddress]);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (!networkInfo.hasPubKey) {
       alert.show("Failure", <GenPubKey />);
     } else {
       alert.close();
     }
-  },[networkInfo.hasPubKey])
+  }, [networkInfo.hasPubKey]);
   //send function
   const send = () => {
     //Checking if amount enter is greater than balance available in wallet and token has been approved.
@@ -158,7 +159,11 @@ const BridgePage = () => {
             />
             <p>{bridgeOut ? "gravity bridge" : "ethereum"}</p>
           </Center>
-          <h4 style={{ color: "white", textAlign: "right", cursor: "pointer" }} id="ethAddress" onClick={() => copyAddress(networkInfo.account)}>
+          <h4
+            style={{ color: "white", textAlign: "right", cursor: "pointer" }}
+            id="ethAddress"
+            onClick={() => copyAddress(networkInfo.account)}
+          >
             {bridgeOut
               ? ""
               : networkInfo.account?.slice(0, 6) +
@@ -178,9 +183,8 @@ const BridgePage = () => {
               }}
               onClick={() => {
                 setBridgeOut(!bridgeOut);
-                tokenStore.setSelectedToken(selectedEmptyToken)
-              }
-            }
+                tokenStore.setSelectedToken(selectedEmptyToken);
+              }}
             />
           </Center>
           <hr />
@@ -191,7 +195,11 @@ const BridgePage = () => {
             <img src={canto} alt="canto" height={26} width={26} />
             <p>canto</p>
           </Center>
-          <h4 style={{ color: "white", textAlign: "right", cursor: "pointer" }} id="cantoAddress" onClick={() => copyAddress(networkInfo.cantoAddress)}>
+          <h4
+            style={{ color: "white", textAlign: "right", cursor: "pointer" }}
+            id="cantoAddress"
+            onClick={() => copyAddress(networkInfo.cantoAddress)}
+          >
             {networkInfo.cantoAddress
               ? networkInfo.cantoAddress.slice(0, 10) +
                 "..." +
@@ -216,36 +224,48 @@ const BridgePage = () => {
             resetApprove();
           }}
         />
-        <div style={{marginTop: "1.5rem"}}>
-        <input
-          className="amount"
-          autoComplete="off"
-          type="text"
-          name="amount"
-          id="amount"
-          value={amount}
-          placeholder="0.00"
-          onChange={(e) => {
-            if (
-              !(
-                stateApprove.status == "PendingSignature" ||
-                stateCosmos.status == "PendingSignature" ||
-                stateApprove.status == "Mining" ||
-                stateCosmos.status == "Mining"
-              )
-            ) {
-              const val = Number(e.target.value);
-              if (!isNaN(val)) {
-                setAmount(e.target.value);
+        <div style={{ marginTop: "1.5rem" }}>
+          <input
+            className="amount"
+            autoComplete="off"
+            type="text"
+            name="amount"
+            id="amount"
+            value={amount}
+            placeholder="0.00"
+            onChange={(e) => {
+              if (
+                !(
+                  stateApprove.status == "PendingSignature" ||
+                  stateCosmos.status == "PendingSignature" ||
+                  stateApprove.status == "Mining" ||
+                  stateCosmos.status == "Mining"
+                )
+              ) {
+                const val = Number(e.target.value);
+                if (!isNaN(val)) {
+                  setAmount(e.target.value);
+                }
+                resetCosmos();
+                resetApprove();
               }
-              resetCosmos();
-              resetApprove();
-            }
-          }}
-        />
-        <div style={{textAlign: "right", color: "gray", paddingTop: "0rem", cursor: "pointer"}} onClick={() => {setAmount((tokenStore.selectedToken.balanceOf).toString())}}>
-          {tokenStore.selectedToken.balanceOf < 0 ? "" : "max " + tokenStore.selectedToken.balanceOf}
-        </div>
+            }}
+          />
+          <div
+            style={{
+              textAlign: "right",
+              color: "gray",
+              paddingTop: "0rem",
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              setAmount(tokenStore.selectedToken.balanceOf.toString());
+            }}
+          >
+            {tokenStore.selectedToken.balanceOf < 0
+              ? ""
+              : "max " + tokenStore.selectedToken.balanceOf}
+          </div>
         </div>
       </Balance>
       <div className="input" style={!bridgeOut ? { visibility: "hidden" } : {}}>
