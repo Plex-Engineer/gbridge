@@ -1,5 +1,5 @@
 import { FilledButton, PrimaryButton, Text } from "cantoui";
-import { DisabledButton } from "pages/styledComponents";
+import { useRef } from "react";
 import styled from "styled-components";
 
 interface Props {
@@ -10,52 +10,55 @@ interface Props {
   onSwitch: () => void;
   disabled?: boolean;
   connected: boolean;
+  button: React.ReactNode;
 }
-const TransferBox = (props: Props) => (
-  <TransferBoxStyled>
-    <div className="amount">
-      <div className="token">
-        <img src={props.tokenIcon} alt="eth" width={26} />
-        <Text type="text" align="left" color="white">
-          {props.tokenSymbol}
-        </Text>
+const TransferBox = (props: Props) => {
+  const amountRef = useRef<HTMLInputElement>(null);
+  return (
+    <TransferBoxStyled>
+      <div className="amount">
+        <div className="token">
+          <img src={props.tokenIcon} alt="eth" width={26} />
+          <Text type="text" align="left" color="white">
+            {props.tokenSymbol}
+          </Text>
+        </div>
+        <div className="amount-input">
+          <Text type="text" align="left" color="primary">
+            amount :
+          </Text>
+          <input
+            autoComplete="off"
+            type="number"
+            name="amount-bridge"
+            id="amount-bridge"
+            placeholder="0.00"
+            ref={amountRef}
+          />
+        </div>
       </div>
-      <div className="amount-input">
-        <Text type="text" align="left" color="primary">
-          amount :
-        </Text>
-        <input
-          type="text"
-          name="amount-bridge"
-          id="amount-bridge"
-          placeholder="0.00"
-        />
+      <div className="row">
+        <PrimaryButton
+          disabled={props.connected}
+          style={{
+            width: "100%",
+          }}
+          onClick={props.onSwitch}
+        >
+          {!props.connected
+            ? "Switch to " + props.networkName
+            : "Connected to " + props.networkName}
+        </PrimaryButton>
+        {props.button}
+        {/* <PrimaryButton onClick={props.onBridge}>Bridge</PrimaryButton> */}
       </div>
-    </div>
-    <div className="row">
-      {!props.connected ? 
-      <PrimaryButton
-        style={{
-          width: "100%",
-        }}
-        onClick={props.onSwitch}
-      >
-        Switch to {props.networkName}
-      </PrimaryButton> 
-      : 
-      <DisabledButton>connected to {props.networkName}</DisabledButton>
-      
-      }
-
-
-      <PrimaryButton onClick={props.onBridge}>Bridge</PrimaryButton>
-    </div>
-  </TransferBoxStyled>
-);
+    </TransferBoxStyled>
+  );
+};
 
 const TransferBoxStyled = styled.div`
   background-color: #242222;
-  width: 500px;
+  width: 530px;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -86,7 +89,7 @@ const TransferBoxStyled = styled.div`
     }
   }
 
-  input[type="text"] {
+  input[type="number"] {
     background-color: transparent;
     border: none;
     outline: none;
@@ -101,6 +104,18 @@ const TransferBoxStyled = styled.div`
     &:focus,
     &:hover {
       border-bottom: 1px solid var(--primary-color);
+    }
+
+    /* Chrome, Safari, Edge, Opera */
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    /* Firefox */
+    &[type="number"] {
+      -moz-appearance: textfield;
     }
   }
 `;

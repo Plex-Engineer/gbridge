@@ -28,9 +28,8 @@ const Container = styled.div`
   border: 1px solid var(--primary-color);
   min-height: 1000px;
   width: 800px;
-  margin: 0 auto;
+  margin: 4rem auto;
   color: white;
-  margin-top: 4rem;
   display: flex;
   flex-direction: column;
   align-items: center;
