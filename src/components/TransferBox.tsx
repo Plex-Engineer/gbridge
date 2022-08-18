@@ -6,11 +6,13 @@ interface Props {
   tokenSymbol: string;
   tokenIcon: string;
   networkName: string;
-  onBridge: () => void;
   onSwitch: () => void;
+  onChange: (s:string) => void;
   disabled?: boolean;
   connected: boolean;
   button: React.ReactNode;
+  max : string;
+  amount?: string
 }
 const TransferBox = (props: Props) => {
   const amountRef = useRef<HTMLInputElement>(null);
@@ -33,7 +35,9 @@ const TransferBox = (props: Props) => {
             name="amount-bridge"
             id="amount-bridge"
             placeholder="0.00"
-            ref={amountRef}
+            // ref={amountRef}
+            value={props.amount}
+            onChange={(e) => props.onChange(e.target.value)}
           />
         </div>
       </div>
@@ -50,8 +54,8 @@ const TransferBox = (props: Props) => {
             : "Connected to " + props.networkName}
         </PrimaryButton>
         {props.button}
-        {/* <PrimaryButton onClick={props.onBridge}>Bridge</PrimaryButton> */}
       </div>
+      <div style={{cursor:"pointer"}} onClick={() => props.onChange(props.max)}>max: {props.max}</div>
     </TransferBoxStyled>
   );
 };

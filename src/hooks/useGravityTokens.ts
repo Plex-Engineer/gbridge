@@ -1,7 +1,7 @@
 import { useCalls} from "@usedapp/core";
 import { Contract } from "ethers";
 import { GravityTestnet } from "config/networks";
-import { ETHGravityTokens, gravityTokenBase, mainnetGravityTokensBase } from "config/gravityBridgeTokens";
+import { ETHGravityTokens } from "config/gravityBridgeTokens";
 import {abi } from "config/abi"
 import { ethers } from "ethers";
 import { ADDRESSES } from "cantoui";
@@ -17,7 +17,7 @@ export interface GTokens  {
       isLP: boolean;
       icon: string;
       cTokenAddress: string;
-      nativeName?: string
+      nativeName: string
   };
   wallet: string;
   balanceOf: number;
@@ -47,7 +47,7 @@ export function useGravityTokens(
         },
       ];
     }) ?? [];
-  const results = useCalls(typeof tokens == typeof mainnetGravityTokensBase ? calls.flat(): [], {chainId: 1}) ?? {};
+  const results = useCalls(tokens ? calls.flat() : [], {chainId: 1}) ?? {};
 
   if (account == undefined) {
     return {gravityTokens: undefined, gravityAddress: undefined};

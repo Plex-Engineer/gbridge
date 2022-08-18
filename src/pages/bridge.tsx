@@ -93,27 +93,27 @@ const BridgePage = () => {
   //     }
   //   }, [networkInfo.hasPubKey]);
   //   //send function
-  //   const send = () => {
-  //     //Checking if amount enter is greater than balance available in wallet and token has been approved.
-  //     if (!networkInfo.cantoAddress) return;
-  //     if (
-  //       (Number(amount) >= activeToken.allowance || activeToken.allowance <= 0) &&
-  //       stateApprove.status == "None"
-  //     ) {
-  //       sendApprove(
-  //         gravityAddress,
-  //         BigNumber.from(
-  //           "115792089237316195423570985008687907853269984665640564039457584007913129639935"
-  //         )
-  //       );
-  //     } else if (Number(amount) > 0 && stateCosmos.status == "None") {
-  //       sendCosmos(
-  //         activeToken.data.address,
-  //         networkInfo.cantoAddress,
-  //         ethers.utils.parseUnits(amount, activeToken.data.decimals)
-  //       );
-  //     }
-  //   };
+    // const send = () => {
+    //   //Checking if amount enter is greater than balance available in wallet and token has been approved.
+    //   if (!networkInfo.cantoAddress) return;
+    //   if (
+    //     (Number(amount) >= activeToken.allowance || activeToken.allowance <= 0) &&
+    //     stateApprove.status == "None"
+    //   ) {
+    //     sendApprove(
+    //       gravityAddress,
+    //       BigNumber.from(
+    //         "115792089237316195423570985008687907853269984665640564039457584007913129639935"
+    //       )
+    //     );
+    //   } else if (Number(amount) > 0 && stateCosmos.status == "None") {
+    //     sendCosmos(
+    //       activeToken.data.address,
+    //       networkInfo.cantoAddress,
+    //       ethers.utils.parseUnits(amount, activeToken.data.decimals)
+    //     );
+    //   }
+    // };
 
   Mixpanel.events.pageOpened("Bridge", activeToken.wallet);
 

@@ -4,6 +4,7 @@ import emptyToken from "assets/empty.svg";
 import { ChainId, TransactionState, TransactionStatus } from "@usedapp/core";
 import { providers } from "ethers";
 import { GTokens } from "hooks/useGravityTokens";
+import { NativeGTokens } from "hooks/useCosmosTokens";
 
 interface TxStatus {
     state: TransactionStatus;
@@ -21,11 +22,12 @@ export const selectedEmptyToken =
   decimals: 0,
   icon: emptyToken,
   name: "select token",
-  nativeName: "none"
+  nativeName: "none",
 },
   wallet : "",
   allowance: -1,
   balanceOf: -1,
+  nativeBalanceOf: "-1"
 }
 
 interface TokenStore {
@@ -35,8 +37,8 @@ interface TokenStore {
   };
   tokens: GTokens[];
   setTokens: (tokens: GTokens[]) => void;
-  selectedToken: GTokens;
-  setSelectedToken: (token: GTokens) => void;
+  selectedToken: NativeGTokens;
+  setSelectedToken: (token: NativeGTokens) => void;
   approveStatus: TransactionState ;
   setApproveStatus : (tx : TransactionState) => void;
   cosmosStatus: TransactionState;
@@ -59,7 +61,7 @@ export const useTokenStore = create<TokenStore>()(
     tokens: [],
     setTokens: (tokens: GTokens[]) => set({ tokens: tokens }),
     selectedToken: selectedEmptyToken,
-    setSelectedToken: (token: GTokens) => {
+    setSelectedToken: (token: NativeGTokens) => {
       set({
         selectedToken: token,
       });

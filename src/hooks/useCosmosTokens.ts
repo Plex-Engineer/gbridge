@@ -68,11 +68,15 @@ export function useCosmosTokens(account: string | undefined): {
   return { cantoTokens: undefined };
 }
 
+export interface NativeGTokens extends GTokens {
+    nativeBalanceOf:string
+}
+
 export async function getCantoBalance(
   nodeAddressIP: string,
   cantoAddress: string,
   gravityTokens: GTokens[]
-) {
+) : Promise<NativeGTokens[]>{
   const url = nodeAddressIP + "/" + generateEndpointBalances(cantoAddress);
   const options = {
     method: "GET",
