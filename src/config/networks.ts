@@ -34,6 +34,7 @@ export const fee = {
   denom: "acanto",
   gas: "250000",
 };
+
 export const chain = {
   chainId: 7700,
   cosmosChainId: "canto_7700-1",
