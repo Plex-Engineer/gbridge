@@ -25,7 +25,7 @@ export const selectedEmptyToken =
 },
   wallet : "",
   allowance: -1,
-  balanceOf: -1,
+  balanceOf: "-1",
 }
 
 interface TokenStore {

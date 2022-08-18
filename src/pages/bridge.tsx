@@ -244,8 +244,8 @@ const BridgePage = () => {
             }
           }}
         />
-        <div style={{textAlign: "right", color: "gray", paddingTop: "0rem", cursor: "pointer"}} onClick={() => {setAmount((tokenStore.selectedToken.balanceOf).toString())}}>
-          {tokenStore.selectedToken.balanceOf < 0 ? "" : "max " + tokenStore.selectedToken.balanceOf}
+        <div style={{textAlign: "right", color: "gray", paddingTop: "0rem", cursor: "pointer"}} onClick={() => {setAmount((tokenStore.selectedToken.balanceOf))}}>
+          {Number(tokenStore.selectedToken.balanceOf) < 0 ? "" : "max " + tokenStore.selectedToken.balanceOf}
         </div>
         </div>
       </Balance>

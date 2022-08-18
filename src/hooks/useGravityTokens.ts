@@ -20,7 +20,7 @@ export interface GTokens  {
       nativeName?: string
   };
   wallet: string;
-  balanceOf: number;
+  balanceOf: string;
   allowance: number;
 }[]
 
@@ -69,7 +69,7 @@ export function useGravityTokens(
   if (chuckSize > 0 && results?.[0] != undefined && !results?.[0].error) {
     processedTokens = array_chunks(results, chuckSize);
     const val = processedTokens.map((tokenData, idx) => {
-      const balanceOf = Number(ethers.utils.formatUnits(tokenData[0][0], tokens[idx].decimals))
+      const balanceOf = ethers.utils.formatUnits(tokenData[0][0], tokens[idx].decimals)
       const allowance = Number(ethers.utils.formatUnits(tokenData[1][0], tokens[idx].decimals));
      
       return {
