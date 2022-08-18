@@ -7,12 +7,12 @@ interface Props {
   tokenIcon: string;
   networkName: string;
   onSwitch: () => void;
-  onChange: (s:string) => void;
+  onChange: (s: string) => void;
   disabled?: boolean;
   connected: boolean;
   button: React.ReactNode;
-  max : string;
-  amount?: string
+  max: string;
+  amount?: string;
 }
 const TransferBox = (props: Props) => {
   const amountRef = useRef<HTMLInputElement>(null);
@@ -55,14 +55,19 @@ const TransferBox = (props: Props) => {
         </PrimaryButton>
         {props.button}
       </div>
-      <div style={{cursor:"pointer"}} onClick={() => props.onChange(props.max)}>max: {props.max}</div>
+      <div
+        style={{ cursor: "pointer" }}
+        onClick={() => props.onChange(props.max)}
+      >
+        max: {props.max}
+      </div>
     </TransferBoxStyled>
   );
 };
 
 const TransferBoxStyled = styled.div`
   background-color: #242222;
-  width: 530px;
+  width: 560px;
   display: flex;
   flex-direction: column;
   gap: 1rem;

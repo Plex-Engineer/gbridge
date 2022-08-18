@@ -5,6 +5,7 @@ import BridgePage from "pages/bridge";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import {
+  GlobalStyle,
   Overlay,
   ScanLine,
   ScanlinesOverlay,
@@ -32,6 +33,7 @@ function App() {
       <Overlay />
       <Container className="App">
         <CantoNav />
+        <GlobalStyle />
         <BridgingPage />
       </Container>
     </HelmetProvider>

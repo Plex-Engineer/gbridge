@@ -1,5 +1,5 @@
-import { ADDRESSES, CantoMainnet, FilledButton, PrimaryButton, Text } from "cantoui";
-import CopyIcon from "assets/copyIcon.svg";
+import { ADDRESSES, CantoMainnet, PrimaryButton, Text } from "cantoui";
+import CopyIcon from "assets/copy.svg";
 import TransferBox from "components/TransferBox";
 import { GTokens, useGravityTokens } from "hooks/useGravityTokens";
 import React, { useEffect, useState } from "react";
@@ -24,7 +24,7 @@ const BridgeIn = () => {
   const activeToken = useTokenStore().selectedToken;
   const [bridgeAmount, setBridgeAmount] = useState("0");
   const [convertAmount, setConvertAmount] = useState("0");
-  const [convertConfirmation, setConvertConfirmation] = useState("")
+  const [convertConfirmation, setConvertConfirmation] = useState("");
 
   //set the gravity token info from ethMainnet
   const { gravityTokens, gravityAddress } = useGravityTokens(
@@ -37,7 +37,7 @@ const BridgeIn = () => {
   >([]);
 
   async function getBalances(gravityTokens: GTokens[]) {
-    const tokensWithBalances : NativeGTokens[] = await getCantoBalance(
+    const tokensWithBalances: NativeGTokens[] = await getCantoBalance(
       CantoMainnet.cosmosAPIEndpoint,
       networkInfo.cantoAddress,
       gravityTokens
@@ -89,7 +89,7 @@ const BridgeIn = () => {
     tokenStore.setCosmosStatus(stateCosmos.status);
   }, [stateCosmos.status]);
 
-  const send = (amount : string) => {
+  const send = (amount: string) => {
     //Checking if amount enter is greater than balance available in wallet and token has been approved.
     if (!networkInfo.cantoAddress) return;
     if (
@@ -126,9 +126,13 @@ const BridgeIn = () => {
           setConvertConfirmation("");
         }}
       />
-      <Text type="title" color="white">
-        Ethereum
-        <span
+      <Row>
+        <Text type="title" color="white">
+          Ethereum
+        </Text>
+        <Text
+          type="text"
+          color="white"
           style={{
             fontSize: "20px",
             marginLeft: "30px",
@@ -139,26 +143,24 @@ const BridgeIn = () => {
           {networkInfo.account?.slice(0, 6) +
             "..." +
             networkInfo.account?.slice(-6, -1)}
-        </span>
-        <img
-          src={CopyIcon}
-          style={{ background: "white", height: "15px", marginLeft: "5px" }}
-        />
-      </Text>
+
+          <img src={CopyIcon} style={{ height: "22px", marginLeft: "5px" }} />
+        </Text>
+      </Row>
       <TransferBox
         tokenIcon={tokenStore.selectedToken.data.icon}
         networkName="ethereum"
         onSwitch={() => {
-        activateBrowserWallet();
+          activateBrowserWallet();
           switchNetwork(1);
         }}
         tokenSymbol={tokenStore.selectedToken.data.symbol}
         connected={1 == Number(networkInfo.chainId)}
-        onChange={(amount:string) => setBridgeAmount(amount)}
+        onChange={(amount: string) => setBridgeAmount(amount)}
         max={tokenStore.selectedToken.balanceOf.toString()}
         amount={bridgeAmount}
         button={
-            <ReactiveButton
+          <ReactiveButton
             destination={networkInfo.cantoAddress}
             amount={bridgeAmount}
             account={networkInfo.account}
@@ -167,14 +169,34 @@ const BridgeIn = () => {
             hasPubKey={networkInfo.hasPubKey}
             disabled={false}
             onClick={() => send(bridgeAmount)}
-            />
+          />
         }
       />
       <img src={arrow} alt="next" />
 
-      <Text type="title" color="white">
-        Canto
-      </Text>
+      <Row>
+        <Text type="title" color="white">
+          Canto
+        </Text>
+        <Text
+          type="text"
+          color="white"
+          style={{
+            fontSize: "20px",
+            marginLeft: "30px",
+            cursor: "pointer",
+          }}
+          onClick={() => copyAddress(networkInfo.account)}
+        >
+          {networkInfo.cantoAddress
+            ? networkInfo.cantoAddress.slice(0, 10) +
+              "..." +
+              networkInfo.cantoAddress.slice(-5)
+            : "retrieving wallet"}
+
+          <img src={CopyIcon} style={{ height: "22px", marginLeft: "5px" }} />
+        </Text>
+      </Row>
 
       <TransferBox
         tokenIcon={tokenStore.selectedToken.data.icon}
@@ -185,52 +207,62 @@ const BridgeIn = () => {
         }}
         tokenSymbol={tokenStore.selectedToken.data.symbol}
         connected={CantoMainnet.chainId == Number(networkInfo.chainId)}
-        onChange={(amount:string) => setConvertAmount(amount)}
+        onChange={(amount: string) => setConvertAmount(amount)}
         max={tokenStore.selectedToken.nativeBalanceOf}
         amount={convertAmount}
         button={
           <PrimaryButton
             disabled={!networkInfo.hasPubKey}
             onClick={async () => {
-                const REFRESH_RATE = 11000;
-                setConvertConfirmation("waiting for the metamask transaction to be signed...");
-                await txConvertCoin(
-                    networkInfo.cantoAddress,
-                    tokenStore.selectedToken.data.nativeName,
-                    ethers.utils.parseUnits(convertAmount, tokenStore.selectedToken.data.decimals).toString(),
-                    CantoMainnet.cosmosAPIEndpoint,
-                    fee,
-                    chain,
-                    memo
+              const REFRESH_RATE = 11000;
+              setConvertConfirmation(
+                "waiting for the metamask transaction to be signed..."
+              );
+              await txConvertCoin(
+                networkInfo.cantoAddress,
+                tokenStore.selectedToken.data.nativeName,
+                ethers.utils
+                  .parseUnits(
+                    convertAmount,
+                    tokenStore.selectedToken.data.decimals
+                  )
+                  .toString(),
+                CantoMainnet.cosmosAPIEndpoint,
+                fee,
+                chain,
+                memo
+              );
+              setConvertConfirmation(
+                "waiting for the transaction to be verified..."
+              );
+              setTimeout(async () => {
+                const currentBalance = tokenStore.selectedToken.nativeBalanceOf;
+                const token: NativeGTokens[] = await getCantoBalance(
+                  CantoMainnet.cosmosAPIEndpoint,
+                  networkInfo.cantoAddress,
+                  [tokenStore.selectedToken]
                 );
-                setConvertConfirmation("waiting for the transaction to be verified...");
-                setTimeout(async () => {
-                    const currentBalance = tokenStore.selectedToken.nativeBalanceOf;
-                    const token : NativeGTokens[] = await getCantoBalance(
-                        CantoMainnet.cosmosAPIEndpoint,
-                        networkInfo.cantoAddress,
-                        [tokenStore.selectedToken]
-                      );
-                    const success = currentBalance != token[0].nativeBalanceOf
-                    console.log("🚀 ~ file: bridgeIn.tsx ~ line 211 ~ setTimeout ~ cantoGravityTokens", token)
-                    const prefix = success ?  "" : "un";
-                    const message =
-                      "you have " +
-                      prefix +
-                      "successfully converted " +
-                      convertAmount +
-                      " of canto " +
-                      tokenStore.selectedToken.data.symbol +
-                      " to evm "
-                    setConvertConfirmation(
-                        message 
-                    );
-                    tokenStore.setSelectedToken(token[0])
-                  }, REFRESH_RATE * 2.5);
-                  
-
+                const success = currentBalance != token[0].nativeBalanceOf;
+                console.log(
+                  "🚀 ~ file: bridgeIn.tsx ~ line 211 ~ setTimeout ~ cantoGravityTokens",
+                  token
+                );
+                const prefix = success ? "" : "un";
+                const message =
+                  "you have " +
+                  prefix +
+                  "successfully converted " +
+                  convertAmount +
+                  " of canto " +
+                  tokenStore.selectedToken.data.symbol +
+                  " to evm ";
+                setConvertConfirmation(message);
+                tokenStore.setSelectedToken(token[0]);
+              }, REFRESH_RATE * 2.5);
             }}
-          >bridge</PrimaryButton>
+          >
+            bridge
+          </PrimaryButton>
         }
       />
       <div>{convertConfirmation}</div>
@@ -241,6 +273,13 @@ const BridgeIn = () => {
     </Container>
   );
 };
+
+const Row = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 560px;
+`;
 
 const Container = styled.div`
   display: flex;
