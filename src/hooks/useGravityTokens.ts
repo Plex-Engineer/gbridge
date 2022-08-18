@@ -1,33 +1,34 @@
-import { useCalls} from "@usedapp/core";
+import { useCalls } from "@usedapp/core";
 import { Contract } from "ethers";
 import { GravityTestnet } from "config/networks";
 import { ETHGravityTokens } from "config/gravityBridgeTokens";
-import {abi } from "config/abi"
+import { abi } from "config/abi";
 import { ethers } from "ethers";
 import { ADDRESSES } from "cantoui";
 
-
-export interface GTokens  {
+export interface GTokens {
   data: {
-      symbol: string;
-      name: string;
-      decimals: number;
-      address: string;
-      isERC20: boolean;
-      isLP: boolean;
-      icon: string;
-      cTokenAddress: string;
-      nativeName: string
+    symbol: string;
+    name: string;
+    decimals: number;
+    address: string;
+    isERC20: boolean;
+    isLP: boolean;
+    icon: string;
+    cTokenAddress: string;
+    nativeName: string;
   };
   wallet: string;
   balanceOf: number;
   allowance: number;
-}[]
+}
+[];
 
-export function useGravityTokens(
-  account: string | undefined
-): { gravityTokens : GTokens[] | undefined, gravityAddress: string| undefined} {
-  const tokens = ETHGravityTokens
+export function useGravityTokens(account: string | undefined): {
+  gravityTokens: GTokens[] | undefined;
+  gravityAddress: string | undefined;
+} {
+  const tokens = ETHGravityTokens;
   const gravityAddress = ADDRESSES.ETHMainnet.GravityBridge;
 
   const calls =
@@ -47,13 +48,13 @@ export function useGravityTokens(
         },
       ];
     }) ?? [];
-  const results = useCalls(tokens ? calls.flat() : [], {chainId: 1}) ?? {};
+  const results = useCalls(tokens ? calls.flat() : [], { chainId: 1 }) ?? {};
 
   if (account == undefined) {
-    return {gravityTokens: undefined, gravityAddress: undefined};
+    return { gravityTokens: undefined, gravityAddress: undefined };
   }
-  if(tokens == undefined){
-    return {gravityTokens: [], gravityAddress: undefined }
+  if (tokens == undefined) {
+    return { gravityTokens: [], gravityAddress: undefined };
   }
   const chuckSize = results.length / tokens.length;
   let processedTokens: Array<any>;
@@ -69,9 +70,13 @@ export function useGravityTokens(
   if (chuckSize > 0 && results?.[0] != undefined && !results?.[0].error) {
     processedTokens = array_chunks(results, chuckSize);
     const val = processedTokens.map((tokenData, idx) => {
-      const balanceOf = Number(ethers.utils.formatUnits(tokenData[0][0], tokens[idx].decimals))
-      const allowance = Number(ethers.utils.formatUnits(tokenData[1][0], tokens[idx].decimals));
-     
+      const balanceOf = Number(
+        ethers.utils.formatUnits(tokenData[0][0], tokens[idx].decimals)
+      );
+      const allowance = Number(
+        ethers.utils.formatUnits(tokenData[1][0], tokens[idx].decimals)
+      );
+
       return {
         data: tokens[idx],
         wallet: account,
@@ -80,11 +85,11 @@ export function useGravityTokens(
       };
     });
 
-    if(val[0].balanceOf == undefined)
-    return {gravityTokens: undefined, gravityAddress: gravityAddress}
+    if (val[0].balanceOf == undefined)
+      return { gravityTokens: undefined, gravityAddress: gravityAddress };
 
-    return {gravityTokens: val, gravityAddress: gravityAddress};
+    return { gravityTokens: val, gravityAddress: gravityAddress };
   }
 
-  return {gravityTokens: undefined, gravityAddress: undefined};
+  return { gravityTokens: undefined, gravityAddress: undefined };
 }
