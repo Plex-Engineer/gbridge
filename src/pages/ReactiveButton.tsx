@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useTokenStore } from "stores/tokens";
 import loading from "assets/loading.svg";
 import { Button, DisabledButton } from "./styledComponents";
+import { generatePubKey } from "utils/nodeTransactions";
 
 interface RBProps {
   amount: string;
@@ -14,7 +15,7 @@ interface RBProps {
   disabled: boolean
 }
 export const ReactiveButton = ({
-  amount, token, hasPubKey, onClick, disabled
+  amount, token, hasPubKey, onClick, disabled, account
 }: RBProps) => {
 
   if (token == undefined) {
@@ -73,7 +74,8 @@ export const ReactiveButton = ({
   //? refactor this into a single component
   //if the account doesn't have a public key
   if (!hasPubKey) {
-    return <DisabledButton>please generate public key</DisabledButton>;
+    return <Button onClick={() => generatePubKey(account, () => {})}>generate public key</Button>
+    // return <DisabledButton>please generate public key</DisabledButton>;
   }
   //if the token hasn't been approved
   if (token?.allowance == -1) {
