@@ -88,7 +88,7 @@ const BridgePage = () => {
     if (!networkInfo.hasPubKey) {
       alert.show("Failure", <GenPubKey />);
     } else {
-      alert.close();
+      // alert.close();
     }
   },[networkInfo.hasPubKey])
   //send function
