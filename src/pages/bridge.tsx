@@ -205,7 +205,8 @@ const BridgePage = () => {
         name="connect"
         networkSwitch={bridgeOut ? CantoMainnet.chainId : 1}
       />
-
+      {((bridgeOut && (Number(networkInfo.chainId) != CantoMainnet.chainId)) || (!bridgeOut && (networkInfo.chainId != "1"))) ? <div/> : 
+      <div className="column">
       <Balance>
         <TokenWallet
           tokens={bridgeOut ? cantoTokens : gravityTokens}
@@ -265,7 +266,8 @@ const BridgePage = () => {
           style={{ width: "120%" }}
         />
       </div>
-
+      
+      
       <ReactiveButton
         destination={networkInfo.cantoAddress}
         amount={amount}
@@ -318,6 +320,8 @@ const BridgePage = () => {
             : send
         }
       />
+      </div>
+}
       <br></br>
       {bridgeOut ? (
         <div style={{ color: "white", padding: "1rem", textAlign: "center" }}>
