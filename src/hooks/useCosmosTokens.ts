@@ -53,9 +53,9 @@ export function useCosmosTokens(
   if (chuckSize > 0 && results?.[0] != undefined && !results?.[0].error) {
     processedTokens = array_chunks(results, chuckSize);
     const val = processedTokens.map((tokenData, idx) => {
-      const balanceOf = Number(
+      const balanceOf = 
         ethers.utils.formatUnits(tokenData[0][0], tokens[idx].decimals)
-      );
+
       const allowance = Number.MAX_SAFE_INTEGER;
       return {
         data: tokens[idx],
