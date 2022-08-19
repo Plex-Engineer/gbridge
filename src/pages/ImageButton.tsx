@@ -46,7 +46,7 @@ interface IWallet {
               >
                   {networkInfo.account
                       ? Number(networkInfo.chainId) != networkSwitch ? networkSwitch == 1
-                          ? "switch to etheruem network" : "switch to canto network"
+                          ? "switch to ethereum network" : "switch to canto network"
                           : networkInfo.account.substring(0, 10) +
                           "..." +
                           networkInfo.account.substring(networkInfo.account.length - 10, networkInfo.account.length)
