@@ -357,7 +357,12 @@ const BridgePage = () => {
           .
         </div>
       )}
-      <br></br>
+      <br/>
+      <p style={{color: "white"}}>to learn how to bridge ATOM into canto, please read <a style= {{color: "white"}}href="https://docs.canto.io/user-guides/bridging-assets/bridging-atom-greater-than-canto-via-ibc-transfer"
+      >
+        here</a> </p>
+      <br/>
+
       <div
         style={{
           color: "var(--primary-color)",
