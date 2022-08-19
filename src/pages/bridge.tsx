@@ -11,7 +11,7 @@ import { selectedEmptyToken, useTokenStore } from "stores/tokens";
 import { ReactiveButton } from "./ReactiveButton";
 import { useApprove, useCosmos } from "./useTransactions";
 import { TokenWallet } from "./TokenSelect";
-import { Container, Balance, Center } from "./styledComponents";
+import { Container, Balance, Center, Button } from "./styledComponents";
 import { ImageButton } from "./ImageButton";
 import { TOKENS, ADDRESSES, CantoMainnet, useAlert } from "cantoui";
 import { getCantoBalance, getGravityTokenBalance, useCosmosTokens } from "hooks/useCosmosTokens";
@@ -19,6 +19,7 @@ import { chain, fee, memo } from "config/networks";
 import { txIBCTransfer } from "utils/IBC/IBCTransfer";
 import { toast } from "react-toastify";
 import { GenPubKey } from "./genPubKey";
+import { generatePubKey } from "utils/nodeTransactions";
 
 const BridgePage = () => {
   const [gravReceiver, setGravReceiver] = useState("");
@@ -57,7 +58,7 @@ const BridgePage = () => {
   }
 
 
-
+const [tempPubKeyMsg, setTempPubKeyMsg] = useState("")
 
   //event tracker
   useEffect(() => {
@@ -201,6 +202,7 @@ const BridgePage = () => {
           {/* <img src={copyIcon} style={{zIndex: "80", background: "gray", height: "15px", marginLeft: "5px", cursor: "pointer"}} onClick={() => copyAddress(networkInfo.cantoAddress)}/> */}
         </div>
       </div>
+      {networkInfo.hasPubKey ? "" : <div style={{color: "white"}}><Button onClick={() => generatePubKey(networkInfo.account, setTempPubKeyMsg)}>generate a public key</Button> {tempPubKeyMsg}</div> }
       <ImageButton
         name="connect"
         networkSwitch={bridgeOut ? CantoMainnet.chainId : 1}
