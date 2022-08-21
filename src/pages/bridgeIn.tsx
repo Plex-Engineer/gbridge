@@ -7,7 +7,7 @@ import { useNetworkInfo } from "stores/networkInfo";
 import { selectedEmptyToken, useTokenStore } from "stores/tokens";
 import styled from "styled-components";
 import { TokenWallet } from "./TokenSelect";
-import arrow from "assets/arrow.svg";
+import arrow from "assets/right.svg";
 import { getCantoBalance, NativeGTokens } from "hooks/useCosmosTokens";
 import { toast } from "react-toastify";
 import { useApprove, useCosmos } from "./useTransactions";
