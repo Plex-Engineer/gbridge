@@ -1,4 +1,4 @@
-import { FilledButton, PrimaryButton, Text } from "cantoui";
+import { FilledButton, HighlightButton, PrimaryButton, Text } from "cantoui";
 import { useRef } from "react";
 import styled from "styled-components";
 import arrow from "assets/right.svg";
@@ -40,6 +40,9 @@ const TransferBox = (props: Props) => {
         // disabled={props.connected}
         style={{
           width: "100%",
+          color: !props.connected ? "var(--warning-color)" : "",
+          border: !props.connected ? "1px solid var(--warning-color)" : "",
+          backgroundColor: !props.connected ? "#382e1f" : "",
         }}
         onClick={props.onSwitch}
       >
@@ -146,13 +149,17 @@ const TransferBoxStyled = styled.div<StyeldProps>`
   gap: 1rem;
   padding: 1rem;
   padding-top: 3rem;
-  border: 1px solid var(--primary-color);
+  border: ${(props) =>
+    props.disabled
+      ? " 1px solid var(--warning-color)"
+      : "1px solid var(--primary-color)"};
   margin: 2rem 0;
-  filter: ${(props) => (props.disabled ? "grayscale(100%)" : "none")};
   .row {
     display: flex;
     /* gap: 1rem; */
     justify-content: space-between;
+    filter: ${(props) => (props.disabled ? "grayscale(100%)" : "none")};
+
     align-items: center;
     & > * {
       /* flex-grow: 1; */
@@ -179,6 +186,8 @@ const TransferBoxStyled = styled.div<StyeldProps>`
   }
 
   .amount {
+    filter: ${(props) => (props.disabled ? "grayscale(100%)" : "none")};
+
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -226,22 +235,22 @@ const TransferBoxStyled = styled.div<StyeldProps>`
   }
 `;
 
-export const HighlightButton = styled(FilledButton)`
-  background-color: #172b23;
-  border: 1px solid var(--primary-color);
-  color: var(--primary-color);
-  padding: 1rem !important;
+// export const HighlightButton = styled(FilledButton)`
+//   background-color: #172b23;
+//   border: 1px solid var(--primary-color);
+//   color: var(--primary-color);
+//   padding: 1rem !important;
 
-  &:hover {
-    background-color: #203128;
-    color: var(--primary-dark-color);
-    border: 1px solid var(--primary-darker-color);
-  }
+//   &:hover {
+//     background-color: #203128;
+//     color: var(--primary-dark-color);
+//     border: 1px solid var(--primary-darker-color);
+//   }
 
-  &:disabled {
-    background-color: #373737;
-    color: var(--off-white-color);
-    border: 1px solid var(--off-white-color);
-  }
-`;
+//   &:disabled {
+//     background-color: #373737;
+//     color: var(--off-white-color);
+//     border: 1px solid var(--off-white-color);
+//   }
+// `;
 export default TransferBox;
