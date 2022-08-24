@@ -60,7 +60,7 @@ const TransferBox = (props: Props) => {
             gap: "1rem",
           }}
         >
-          {props.from.name == "Ethereum" ? (
+          {props.from.name == "ethereum" ? (
             <img src={ethIcon} height={26} />
           ) : null}
           <Text type="text" color="white" align="left">
@@ -83,7 +83,7 @@ const TransferBox = (props: Props) => {
             gap: "1rem",
           }}
         >
-          {props.to.name == "Canto (EVM)" ? (
+          {props.to.name == "canto (EVM)" ? (
             <img src={cantoIcon} height={26} />
           ) : null}
           <Text type="text" color="white" align="right">
