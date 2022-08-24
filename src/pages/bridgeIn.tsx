@@ -24,7 +24,7 @@ const BridgeIn = () => {
   const activeToken = useTokenStore().selectedToken;
   const [bridgeAmount, setBridgeAmount] = useState("0");
   const [convertAmount, setConvertAmount] = useState("0");
-  const [convertConfirmation, setConvertConfirmation] = useState("");
+  const [convertConfirmation, setConvertConfirmation] = useState("Bridge In");
 
   //set the gravity token info from ethMainnet
   const { gravityTokens, gravityAddress } = useGravityTokens(
@@ -126,7 +126,7 @@ const BridgeIn = () => {
           setConvertConfirmation("");
         }}
       />
-      <Row>
+      {/* <Row>
         <Text type="title" color="white">
           Ethereum
         </Text>
@@ -146,8 +146,21 @@ const BridgeIn = () => {
 
           <img src={CopyIcon} style={{ height: "22px", marginLeft: "5px" }} />
         </Text>
-      </Row>
+      </Row> */}
+
+      <Text type="text" color="white" style={{ width: "70%" }}>
+        it takes several minutes for your bridged assets to arrive on the canto
+        network. for more details, read more here.
+      </Text>
       <TransferBox
+        from={{
+          address: networkInfo.account,
+          name: "Ethereum",
+        }}
+        to={{
+          address: networkInfo.cantoAddress,
+          name: "Canto (Bridge)",
+        }}
         tokenIcon={tokenStore.selectedToken.data.icon}
         networkName="ethereum"
         onSwitch={() => {
@@ -172,9 +185,14 @@ const BridgeIn = () => {
           />
         }
       />
-      <img src={arrow} alt="next" />
 
-      <Row>
+      <Text type="text" color="white" style={{ width: "70%" }}>
+        you must bridge your assets from canto (bridge) to canto to use them on
+        the canto network. read more here
+      </Text>
+      {/* <img src={arrow} alt="next" /> */}
+
+      {/* <Row>
         <Text type="title" color="white">
           Canto
         </Text>
@@ -196,9 +214,17 @@ const BridgeIn = () => {
 
           <img src={CopyIcon} style={{ height: "22px", marginLeft: "5px" }} />
         </Text>
-      </Row>
+      </Row> */}
 
       <TransferBox
+        from={{
+          address: networkInfo.cantoAddress,
+          name: "Canto (Bridge)",
+        }}
+        to={{
+          address: networkInfo.account,
+          name: "Canto (EVM)",
+        }}
         tokenIcon={tokenStore.selectedToken.data.icon}
         networkName="canto"
         onSwitch={() => {
@@ -261,15 +287,10 @@ const BridgeIn = () => {
               }, REFRESH_RATE * 2.5);
             }}
           >
-            bridge
+            {convertConfirmation}
           </PrimaryButton>
         }
       />
-      <div>{convertConfirmation}</div>
-      <img src={arrow} alt="next" />
-      <Text type="title" color="primary">
-        Canto (EVM)
-      </Text>
     </Container>
   );
 };

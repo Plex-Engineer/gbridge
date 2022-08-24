@@ -1,10 +1,13 @@
 import { useEthers } from "@usedapp/core";
 import { NavBar, useAlert } from "cantoui";
-import { getAccountBalance, getChainIdandAccount } from "global/utils/walletConnect/addCantoToWallet";
+import {
+  getAccountBalance,
+  getChainIdandAccount,
+} from "global/utils/walletConnect/addCantoToWallet";
 import { useEffect } from "react";
 import { useNetworkInfo } from "stores/networkInfo";
 import { addNetwork } from "utils/addCantoToWallet";
-import logo from "./../../assets/logo.svg"
+import logo from "./../../assets/logo.svg";
 
 export const CantoNav = () => {
   const netWorkInfo = useNetworkInfo();
@@ -19,8 +22,8 @@ export const CantoNav = () => {
 
   useEffect(() => {
     setChainInfo();
-   //@ts-ignore
-}, [window.ethereum?.networkVersion]);
+    //@ts-ignore
+  }, [window.ethereum?.networkVersion]);
 
   //@ts-ignore
   if (window.ethereum) {
@@ -29,25 +32,36 @@ export const CantoNav = () => {
       window.location.reload();
     });
 
-  //   //@ts-ignore
-  //   window.ethereum.on("networkChanged", () => {
-  //     window.location.reload();
-  //   });
+    //   //@ts-ignore
+    //   window.ethereum.on("networkChanged", () => {
+    //     window.location.reload();
+    //   });
   }
 
   async function getBalance() {
     if (netWorkInfo.account != undefined) {
-      netWorkInfo.setBalance(await getAccountBalance(netWorkInfo.account))
+      netWorkInfo.setBalance(await getAccountBalance(netWorkInfo.account));
     }
   }
   useEffect(() => {
     if (!netWorkInfo.isConnected) {
-      alert.show("Failure", <p>this network is not supported on gravity bridge, please <a onClick={addNetwork} style={{cursor: "pointer", textDecoration: "underline"}}>switch networks</a></p>)
+      alert.show(
+        "Failure",
+        <p>
+          this network is not supported on gravity bridge, please{" "}
+          <a
+            onClick={addNetwork}
+            style={{ cursor: "pointer", textDecoration: "underline" }}
+          >
+            switch networks
+          </a>
+        </p>
+      );
     } else {
       alert.close();
     }
     getBalance();
-  },[netWorkInfo.account, netWorkInfo.chainId])
+  }, [netWorkInfo.account, netWorkInfo.chainId]);
 
   return (
     <NavBar

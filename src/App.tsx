@@ -1,7 +1,6 @@
 import "App.css";
 import styled from "@emotion/styled";
 import { HelmetProvider } from "react-helmet-async";
-import BridgePage from "pages/bridge";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import {
