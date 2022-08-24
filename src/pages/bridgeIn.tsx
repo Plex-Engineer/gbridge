@@ -24,7 +24,11 @@ const BridgeIn = () => {
   const activeToken = useTokenStore().selectedToken;
   const [bridgeAmount, setBridgeAmount] = useState("0");
   const [convertAmount, setConvertAmount] = useState("0");
-  const [convertConfirmation, setConvertConfirmation] = useState("Bridge In");
+
+  //convert states to update the user
+  const [convertConfirmation, setConvertConfirmation] = useState("select a token");
+  const [inConvertTransaction, setInConvertTransaction] = useState<boolean>(false);
+  const [prevConvertBalance, setPrevConvertBalance] = useState("0");
 
   //set the gravity token info from ethMainnet
   const { gravityTokens, gravityAddress } = useGravityTokens(
@@ -44,6 +48,24 @@ const BridgeIn = () => {
     );
     setCantoGravityTokens(tokensWithBalances);
   }
+
+  //Useffect for calling data per block
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      if (gravityTokens) {
+        await getBalances(gravityTokens);
+        tokenStore.setSelectedToken(cantoGravityTokens?.find((token) => token.data.address == tokenStore.selectedToken.data.address) ?? tokenStore.selectedToken)
+      }
+    //check if convertCoin has been called 
+    if (inConvertTransaction) {
+      if (tokenStore.selectedToken.nativeBalanceOf != prevConvertBalance) {
+        setConvertConfirmation("you have successfully bridged " + tokenStore.selectedToken.data.symbol + " from canto to evm");
+        setInConvertTransaction(false);
+      }
+    }
+    }, 6000);
+    return () => clearInterval(interval)
+  },[gravityTokens]);
 
   //setting native canto balances whenever eth gravity tokens change
   useEffect(() => {
@@ -107,7 +129,7 @@ const BridgeIn = () => {
   return (
     <Container>
       <Text type="title" color="white">
-        Send funds to canto
+        send funds to canto
       </Text>
       <TokenWallet
         tokens={cantoGravityTokens}
@@ -116,7 +138,8 @@ const BridgeIn = () => {
           tokenStore.setSelectedToken(value);
           resetCosmos();
           resetApprove();
-          setConvertConfirmation("");
+          setConvertConfirmation("bridge in");
+          setInConvertTransaction(false);
         }}
       />
       {/* <Row>
@@ -148,11 +171,11 @@ const BridgeIn = () => {
       <TransferBox
         from={{
           address: networkInfo.account,
-          name: "Ethereum",
+          name: "ethereum",
         }}
         to={{
           address: networkInfo.cantoAddress,
-          name: "Canto (Bridge)",
+          name: "canto (bridge)",
         }}
         tokenIcon={tokenStore.selectedToken.data.icon}
         networkName="ethereum"
@@ -174,7 +197,7 @@ const BridgeIn = () => {
             gravityAddress={gravityAddress}
             hasPubKey={networkInfo.hasPubKey}
             disabled={false}
-            onClick={() => send(bridgeAmount)}
+            onClick={() => 1 == Number(networkInfo.chainId) ? send(bridgeAmount) : {}}
           />
         }
       />
@@ -212,11 +235,11 @@ const BridgeIn = () => {
       <TransferBox
         from={{
           address: networkInfo.cantoAddress,
-          name: "Canto (Bridge)",
+          name: "canto (bridge)",
         }}
         to={{
           address: networkInfo.account,
-          name: "Canto (EVM)",
+          name: "canto (EVM)",
         }}
         tokenIcon={tokenStore.selectedToken.data.icon}
         networkName="canto"
@@ -231,7 +254,7 @@ const BridgeIn = () => {
         amount={convertAmount}
         button={
           <PrimaryButton
-            disabled={!networkInfo.hasPubKey}
+            disabled={!networkInfo.hasPubKey || !(CantoMainnet.chainId == Number(networkInfo.chainId))}
             onClick={async () => {
               const REFRESH_RATE = 11000;
               setConvertConfirmation(
@@ -254,30 +277,8 @@ const BridgeIn = () => {
               setConvertConfirmation(
                 "waiting for the transaction to be verified..."
               );
-              setTimeout(async () => {
-                const currentBalance = tokenStore.selectedToken.nativeBalanceOf;
-                const token: NativeGTokens[] = await getCantoBalance(
-                  CantoMainnet.cosmosAPIEndpoint,
-                  networkInfo.cantoAddress,
-                  [tokenStore.selectedToken]
-                );
-                const success = currentBalance != token[0].nativeBalanceOf;
-                console.log(
-                  "🚀 ~ file: bridgeIn.tsx ~ line 211 ~ setTimeout ~ cantoGravityTokens",
-                  token
-                );
-                const prefix = success ? "" : "un";
-                const message =
-                  "you have " +
-                  prefix +
-                  "successfully converted " +
-                  convertAmount +
-                  " of canto " +
-                  tokenStore.selectedToken.data.symbol +
-                  " to evm ";
-                setConvertConfirmation(message);
-                tokenStore.setSelectedToken(token[0]);
-              }, REFRESH_RATE * 2.5);
+              setInConvertTransaction(true);
+              setPrevConvertBalance(tokenStore.selectedToken.nativeBalanceOf);
             }}
           >
             {convertConfirmation}

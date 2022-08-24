@@ -48,8 +48,8 @@ const TransferBox = (props: Props) => {
         onClick={props.onSwitch}
       >
         {!props.connected
-          ? "Switch to " + props.networkName
-          : "Connected to " + props.networkName}
+          ? "switch to " + props.networkName
+          : "connected to " + props.networkName}
       </HighlightButton>
 
       <div className="row">
@@ -149,6 +149,7 @@ const TransferBox = (props: Props) => {
             value={props.amount}
             onChange={(e) => props.onChange(e.target.value)}
           />
+          {Number(props.max) < 0 ? "" : 
           <div
             className="max"
             style={{ cursor: "pointer" }}
@@ -156,6 +157,7 @@ const TransferBox = (props: Props) => {
           >
             max: {props.max}
           </div>
+          }
         </div>
       </div>
       <div className="row">{props.button}</div>
