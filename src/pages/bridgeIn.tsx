@@ -24,7 +24,11 @@ const BridgeIn = () => {
   const activeToken = useTokenStore().selectedToken;
   const [bridgeAmount, setBridgeAmount] = useState("0");
   const [convertAmount, setConvertAmount] = useState("0");
+
+  //convert states to update the user
   const [convertConfirmation, setConvertConfirmation] = useState("select a token");
+  const [inConvertTransaction, setInConvertTransaction] = useState<boolean>(false);
+  const [prevConvertBalance, setPrevConvertBalance] = useState("0");
 
   //set the gravity token info from ethMainnet
   const { gravityTokens, gravityAddress } = useGravityTokens(
@@ -52,6 +56,13 @@ const BridgeIn = () => {
         await getBalances(gravityTokens);
         tokenStore.setSelectedToken(cantoGravityTokens?.find((token) => token.data.address == tokenStore.selectedToken.data.address) ?? tokenStore.selectedToken)
       }
+    //check if convertCoin has been called 
+    if (inConvertTransaction) {
+      if (tokenStore.selectedToken.nativeBalanceOf != prevConvertBalance) {
+        setConvertConfirmation("you have successfully bridged " + tokenStore.selectedToken.data.symbol + " from canto to evm");
+        setInConvertTransaction(false);
+      }
+    }
     }, 6000);
     return () => clearInterval(interval)
   },[gravityTokens]);
@@ -128,6 +139,7 @@ const BridgeIn = () => {
           resetCosmos();
           resetApprove();
           setConvertConfirmation("bridge in");
+          setInConvertTransaction(false);
         }}
       />
       {/* <Row>
@@ -265,25 +277,8 @@ const BridgeIn = () => {
               setConvertConfirmation(
                 "waiting for the transaction to be verified..."
               );
-              setTimeout(async () => {
-                const currentBalance = tokenStore.selectedToken.nativeBalanceOf;
-                const token: NativeGTokens[] = await getCantoBalance(
-                  CantoMainnet.cosmosAPIEndpoint,
-                  networkInfo.cantoAddress,
-                  [tokenStore.selectedToken]
-                );
-                const success = currentBalance != token[0].nativeBalanceOf;
-                const prefix = success ? "" : "un";
-                const message =
-                  "you have " +
-                  prefix +
-                  "successfully converted " +
-                  convertAmount +
-                  " of canto " +
-                  tokenStore.selectedToken.data.symbol +
-                  " to evm ";
-                setConvertConfirmation(message);
-              }, REFRESH_RATE * 2.5);
+              setInConvertTransaction(true);
+              setPrevConvertBalance(tokenStore.selectedToken.nativeBalanceOf);
             }}
           >
             {convertConfirmation}
