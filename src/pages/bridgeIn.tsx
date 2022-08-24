@@ -64,13 +64,6 @@ const BridgeIn = () => {
     resetState: resetCosmos,
   } = useCosmos(gravityAddress ?? ADDRESSES.ETHMainnet.GravityBridge);
 
-  function copyAddress(value: string | undefined) {
-    navigator.clipboard.writeText(value ?? "");
-    toast("copied address", {
-      autoClose: 300,
-    });
-  }
-
   //event tracker
   useEffect(() => {
     tokenStore.setApproveStatus(stateApprove.status);

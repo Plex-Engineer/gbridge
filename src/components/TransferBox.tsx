@@ -4,7 +4,8 @@ import styled from "styled-components";
 import arrow from "assets/right.svg";
 import CopyIcon from "assets/copy.svg";
 import { toast } from "react-toastify";
-
+import ethIcon from "assets/icons/ETH.svg";
+import cantoIcon from "assets/logo.svg";
 interface Props {
   tokenSymbol: string;
   tokenIcon: string;
@@ -52,13 +53,43 @@ const TransferBox = (props: Props) => {
       </HighlightButton>
 
       <div className="row">
-        <Text type="text" color="white" align="left">
-          {props.from.name}
-        </Text>
-        <img src={arrow} alt="right arrow" height={40} />
-        <Text type="text" color="white" align="right">
-          {props.to.name}
-        </Text>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "1rem",
+          }}
+        >
+          {props.from.name == "Ethereum" ? (
+            <img src={ethIcon} height={26} />
+          ) : null}
+          <Text type="text" color="white" align="left">
+            {props.from.name}
+          </Text>
+        </div>
+        <img
+          style={{
+            flex: "0",
+          }}
+          src={arrow}
+          alt="right arrow"
+          height={40}
+        />
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+            gap: "1rem",
+          }}
+        >
+          {props.to.name == "Canto (EVM)" ? (
+            <img src={cantoIcon} height={26} />
+          ) : null}
+          <Text type="text" color="white" align="right">
+            {props.to.name}
+          </Text>
+        </div>
       </div>
       <div className="row">
         <Text type="text" color="white" align="left">
@@ -157,6 +188,7 @@ const TransferBoxStyled = styled.div<StyeldProps>`
   .row {
     display: flex;
     /* gap: 1rem; */
+
     justify-content: space-between;
     filter: ${(props) => (props.disabled ? "grayscale(100%)" : "none")};
 
