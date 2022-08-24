@@ -49,8 +49,8 @@ const TransferBox = (props: Props) => {
         onClick={props.onSwitch}
       >
         {!props.connected
-          ? "Switch to " + props.networkName
-          : "Connected to " + props.networkName}
+          ? "switch to " + props.networkName
+          : "connected to " + props.networkName}
       </HighlightButton>
 
       <div className="row">
@@ -61,7 +61,7 @@ const TransferBox = (props: Props) => {
             gap: "1rem",
           }}
         >
-          {props.from.name == "Ethereum" ? (
+          {props.from.name == "ethereum" ? (
             <img src={ethIcon} height={26} />
           ) : null}
           <Text type="text" color="white" align="left">
@@ -84,7 +84,7 @@ const TransferBox = (props: Props) => {
             gap: "1rem",
           }}
         >
-          {props.to.name == "Canto (EVM)" ? (
+          {props.to.name == "canto (EVM)" ? (
             <img src={cantoIcon} height={26} />
           ) : null}
           <Text type="text" color="white" align="right">
@@ -150,6 +150,7 @@ const TransferBox = (props: Props) => {
             value={props.amount}
             onChange={(e) => props.onChange(e.target.value)}
           />
+          {Number(props.max) < 0 ? "" : 
           <div
             className="max"
             style={{ cursor: "pointer" }}
@@ -157,6 +158,7 @@ const TransferBox = (props: Props) => {
           >
             max: {props.max}
           </div>
+          }
         </div>
       </div>
       <div className="row">{props.button}</div>
