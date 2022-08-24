@@ -37,14 +37,15 @@ const TransferBox = (props: Props) => {
   return (
     <TransferBoxStyled disabled={!props.connected}>
       <HighlightButton
+        className="switch"
         id="head-button"
         // disabled={props.connected}
-        style={{
-          width: "100%",
-          color: !props.connected ? "var(--warning-color)" : "",
-          border: !props.connected ? "1px solid var(--warning-color)" : "",
-          backgroundColor: !props.connected ? "#382e1f" : "",
-        }}
+        // style={{
+        //   width: "100%",
+        //   color: !props.connected ? "var(--warning-color)" : "",
+        //   border: !props.connected ? "1px solid var(--warning-color)" : "",
+        //   backgroundColor: !props.connected ? "#382e1f" : "",
+        // }}
         onClick={props.onSwitch}
       >
         {!props.connected
@@ -215,6 +216,16 @@ const TransferBoxStyled = styled.div<StyeldProps>`
   .token {
     display: flex;
     gap: 1rem;
+  }
+
+  .switch {
+    color: ${({ disabled }) => (disabled ? "var(--warning-color)" : "")};
+    border: ${({ disabled }) =>
+      disabled ? "1px solid var(--warning-color)" : ""};
+    background-color: ${({ disabled }) => (disabled ? "#382e1f" : "")};
+    &:hover {
+      background-color: ${({ disabled }) => (disabled ? "#2a2218" : "")};
+    }
   }
 
   .amount {
