@@ -24,7 +24,7 @@ const BridgeIn = () => {
   const activeToken = useTokenStore().selectedToken;
   const [bridgeAmount, setBridgeAmount] = useState("0");
   const [convertAmount, setConvertAmount] = useState("0");
-  const [convertConfirmation, setConvertConfirmation] = useState("Bridge In");
+  const [convertConfirmation, setConvertConfirmation] = useState("select a token");
 
   //set the gravity token info from ethMainnet
   const { gravityTokens, gravityAddress } = useGravityTokens(
@@ -45,6 +45,17 @@ const BridgeIn = () => {
     setCantoGravityTokens(tokensWithBalances);
   }
 
+  //Useffect for calling data per block
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      if (gravityTokens) {
+        await getBalances(gravityTokens);
+        tokenStore.setSelectedToken(cantoGravityTokens?.find((token) => token.data.address == tokenStore.selectedToken.data.address) ?? tokenStore.selectedToken)
+      }
+    }, 6000);
+    return () => clearInterval(interval)
+  },[gravityTokens]);
+
   //setting native canto balances whenever eth gravity tokens change
   useEffect(() => {
     if (gravityTokens) {
@@ -63,13 +74,6 @@ const BridgeIn = () => {
     send: sendCosmos,
     resetState: resetCosmos,
   } = useCosmos(gravityAddress ?? ADDRESSES.ETHMainnet.GravityBridge);
-
-  function copyAddress(value: string | undefined) {
-    navigator.clipboard.writeText(value ?? "");
-    toast("copied address", {
-      autoClose: 300,
-    });
-  }
 
   //event tracker
   useEffect(() => {
@@ -114,7 +118,7 @@ const BridgeIn = () => {
   return (
     <Container>
       <Text type="title" color="white">
-        Send funds to canto
+        send funds to canto
       </Text>
       <TokenWallet
         tokens={cantoGravityTokens}
@@ -123,7 +127,7 @@ const BridgeIn = () => {
           tokenStore.setSelectedToken(value);
           resetCosmos();
           resetApprove();
-          setConvertConfirmation("");
+          setConvertConfirmation("bridge in");
         }}
       />
       {/* <Row>
@@ -155,11 +159,11 @@ const BridgeIn = () => {
       <TransferBox
         from={{
           address: networkInfo.account,
-          name: "Ethereum",
+          name: "ethereum",
         }}
         to={{
           address: networkInfo.cantoAddress,
-          name: "Canto (Bridge)",
+          name: "canto (bridge)",
         }}
         tokenIcon={tokenStore.selectedToken.data.icon}
         networkName="ethereum"
@@ -181,7 +185,7 @@ const BridgeIn = () => {
             gravityAddress={gravityAddress}
             hasPubKey={networkInfo.hasPubKey}
             disabled={false}
-            onClick={() => send(bridgeAmount)}
+            onClick={() => 1 == Number(networkInfo.chainId) ? send(bridgeAmount) : {}}
           />
         }
       />
@@ -219,11 +223,11 @@ const BridgeIn = () => {
       <TransferBox
         from={{
           address: networkInfo.cantoAddress,
-          name: "Canto (Bridge)",
+          name: "canto (bridge)",
         }}
         to={{
           address: networkInfo.account,
-          name: "Canto (EVM)",
+          name: "canto (EVM)",
         }}
         tokenIcon={tokenStore.selectedToken.data.icon}
         networkName="canto"
@@ -238,7 +242,7 @@ const BridgeIn = () => {
         amount={convertAmount}
         button={
           <PrimaryButton
-            disabled={!networkInfo.hasPubKey}
+            disabled={!networkInfo.hasPubKey || !(CantoMainnet.chainId == Number(networkInfo.chainId))}
             onClick={async () => {
               const REFRESH_RATE = 11000;
               setConvertConfirmation(
@@ -269,10 +273,6 @@ const BridgeIn = () => {
                   [tokenStore.selectedToken]
                 );
                 const success = currentBalance != token[0].nativeBalanceOf;
-                console.log(
-                  "🚀 ~ file: bridgeIn.tsx ~ line 211 ~ setTimeout ~ cantoGravityTokens",
-                  token
-                );
                 const prefix = success ? "" : "un";
                 const message =
                   "you have " +
@@ -283,7 +283,6 @@ const BridgeIn = () => {
                   tokenStore.selectedToken.data.symbol +
                   " to evm ";
                 setConvertConfirmation(message);
-                tokenStore.setSelectedToken(token[0]);
               }, REFRESH_RATE * 2.5);
             }}
           >
