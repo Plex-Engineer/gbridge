@@ -40,10 +40,12 @@ export const useNetworkInfo = create<NetworkProps>()(
     hasPubKey: true,
     setAccount: async (account) => {
     set({ account: account });
-    let cantoAddress = await getCantoAddressFromMetaMask(account);
-    let hasPubKey = await checkPubKey(cantoAddress);
-    set({cantoAddress : cantoAddress});
-    set({hasPubKey : hasPubKey});
+    if (account) {
+      let cantoAddress = await getCantoAddressFromMetaMask(account);
+      set({cantoAddress : cantoAddress});
+      let hasPubKey = await checkPubKey(cantoAddress);
+      set({hasPubKey : hasPubKey});
+    }
     },
     balance: "0",
     setBalance: (balance) => set({ balance: balance }),

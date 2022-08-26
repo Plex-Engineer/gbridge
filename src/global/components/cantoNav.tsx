@@ -4,6 +4,7 @@ import {
   getAccountBalance,
   getChainIdandAccount,
 } from "global/utils/walletConnect/addCantoToWallet";
+import { GenPubKey } from "pages/genPubKey";
 import { useEffect } from "react";
 import { useNetworkInfo } from "stores/networkInfo";
 import { addNetwork } from "utils/addCantoToWallet";
@@ -11,19 +12,13 @@ import logo from "./../../assets/logo.svg";
 
 export const CantoNav = () => {
   const netWorkInfo = useNetworkInfo();
-  const { activateBrowserWallet, account, switchNetwork } = useEthers();
+  const { activateBrowserWallet, account, switchNetwork, chainId } = useEthers();
   const alert = useAlert();
 
-  async function setChainInfo() {
-    const [chainId, account] = await getChainIdandAccount();
-    netWorkInfo.setChainId(chainId);
-    netWorkInfo.setAccount(account);
-  }
-
   useEffect(() => {
-    setChainInfo();
-    //@ts-ignore
-  }, [window.ethereum?.networkVersion]);
+    netWorkInfo.setChainId(chainId?.toString());
+    netWorkInfo.setAccount(account);
+  }, [account, chainId]);
 
   //@ts-ignore
   if (window.ethereum) {
@@ -31,11 +26,6 @@ export const CantoNav = () => {
     window.ethereum.on("accountsChanged", () => {
       window.location.reload();
     });
-
-    //   //@ts-ignore
-    //   window.ethereum.on("networkChanged", () => {
-    //     window.location.reload();
-    //   });
   }
 
   async function getBalance() {
@@ -57,11 +47,14 @@ export const CantoNav = () => {
           </a>
         </p>
       );
-    } else {
+    } else if (!netWorkInfo.hasPubKey) {
+      alert.show("Failure", <GenPubKey />)
+    } else{
       alert.close();
     }
     getBalance();
-  }, [netWorkInfo.account, netWorkInfo.chainId]);
+  }, [netWorkInfo.account, netWorkInfo.chainId, netWorkInfo.hasPubKey]);
+
 
   return (
     <NavBar

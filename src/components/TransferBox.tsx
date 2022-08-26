@@ -93,7 +93,13 @@ const TransferBox = (props: Props) => {
         </div>
       </div>
       <div className="row">
-        <Text type="text" color="white" align="left">
+        <Text 
+          type="text" 
+          color="white" 
+          align="left"
+          onClick={() => copyAddress(props.from.address)}
+          style={{cursor: "pointer"}}
+        >
           {props.from.address
             ? props.from.address.slice(0, 4) +
               "..." +
@@ -113,7 +119,8 @@ const TransferBox = (props: Props) => {
           type="text"
           color="white"
           align="right"
-          onClick={() => copyAddress(props.from.address)}
+          onClick={() => copyAddress(props.to.address)}
+          style={{cursor: "pointer"}}
         >
           {props.to.address
             ? props.to.address.slice(0, 4) + "..." + props.to.address.slice(-4)
@@ -156,7 +163,7 @@ const TransferBox = (props: Props) => {
             style={{ cursor: "pointer" }}
             onClick={() => props.onChange(props.max)}
           >
-            max: {props.max}
+            max: {Number(props.max)}
           </div>
           }
         </div>

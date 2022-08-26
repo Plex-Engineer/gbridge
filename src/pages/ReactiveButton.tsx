@@ -9,14 +9,12 @@ interface RBProps {
   token: any | undefined;
   destination: string | undefined;
   gravityAddress: string | undefined;
-  hasPubKey: boolean;
   onClick: () => void;
   disabled: boolean;
 }
 export const ReactiveButton = ({
   amount,
   token,
-  hasPubKey,
   onClick,
   disabled,
 }: RBProps) => {
@@ -76,10 +74,6 @@ export const ReactiveButton = ({
   }
 
   //? refactor this into a single component
-  //if the account doesn't have a public key
-  if (!hasPubKey) {
-    return <PrimaryButton disabled>please generate public key</PrimaryButton>;
-  }
   //if the token hasn't been approved
   if (token?.allowance == -1) {
     return <PrimaryButton disabled>select a token</PrimaryButton>;

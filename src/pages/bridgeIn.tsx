@@ -166,7 +166,7 @@ const BridgeIn = () => {
 
       <Text type="text" color="white" style={{ width: "70%" }}>
         it takes several minutes for your bridged assets to arrive on the canto
-        network. for more details, read more here.
+        network. for more details, read more <a href="https://docs.canto.io/user-guides/bridging-assets/ethereum" style={{color: "white", cursor: "pointer", textDecoration: "underline"}}>here</a>.
       </Text>
       <TransferBox
         from={{
@@ -195,7 +195,6 @@ const BridgeIn = () => {
             account={networkInfo.account}
             token={tokenStore.selectedToken}
             gravityAddress={gravityAddress}
-            hasPubKey={networkInfo.hasPubKey}
             disabled={false}
             onClick={() => 1 == Number(networkInfo.chainId) ? send(bridgeAmount) : {}}
           />
@@ -203,8 +202,8 @@ const BridgeIn = () => {
       />
 
       <Text type="text" color="white" style={{ width: "70%" }}>
-        you must bridge your assets from canto (bridge) to canto to use them on
-        the canto network. read more here
+        you must bridge your assets from canto (bridge) to the canto EVM to use them on
+        the canto network. read more <a href="https://docs.canto.io/user-guides/converting-assets" style={{color: "white", cursor: "pointer", textDecoration: "underline"}}>here</a>.
       </Text>
       {/* <img src={arrow} alt="next" /> */}
 
@@ -254,9 +253,8 @@ const BridgeIn = () => {
         amount={convertAmount}
         button={
           <PrimaryButton
-            disabled={!networkInfo.hasPubKey || !(CantoMainnet.chainId == Number(networkInfo.chainId))}
+            disabled={!networkInfo.hasPubKey || !(CantoMainnet.chainId == Number(networkInfo.chainId)) || tokenStore.selectedToken == selectedEmptyToken}
             onClick={async () => {
-              const REFRESH_RATE = 11000;
               setConvertConfirmation(
                 "waiting for the metamask transaction to be signed..."
               );

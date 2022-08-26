@@ -1,16 +1,18 @@
 import styled from "@emotion/styled";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
+import { selectedEmptyToken, useTokenStore } from "stores/tokens";
 import BridgeIn from "./bridgeIn";
 import BridgeOut from "./BridgeOut";
 
 const BridgingPage = () => {
+  const tokenStore = useTokenStore();
   return (
     <Container>
       <Tabs className="tabs">
         <TabList className="tablist">
-          <Tab className="tab">Bridge In</Tab>
-          <Tab className="tab">Bridge Out</Tab>
+          <Tab className="tab" onClick={() => tokenStore.setSelectedToken(selectedEmptyToken)}>Bridge In</Tab>
+          <Tab className="tab" onClick={() => tokenStore.setSelectedToken(selectedEmptyToken)}>Bridge Out</Tab>
         </TabList>
         <TabPanel>
           <BridgeIn />
