@@ -4,9 +4,6 @@ import styled from "styled-components";
 import arrow from "assets/right.svg";
 import CopyIcon from "assets/copy.svg";
 import { toast } from "react-toastify";
-import ethIcon from "assets/icons/ETH.svg";
-import cantoIcon from "assets/logo.svg";
-const gravityIcon = "https://raw.githubusercontent.com/Gravity-Bridge/Gravity-Docs/main/assets/Graviton-Grey.svg";
 interface Props {
   tokenSymbol: string;
   tokenIcon: string;
@@ -21,10 +18,12 @@ interface Props {
   from: {
     name: string;
     address?: string;
+    icon?: string;
   };
   to: {
     name: string;
     address?: string;
+    icon?: string;
   };
   onAddressChange : (e : ChangeEvent<HTMLInputElement>) => void
 }
@@ -63,11 +62,7 @@ const TransferOutBox = (props: Props) => {
             gap: "1rem",
           }}
         >
-          {props.from.name == "gravity bridge" ? (
-            <img src={gravityIcon} height={26} />
-          ) : props.from.name == "canto (EVM)" ? (
-            <img src={cantoIcon} height={26} />
-          ) : null}
+          <img src={props.from.icon ?? ""} height={26} />
           <Text type="text" color="white" align="left">
             {props.from.name}
           </Text>
@@ -88,11 +83,7 @@ const TransferOutBox = (props: Props) => {
             gap: "1rem",
           }}
         >
-          {props.to.name == "canto (EVM)" ? (
-            <img src={cantoIcon} height={26} />
-          ) : props.to.name == "gravity bridge" ? (
-            <img src={gravityIcon} height={26} />
-          ) : null}
+          <img src={props.to.icon ?? ""} height={26} />
           <Text type="text" color="white" align="right">
             {props.to.name}
           </Text>

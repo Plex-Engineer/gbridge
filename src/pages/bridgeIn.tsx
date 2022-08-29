@@ -1,4 +1,5 @@
 import { ADDRESSES, CantoMainnet, Text } from "cantoui";
+import ethIcon from "assets/icons/ETH.svg";
 import TransferBox from "components/TransferBox";
 import { GTokens, useGravityTokens } from "hooks/useGravityTokens";
 import { useEffect, useState } from "react";
@@ -146,6 +147,7 @@ const BridgeIn = () => {
         from={{
           address: networkInfo.account,
           name: "ethereum",
+          icon: ethIcon,
         }}
         to={{
           address: networkInfo.cantoAddress,

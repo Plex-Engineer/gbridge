@@ -4,8 +4,7 @@ import styled from "styled-components";
 import arrow from "assets/right.svg";
 import CopyIcon from "assets/copy.svg";
 import { toast } from "react-toastify";
-import ethIcon from "assets/icons/ETH.svg";
-import cantoIcon from "assets/logo.svg";
+
 interface Props {
   tokenSymbol: string;
   tokenIcon: string;
@@ -20,10 +19,12 @@ interface Props {
   from: {
     name: string;
     address?: string;
+    icon?: string;
   };
   to: {
     name: string;
     address?: string;
+    icon?: string;
   };
 }
 const TransferBox = (props: Props) => {
@@ -60,11 +61,7 @@ const TransferBox = (props: Props) => {
             gap: "1rem",
           }}
         >
-             {props.from.name == "ethereum" ? (
-            <img src={ethIcon} height={26} />
-          ) : props.from.name == "canto (EVM)" ? (
-            <img src={cantoIcon} height={26} />
-          ) : null}
+          <img src={props.from.icon ?? ""} height={26} />
           <Text type="text" color="white" align="left">
             {props.from.name}
           </Text>
@@ -85,23 +82,19 @@ const TransferBox = (props: Props) => {
             gap: "1rem",
           }}
         >
-             {props.to.name == "canto (EVM)" ? (
-            <img src={cantoIcon} height={26} />
-          ) : props.to.name == "ethereum" ? (
-            <img src={ethIcon} height={26} />
-          ) : null}
+       <img src={props.to.icon ?? ""} height={26} />
           <Text type="text" color="white" align="right">
             {props.to.name}
           </Text>
         </div>
       </div>
       <div className="row">
-        <Text 
-          type="text" 
-          color="white" 
+        <Text
+          type="text"
+          color="white"
           align="left"
           onClick={() => copyAddress(props.from.address)}
-          style={{cursor: "pointer"}}
+          style={{ cursor: "pointer" }}
         >
           {props.from.address
             ? props.from.address.slice(0, 4) +
@@ -123,7 +116,7 @@ const TransferBox = (props: Props) => {
           color="white"
           align="right"
           onClick={() => copyAddress(props.to.address)}
-          style={{cursor: "pointer"}}
+          style={{ cursor: "pointer" }}
         >
           {props.to.address
             ? props.to.address.slice(0, 4) + "..." + props.to.address.slice(-4)
@@ -160,15 +153,17 @@ const TransferBox = (props: Props) => {
             value={props.amount}
             onChange={(e) => props.onChange(e.target.value)}
           />
-          {Number(props.max) < 0 ? "" : 
-          <div
-            className="max"
-            style={{ cursor: "pointer" }}
-            onClick={() => props.onChange(props.max)}
-          >
-            max: {Number(props.max)}
-          </div>
-          }
+          {Number(props.max) < 0 ? (
+            ""
+          ) : (
+            <div
+              className="max"
+              style={{ cursor: "pointer" }}
+              onClick={() => props.onChange(props.max)}
+            >
+              max: {Number(props.max)}
+            </div>
+          )}
         </div>
       </div>
       <div className="row">{props.button}</div>

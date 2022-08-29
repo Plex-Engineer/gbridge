@@ -167,6 +167,7 @@ const BridgeOut = () => {
         to={{
           address: userGravityAddress,
           name: "gravity bridge",
+          icon: "https://raw.githubusercontent.com/Gravity-Bridge/Gravity-Docs/main/assets/Graviton-Grey.svg",
         }}
         tokenIcon={tokenStore.selectedToken.data.icon}
         networkName="canto"

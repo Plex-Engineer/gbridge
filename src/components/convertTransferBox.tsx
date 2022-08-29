@@ -1,5 +1,6 @@
 import { useEthers } from "@usedapp/core";
 import { CantoMainnet, PrimaryButton } from "cantoui";
+import cantoIcon from "assets/logo.svg";
 import { chain, fee, memo } from "config/networks";
 import { ethers } from "ethers";
 import { NativeGTokens } from "hooks/useCosmosTokens";
@@ -90,10 +91,12 @@ export const ConvertTransferBox = (props: ConvertTransferBoxProps) => {
       from={{
         address: props.cantoToEVM ? props.cantoAddress : props.ETHAddress,
         name: props.cantoToEVM ? "canto (bridge)" : "canto (EVM)",
+        icon: props.cantoToEVM ? "" : cantoIcon
       }}
       to={{
         address: !props.cantoToEVM ? props.cantoAddress : props.ETHAddress,
         name: !props.cantoToEVM ? "canto (bridge)" : "canto (EVM)",
+        icon: !props.cantoToEVM ? "" : cantoIcon
       }}
       tokenIcon={props.token.data.icon}
       networkName="canto"
