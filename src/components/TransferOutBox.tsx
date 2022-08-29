@@ -64,6 +64,8 @@ const TransferOutBox = (props: Props) => {
         >
           {props.from.name == "ethereum" ? (
             <img src={ethIcon} height={26} />
+          ) : props.from.name == "canto (EVM)" ? (
+            <img src={cantoIcon} height={26} />
           ) : null}
           <Text type="text" color="white" align="left">
             {props.from.name}
@@ -87,6 +89,8 @@ const TransferOutBox = (props: Props) => {
         >
           {props.to.name == "canto (EVM)" ? (
             <img src={cantoIcon} height={26} />
+          ) : props.to.name == "ethereum" ? (
+            <img src={ethIcon} height={26} />
           ) : null}
           <Text type="text" color="white" align="right">
             {props.to.name}

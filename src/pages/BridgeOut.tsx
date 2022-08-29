@@ -174,20 +174,22 @@ const BridgeOut = () => {
       <TransferBox
         from={{
           address: networkInfo.account,
-          name: "ethereum",
+          name: "canto (EVM)",
         }}
         to={{
           address: networkInfo.cantoAddress,
           name: "canto (bridge)",
         }}
         tokenIcon={tokenStore.selectedToken.data.icon}
-        networkName="ethereum"
+        networkName="canto"
         onSwitch={() => {
           activateBrowserWallet();
-          switchNetwork(1);
+          addNetwork();
+
         }}
         tokenSymbol={tokenStore.selectedToken.data.symbol}
-        connected={1 == Number(networkInfo.chainId)}
+        connected={CantoMainnet.chainId == Number(networkInfo.chainId)}
+
         onChange={(amount: string) => setBridgeAmount(amount)}
         max={tokenStore.selectedToken.balanceOf.toString()}
         amount={bridgeAmount}
@@ -242,17 +244,20 @@ const BridgeOut = () => {
           name: "canto (bridge)",
         }}
         to={{
+          
           address: networkInfo.account,
-          name: "canto (EVM)",
+          name: "ethereum",
         }}
         tokenIcon={tokenStore.selectedToken.data.icon}
-        networkName="canto"
+        networkName="ethereum"
         onSwitch={() => {
           activateBrowserWallet();
-          addNetwork();
+          switchNetwork(1);
+
         }}
         tokenSymbol={tokenStore.selectedToken.data.symbol}
-        connected={CantoMainnet.chainId == Number(networkInfo.chainId)}
+        connected={1 == Number(networkInfo.chainId)}
+
         onChange={(amount: string) => setConvertAmount(amount)}
         max={tokenStore.selectedToken.nativeBalanceOf}
         amount={convertAmount}
