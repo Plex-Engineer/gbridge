@@ -19,8 +19,10 @@ import { txIBCTransfer } from "utils/IBC/IBCTransfer";
 import {
   checkBridgeAmountConfirmation,
   checkGravityAddress,
+  toastBridge,
 } from "utils/bridgeConfirmations";
 import { ConvertTransferBox } from "components/convertTransferBox";
+import { toast } from "react-toastify";
 
 const BridgeOut = () => {
   const networkInfo = useNetworkInfo();
@@ -76,6 +78,7 @@ const BridgeOut = () => {
               " from canto to gravity bridge"
           );
           setInBridgeTransaction(false);
+          toastBridge(true);
         }
       }
     }, 6000);
@@ -221,28 +224,6 @@ const BridgeOut = () => {
               setBridgeConfirmation(
                 "waiting for the transaction to be verified..."
               );
-              // if (response.tx_response?.txhash) {
-              //   toast("bridge out successful", {
-              //     position: "top-right",
-              //     autoClose: 5000,
-              //     hideProgressBar: false,
-              //     closeOnClick: true,
-              //     pauseOnHover: true,
-              //     draggable: true,
-              //     progressStyle: {
-              //       color: "var(--primary-color)",
-              //     },
-              //     style: {
-              //       border: "1px solid var(--primary-color)",
-              //       borderRadius: "0px",
-              //       paddingBottom: "3px",
-              //       background: "black",
-              //       color: "var(--primary-color)",
-              //       height: "100px",
-              //       fontSize: "20px",
-              //     },
-              //   });
-              // }
               setInBridgeTransaction(true);
               setPrevBridgeBalance(
                 Number(tokenStore.selectedToken.nativeBalanceOf)

@@ -12,6 +12,7 @@ import {
   txConvertERC20,
 } from "utils/cantoTransactions/convertCoin/convertTransactions";
 import TransferBox from "./TransferBox";
+import { toastBridge } from "utils/bridgeConfirmations";
 
 interface ConvertTransferBoxProps {
   cantoToEVM: boolean;
@@ -51,6 +52,7 @@ export const ConvertTransferBox = (props: ConvertTransferBoxProps) => {
               msg
           );
           setInConvertTransaction(false);
+          toastBridge(true);
         }
     } else {
         setInConvertTransaction(false);
