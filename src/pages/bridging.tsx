@@ -1,77 +1,18 @@
 import styled from "@emotion/styled";
-import { CantoMainnet } from "cantoui";
-import {
-  getCantoBalance,
-  NativeGTokens,
-  useCosmosTokens,
-} from "hooks/useCosmosTokens";
-import { GTokens, useGravityTokens } from "hooks/useGravityTokens";
-import { useEffect, useState } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
-import { useNetworkInfo } from "stores/networkInfo";
 import { selectedEmptyToken, useTokenStore } from "stores/tokens";
 import BridgeIn from "./bridgeIn";
 import BridgeOut from "./BridgeOut";
 
 const BridgingPage = () => {
   const tokenStore = useTokenStore();
-  const networkInfo = useNetworkInfo();
-  const [bridgeIn, setBridgeIn] = useState(true);
-  const { gravityTokens } = bridgeIn
-    ? useGravityTokens(networkInfo.account)
-    : useCosmosTokens(networkInfo.account);
-  const [cantoGravityTokens, setCantoGravityTokens] = useState<
-    NativeGTokens[] | undefined
-  >([]);
-  async function getBalances(gravityTokens: GTokens[]) {
-    const tokensWithBalances: NativeGTokens[] = await getCantoBalance(
-      CantoMainnet.cosmosAPIEndpoint,
-      networkInfo.cantoAddress,
-      gravityTokens
-    );
-    setCantoGravityTokens(tokensWithBalances);
-  }
-  //Useffect for calling data per block
-  useEffect(() => {
-    const interval = setInterval(async () => {
-      if (gravityTokens) {
-        await getBalances(gravityTokens);
-        tokenStore.setSelectedToken(
-          cantoGravityTokens?.find(
-            (token) =>
-              token.data.address == tokenStore.selectedToken.data.address
-          ) ?? tokenStore.selectedToken
-        );
-      }
-    }, 6000);
-    return () => clearInterval(interval);
-  }, [gravityTokens]);
-
-  console.log(bridgeIn, cantoGravityTokens)
-
   return (
     <Container>
       <Tabs className="tabs">
         <TabList className="tablist">
-          <Tab
-            className="tab"
-            onClick={() => {
-              setBridgeIn(true);
-              tokenStore.setSelectedToken(selectedEmptyToken);
-            }}
-          >
-            Bridge In
-          </Tab>
-          <Tab
-            className="tab"
-            onClick={() => {
-              setBridgeIn(false);
-              tokenStore.setSelectedToken(selectedEmptyToken);
-            }}
-          >
-            Bridge Out
-          </Tab>
+          <Tab className="tab" onClick={() => tokenStore.setSelectedToken(selectedEmptyToken)}>Bridge In</Tab>
+          <Tab className="tab" onClick={() => tokenStore.setSelectedToken(selectedEmptyToken)}>Bridge Out</Tab>
         </TabList>
         <TabPanel>
           <BridgeIn />
