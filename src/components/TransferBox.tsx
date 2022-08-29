@@ -27,7 +27,6 @@ interface Props {
   };
 }
 const TransferBox = (props: Props) => {
-  const amountRef = useRef<HTMLInputElement>(null);
   function copyAddress(value: string | undefined) {
     navigator.clipboard.writeText(value ?? "");
     toast("copied address", {

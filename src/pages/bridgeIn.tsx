@@ -1,15 +1,12 @@
 import { ADDRESSES, CantoMainnet, PrimaryButton, Text } from "cantoui";
-import CopyIcon from "assets/copy.svg";
 import TransferBox from "components/TransferBox";
 import { GTokens, useGravityTokens } from "hooks/useGravityTokens";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNetworkInfo } from "stores/networkInfo";
 import { selectedEmptyToken, useTokenStore } from "stores/tokens";
 import styled from "styled-components";
 import { TokenWallet } from "./TokenSelect";
-import arrow from "assets/right.svg";
 import { getCantoBalance, NativeGTokens } from "hooks/useCosmosTokens";
-import { toast } from "react-toastify";
 import { useApprove, useCosmos } from "./useTransactions";
 import { useEthers } from "@usedapp/core";
 import { addNetwork } from "utils/addCantoToWallet";
@@ -142,28 +139,6 @@ const BridgeIn = () => {
           setInConvertTransaction(false);
         }}
       />
-      {/* <Row>
-        <Text type="title" color="white">
-          Ethereum
-        </Text>
-        <Text
-          type="text"
-          color="white"
-          style={{
-            fontSize: "20px",
-            marginLeft: "30px",
-            cursor: "pointer",
-          }}
-          onClick={() => copyAddress(networkInfo.account)}
-        >
-          {networkInfo.account?.slice(0, 6) +
-            "..." +
-            networkInfo.account?.slice(-6, -1)}
-
-          <img src={CopyIcon} style={{ height: "22px", marginLeft: "5px" }} />
-        </Text>
-      </Row> */}
-
       <Text type="text" color="white" style={{ width: "70%" }}>
         it takes several minutes for your bridged assets to arrive on the canto
         network. for more details, read more <a href="https://docs.canto.io/user-guides/bridging-assets/ethereum" style={{color: "white", cursor: "pointer", textDecoration: "underline"}}>here</a>.
@@ -205,31 +180,6 @@ const BridgeIn = () => {
         you must bridge your assets from canto (bridge) to the canto EVM to use them on
         the canto network. read more <a href="https://docs.canto.io/user-guides/converting-assets" style={{color: "white", cursor: "pointer", textDecoration: "underline"}}>here</a>.
       </Text>
-      {/* <img src={arrow} alt="next" /> */}
-
-      {/* <Row>
-        <Text type="title" color="white">
-          Canto
-        </Text>
-        <Text
-          type="text"
-          color="white"
-          style={{
-            fontSize: "20px",
-            marginLeft: "30px",
-            cursor: "pointer",
-          }}
-          onClick={() => copyAddress(networkInfo.account)}
-        >
-          {networkInfo.cantoAddress
-            ? networkInfo.cantoAddress.slice(0, 10) +
-              "..." +
-              networkInfo.cantoAddress.slice(-5)
-            : "retrieving wallet"}
-
-          <img src={CopyIcon} style={{ height: "22px", marginLeft: "5px" }} />
-        </Text>
-      </Row> */}
 
       <TransferBox
         from={{

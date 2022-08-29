@@ -4,7 +4,7 @@ import {
   getAccountBalance,
   getChainIdandAccount,
 } from "global/utils/walletConnect/addCantoToWallet";
-import { GenPubKey } from "pages/genPubKey";
+import { GenPubKey } from "components/genPubKey";
 import { useEffect } from "react";
 import { useNetworkInfo } from "stores/networkInfo";
 import { addNetwork } from "utils/addCantoToWallet";

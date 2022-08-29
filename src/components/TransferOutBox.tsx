@@ -6,6 +6,7 @@ import CopyIcon from "assets/copy.svg";
 import { toast } from "react-toastify";
 import ethIcon from "assets/icons/ETH.svg";
 import cantoIcon from "assets/logo.svg";
+const gravityIcon = "https://raw.githubusercontent.com/Gravity-Bridge/Gravity-Docs/main/assets/Graviton-Grey.svg";
 interface Props {
   tokenSymbol: string;
   tokenIcon: string;
@@ -62,8 +63,8 @@ const TransferOutBox = (props: Props) => {
             gap: "1rem",
           }}
         >
-          {props.from.name == "ethereum" ? (
-            <img src={ethIcon} height={26} />
+          {props.from.name == "gravity bridge" ? (
+            <img src={gravityIcon} height={26} />
           ) : props.from.name == "canto (EVM)" ? (
             <img src={cantoIcon} height={26} />
           ) : null}
@@ -89,8 +90,8 @@ const TransferOutBox = (props: Props) => {
         >
           {props.to.name == "canto (EVM)" ? (
             <img src={cantoIcon} height={26} />
-          ) : props.to.name == "ethereum" ? (
-            <img src={ethIcon} height={26} />
+          ) : props.to.name == "gravity bridge" ? (
+            <img src={gravityIcon} height={26} />
           ) : null}
           <Text type="text" color="white" align="right">
             {props.to.name}
@@ -173,7 +174,7 @@ const TransferOutBox = (props: Props) => {
           }
         </div>
       </div>
-      <input placeholder="wallet address" type="text" name="address" id="address" onChange={props.onAddressChange} />
+      <input placeholder="gravity address (gravity...)" type="text" name="address" id="address" onChange={props.onAddressChange} />
       <div className="row">{props.button}</div>
       {/* <div
         style={{ cursor: "pointer" }}

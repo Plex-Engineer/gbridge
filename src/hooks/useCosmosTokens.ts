@@ -8,7 +8,7 @@ import { generateEndpointBalances } from "@tharsis/provider";
 import { CantoMainnet } from "cantoui";
 
 export function useCosmosTokens(account: string | undefined): {
-  cantoTokens: GTokens[] | undefined;
+  gravityTokens: GTokens[] | undefined;
 } {
   const tokens = CantoGravityTokens;
 
@@ -29,10 +29,10 @@ export function useCosmosTokens(account: string | undefined): {
     {};
 
   if (account == undefined) {
-    return { cantoTokens: undefined };
+    return { gravityTokens: undefined };
   }
   if (tokens == undefined) {
-    return { cantoTokens: [] };
+    return { gravityTokens: [] };
   }
   const chuckSize = results.length / tokens.length;
   let processedTokens: Array<any>;
@@ -60,12 +60,12 @@ export function useCosmosTokens(account: string | undefined): {
       };
     });
 
-    if (val[0].balanceOf == undefined) return { cantoTokens: undefined };
+    if (val[0].balanceOf == undefined) return { gravityTokens: undefined };
 
-    return { cantoTokens: val };
+    return { gravityTokens: val };
   }
 
-  return { cantoTokens: undefined };
+  return { gravityTokens: undefined };
 }
 
 export interface NativeGTokens extends GTokens {
@@ -129,9 +129,5 @@ export async function getGravityTokenBalance(gravityAddress: string) {
     .catch((err) => {
       console.log(err);
     });
-  console.log(
-    "🚀 ~ file: useCosmosTokens.ts ~ line 130 ~ getGravityTokenBalance ~ result",
-    result
-  );
   return result;
 }
