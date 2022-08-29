@@ -1,31 +1,23 @@
-import { ADDRESSES, CantoMainnet, PrimaryButton, Text } from "cantoui";
+import { ADDRESSES, CantoMainnet, Text } from "cantoui";
 import TransferBox from "components/TransferBox";
 import { GTokens, useGravityTokens } from "hooks/useGravityTokens";
 import { useEffect, useState } from "react";
 import { useNetworkInfo } from "stores/networkInfo";
-import { selectedEmptyToken, useTokenStore } from "stores/tokens";
+import { useTokenStore } from "stores/tokens";
 import styled from "styled-components";
 import { TokenWallet } from "./TokenSelect";
 import { getCantoBalance, NativeGTokens } from "hooks/useCosmosTokens";
 import { useApprove, useCosmos } from "./useTransactions";
 import { useEthers } from "@usedapp/core";
-import { addNetwork } from "utils/addCantoToWallet";
 import { ReactiveButton } from "./ReactiveButton";
 import { BigNumber, ethers } from "ethers";
-import { txConvertCoin } from "utils/cantoTransactions/convertCoin/convertTransactions";
-import { chain, fee, memo } from "config/networks";
+import { ConvertTransferBox } from "components/convertTransferBox";
 const BridgeIn = () => {
   const networkInfo = useNetworkInfo();
   const tokenStore = useTokenStore();
   const { switchNetwork, activateBrowserWallet } = useEthers();
   const activeToken = useTokenStore().selectedToken;
   const [bridgeAmount, setBridgeAmount] = useState("0");
-  const [convertAmount, setConvertAmount] = useState("0");
-
-  //convert states to update the user
-  const [convertConfirmation, setConvertConfirmation] = useState("select a token");
-  const [inConvertTransaction, setInConvertTransaction] = useState<boolean>(false);
-  const [prevConvertBalance, setPrevConvertBalance] = useState("0");
 
   //set the gravity token info from ethMainnet
   const { gravityTokens, gravityAddress } = useGravityTokens(
@@ -51,18 +43,16 @@ const BridgeIn = () => {
     const interval = setInterval(async () => {
       if (gravityTokens) {
         await getBalances(gravityTokens);
-        tokenStore.setSelectedToken(cantoGravityTokens?.find((token) => token.data.address == tokenStore.selectedToken.data.address) ?? tokenStore.selectedToken)
+        tokenStore.setSelectedToken(
+          cantoGravityTokens?.find(
+            (token) =>
+              token.data.address == tokenStore.selectedToken.data.address
+          ) ?? tokenStore.selectedToken
+        );
       }
-    //check if convertCoin has been called 
-    if (inConvertTransaction) {
-      if (tokenStore.selectedToken.nativeBalanceOf != prevConvertBalance) {
-        setConvertConfirmation("you have successfully bridged " + tokenStore.selectedToken.data.symbol + " from canto to evm");
-        setInConvertTransaction(false);
-      }
-    }
     }, 6000);
-    return () => clearInterval(interval)
-  },[gravityTokens]);
+    return () => clearInterval(interval);
+  }, [gravityTokens]);
 
   //setting native canto balances whenever eth gravity tokens change
   useEffect(() => {
@@ -135,13 +125,22 @@ const BridgeIn = () => {
           tokenStore.setSelectedToken(value);
           resetCosmos();
           resetApprove();
-          setConvertConfirmation("bridge in");
-          setInConvertTransaction(false);
         }}
       />
       <Text type="text" color="white" style={{ width: "70%" }}>
         it takes several minutes for your bridged assets to arrive on the canto
-        network. for more details, read more <a href="https://docs.canto.io/user-guides/bridging-assets/ethereum" style={{color: "white", cursor: "pointer", textDecoration: "underline"}}>here</a>.
+        network. for more details, read more{" "}
+        <a
+          href="https://docs.canto.io/user-guides/bridging-assets/ethereum"
+          style={{
+            color: "white",
+            cursor: "pointer",
+            textDecoration: "underline",
+          }}
+        >
+          here
+        </a>
+        .
       </Text>
       <TransferBox
         from={{
@@ -171,67 +170,35 @@ const BridgeIn = () => {
             token={tokenStore.selectedToken}
             gravityAddress={gravityAddress}
             disabled={false}
-            onClick={() => 1 == Number(networkInfo.chainId) ? send(bridgeAmount) : {}}
+            onClick={() =>
+              1 == Number(networkInfo.chainId) ? send(bridgeAmount) : {}
+            }
           />
         }
       />
 
       <Text type="text" color="white" style={{ width: "70%" }}>
-        you must bridge your assets from canto (bridge) to the canto EVM to use them on
-        the canto network. read more <a href="https://docs.canto.io/user-guides/converting-assets" style={{color: "white", cursor: "pointer", textDecoration: "underline"}}>here</a>.
+        you must bridge your assets from canto (bridge) to the canto EVM to use
+        them on the canto network. read more{" "}
+        <a
+          href="https://docs.canto.io/user-guides/converting-assets"
+          style={{
+            color: "white",
+            cursor: "pointer",
+            textDecoration: "underline",
+          }}
+        >
+          here
+        </a>
+        .
       </Text>
 
-      <TransferBox
-        from={{
-          address: networkInfo.cantoAddress,
-          name: "canto (bridge)",
-        }}
-        to={{
-          address: networkInfo.account,
-          name: "canto (EVM)",
-        }}
-        tokenIcon={tokenStore.selectedToken.data.icon}
-        networkName="canto"
-        onSwitch={() => {
-          activateBrowserWallet();
-          addNetwork();
-        }}
-        tokenSymbol={tokenStore.selectedToken.data.symbol}
-        connected={CantoMainnet.chainId == Number(networkInfo.chainId)}
-        onChange={(amount: string) => setConvertAmount(amount)}
-        max={tokenStore.selectedToken.nativeBalanceOf}
-        amount={convertAmount}
-        button={
-          <PrimaryButton
-            disabled={!networkInfo.hasPubKey || !(CantoMainnet.chainId == Number(networkInfo.chainId)) || tokenStore.selectedToken == selectedEmptyToken}
-            onClick={async () => {
-              setConvertConfirmation(
-                "waiting for the metamask transaction to be signed..."
-              );
-              await txConvertCoin(
-                networkInfo.cantoAddress,
-                tokenStore.selectedToken.data.nativeName,
-                ethers.utils
-                  .parseUnits(
-                    convertAmount,
-                    tokenStore.selectedToken.data.decimals
-                  )
-                  .toString(),
-                CantoMainnet.cosmosAPIEndpoint,
-                fee,
-                chain,
-                memo
-              );
-              setConvertConfirmation(
-                "waiting for the transaction to be verified..."
-              );
-              setInConvertTransaction(true);
-              setPrevConvertBalance(tokenStore.selectedToken.nativeBalanceOf);
-            }}
-          >
-            {convertConfirmation}
-          </PrimaryButton>
-        }
+      <ConvertTransferBox
+        cantoToEVM={true}
+        cantoAddress={networkInfo.cantoAddress}
+        ETHAddress={networkInfo.account ?? ""}
+        token={tokenStore.selectedToken}
+        chainId={Number(networkInfo.chainId)}
       />
     </Container>
   );
