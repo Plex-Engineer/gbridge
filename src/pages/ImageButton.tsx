@@ -12,8 +12,6 @@ interface IWallet {
   export const ImageButton = ({ image, name, networkSwitch }: IWallet) => {
 
   const networkInfo = useNetworkInfo();
-  console.log(window)
-
       return (
 
           <div
