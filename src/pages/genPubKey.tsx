@@ -1,3 +1,4 @@
+import { useEthers } from "@usedapp/core";
 import { CantoMainnet } from "cantoui";
 import { useEffect, useState } from "react";
 import { useNetworkInfo } from "stores/networkInfo";
@@ -8,6 +9,7 @@ export const GenPubKey = () => {
   const [pubKeySuccess, setPubKeySuccess] = useState("");
   const [wasNotConnected, setWasNotConnected] = useState(false);
   const networkInfo = useNetworkInfo();
+  const {activateBrowserWallet} = useEthers();
   useEffect(() => {
     if (
       Number(networkInfo.chainId) == CantoMainnet.chainId &&
@@ -35,7 +37,10 @@ export const GenPubKey = () => {
             cursor: "pointer",
           }}
           onClick={() => {
-            if (Number(networkInfo.chainId) != CantoMainnet.chainId) {
+            if (!networkInfo.account) {
+              setPubKeySuccess("please connect wallet");
+              activateBrowserWallet();
+            } else if (Number(networkInfo.chainId) != CantoMainnet.chainId) {
               addNetwork();
               setPubKeySuccess("switch to canto network");
               setWasNotConnected(true);

@@ -1,5 +1,5 @@
 import { useEthers } from "@usedapp/core";
-import { NavBar, useAlert } from "cantoui";
+import { CantoMainnet, NavBar, useAlert } from "cantoui";
 import { getAccountBalance, getChainIdandAccount } from "global/utils/walletConnect/addCantoToWallet";
 import { GenPubKey } from "pages/genPubKey";
 import { useEffect } from "react";
@@ -9,19 +9,13 @@ import logo from "./../../assets/logo.svg"
 
 export const CantoNav = () => {
   const netWorkInfo = useNetworkInfo();
-  const { activateBrowserWallet, account, switchNetwork } = useEthers();
+  const { activateBrowserWallet, account, switchNetwork, chainId } = useEthers();
   const alert = useAlert();
 
-  async function setChainInfo() {
-    const [chainId, account] = await getChainIdandAccount();
-    netWorkInfo.setChainId(chainId);
-    netWorkInfo.setAccount(account);
-  }
-
   useEffect(() => {
-    setChainInfo();
-   //@ts-ignore
-}, [window.ethereum?.networkVersion]);
+    netWorkInfo.setChainId(chainId?.toString());
+    netWorkInfo.setAccount(account);
+}, [account, chainId]);
 
   //@ts-ignore
   if (window.ethereum) {
@@ -52,13 +46,12 @@ export const CantoNav = () => {
       title="bridge"
       onClick={() => {
         activateBrowserWallet();
-        switchNetwork(1);
       }}
       chainId={Number(netWorkInfo.chainId)}
       account={netWorkInfo.account ?? ""}
-      isConnected={netWorkInfo.isConnected && account ? true : false}
+      isConnected={account ? true : false}
       balance={netWorkInfo.balance}
-      currency={netWorkInfo.chainId == "1" ? "ETH" : "CANTO"}
+      currency={Number(netWorkInfo.chainId) == CantoMainnet.chainId ? "CANTO" : "ETH"}
       logo={logo}
       currentPage="bridge"
     />

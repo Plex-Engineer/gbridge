@@ -18,7 +18,6 @@ import { getCantoBalance, getGravityTokenBalance, useCosmosTokens } from "hooks/
 import { chain, fee, memo } from "config/networks";
 import { txIBCTransfer } from "utils/IBC/IBCTransfer";
 import { toast } from "react-toastify";
-import { generatePubKey } from "utils/nodeTransactions";
 
 const BridgePage = () => {
   const [gravReceiver, setGravReceiver] = useState("");
