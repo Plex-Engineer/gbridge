@@ -1,6 +1,7 @@
 import { useEthers } from "@usedapp/core";
 import { NavBar, useAlert } from "cantoui";
 import { getAccountBalance, getChainIdandAccount } from "global/utils/walletConnect/addCantoToWallet";
+import { GenPubKey } from "pages/genPubKey";
 import { useEffect } from "react";
 import { useNetworkInfo } from "stores/networkInfo";
 import { addNetwork } from "utils/addCantoToWallet";
@@ -28,11 +29,6 @@ export const CantoNav = () => {
     window.ethereum.on("accountsChanged", () => {
       window.location.reload();
     });
-
-  //   //@ts-ignore
-  //   window.ethereum.on("networkChanged", () => {
-  //     window.location.reload();
-  //   });
   }
 
   async function getBalance() {
@@ -41,13 +37,15 @@ export const CantoNav = () => {
     }
   }
   useEffect(() => {
-    if (!netWorkInfo.isConnected) {
+    if (!netWorkInfo.hasPubKey) {
+      alert.show("Failure", <GenPubKey />)
+    } else if (!netWorkInfo.isConnected) {
       alert.show("Failure", <p>this network is not supported on gravity bridge, please <a onClick={addNetwork} style={{cursor: "pointer", textDecoration: "underline"}}>switch networks</a></p>)
     } else {
       alert.close();
     }
     getBalance();
-  },[netWorkInfo.account, netWorkInfo.chainId])
+  },[netWorkInfo.account, netWorkInfo.chainId, netWorkInfo.hasPubKey])
 
   return (
     <NavBar
