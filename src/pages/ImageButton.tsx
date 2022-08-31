@@ -35,6 +35,8 @@ interface IWallet {
                   gap: "1rem",
                   width: "20rem",
                   cursor: "pointer",
+                  border: Number(networkInfo.chainId) == networkSwitch ? "" : "1px solid yellow",
+                // boxShadow:" 0 1px 0 #000000, 0 5px 0 #000000, 0 6px 6px #ff0000"
               }}
           >
               {image ? <img src={image} alt={name} height={24} width={24} /> : null}
