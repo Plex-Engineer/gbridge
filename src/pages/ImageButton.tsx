@@ -1,5 +1,4 @@
 import { useEthers } from "@usedapp/core";
-import { ETHMainnet } from "config/networks";
 import { useNetworkInfo } from "stores/networkInfo";
 import { addEthMainToWallet, addNetwork } from "utils/addCantoToWallet";
 
@@ -12,8 +11,8 @@ interface IWallet {
   
   export const ImageButton = ({ image, name, networkSwitch }: IWallet) => {
 
-  const { activateBrowserWallet, switchNetwork } = useEthers();
   const networkInfo = useNetworkInfo();
+  console.log(window)
 
       return (
 
@@ -21,7 +20,6 @@ interface IWallet {
               className="image-button button"
               onClick={async () => {
                   //1 for ethereum mainnet, 15 for gravity bridge testnet
-                  activateBrowserWallet();
                   networkSwitch == 1 ? addEthMainToWallet() : addNetwork();
               } 
             }
@@ -35,7 +33,7 @@ interface IWallet {
                   gap: "1rem",
                   width: "20rem",
                   cursor: "pointer",
-                  border: Number(networkInfo.chainId) == networkSwitch ? "" : "1px solid yellow",
+                //   border: Number(networkInfo.chainId) == networkSwitch ? "" : "1px solid yellow",
                 // boxShadow:" 0 1px 0 #000000, 0 5px 0 #000000, 0 6px 6px #ff0000"
               }}
           >
@@ -46,13 +44,13 @@ interface IWallet {
                       textAlign: "center",
                   }}
               >
-                  {networkInfo.account
-                      ? Number(networkInfo.chainId) != networkSwitch ? networkSwitch == 1
-                          ? "switch to ethereum network" : "switch to canto network"
+                  {Number(networkInfo.chainId) != networkSwitch ? networkSwitch == 1
+                          ? "switch to ethereum network" : "switch to canto network" : 
+                          !networkInfo.account ? ""
                           : networkInfo.account.substring(0, 10) +
                           "..." +
                           networkInfo.account.substring(networkInfo.account.length - 10, networkInfo.account.length)
-                      : "connect"}
+                      }
               </span>
           </div>
       );

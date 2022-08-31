@@ -1,5 +1,5 @@
 import { useEthers } from "@usedapp/core";
-import { CantoMainnet, NavBar, useAlert } from "cantoui";
+import { CantoMainnet, useAlert, NavBar } from "cantoui";
 import { getAccountBalance, getChainIdandAccount } from "global/utils/walletConnect/addCantoToWallet";
 import { GenPubKey } from "pages/genPubKey";
 import { useEffect } from "react";
@@ -9,7 +9,7 @@ import logo from "./../../assets/logo.svg"
 
 export const CantoNav = () => {
   const netWorkInfo = useNetworkInfo();
-  const { activateBrowserWallet, account, switchNetwork, chainId } = useEthers();
+  const { activateBrowserWallet, account, chainId } = useEthers();
   const alert = useAlert();
 
   useEffect(() => {
@@ -33,7 +33,9 @@ export const CantoNav = () => {
   useEffect(() => {
     if (!netWorkInfo.hasPubKey) {
       alert.show("Failure", <GenPubKey />)
-    } else if (!netWorkInfo.isConnected) {
+    } else if (!netWorkInfo.account) {
+      alert.show("Failure", <p> please connect your wallet to use the bridge</p>)
+    }else if (!netWorkInfo.isConnected) {
       alert.show("Failure", <p>this network is not supported on gravity bridge, please <a onClick={addNetwork} style={{cursor: "pointer", textDecoration: "underline"}}>switch networks</a></p>)
     } else {
       alert.close();
