@@ -2,6 +2,7 @@ import { useCalls } from "@usedapp/core";
 import { Contract } from "ethers";
 import { GravityTestnet } from "config/networks";
 import {
+  ATOMGravityToken,
   CantoGravityTokens,
   gravityTokenBase,
   mainnetGravityTokensBase,
@@ -94,7 +95,7 @@ export async function getCantoBalance(
       console.log(err);
     });
 
-  let processedTokens = CantoGravityTokens.map((token) => {
+  let processedTokens = ATOMGravityToken.map((token) => {
     let allowance = Number.MAX_SAFE_INTEGER;
     let balanceOf = result.find((data : any) => data.denom == token.nativeName)?.amount ?? "0";
 

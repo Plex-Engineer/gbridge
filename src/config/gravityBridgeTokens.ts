@@ -24,4 +24,8 @@ export const CantoGravityTokens = [
         nativeName : 'ibc/DC186CA7A8C009B43774EBDC825C935CABA9743504CE6037507E6E5CCE12858A',}
 ]
 
+export const ATOMGravityToken = [
+    {...TOKENS.cantoMainnet.ATOM, 
+    nativeName: "ibc/9117A26BA81E29FA4F78F57DC2BD90CD3D26848101BA880445F119B22A1E254E"}
+]
 

@@ -20,6 +20,7 @@ export async function txIBCTransfer(receiver:any, channel_id:any, amount:any, de
     console.log(account)
     //get revision number/height for construction of the timeout-height object (determines the last update of the counter-party IBC client)
     const ibcData = await getIBCData(counterPartyChain)
+    console.log("🚀 ~ file: IBCTransfer.ts ~ line 23 ~ txIBCTransfer ~ ibcData", ibcData)
 
     let timeoutTimestamp = await getBlockTimestamp(counterPartyChain)
     
