@@ -26,8 +26,6 @@ import {Buffer} from 'buffer'
         headers: { 'Content-Type': 'application/json' },
         body: generatePostBodyBroadcast(raw),
     };
-    console.log(     nodeAddress + generateEndpointBroadcast(),
-    postOptions)
     const broadcastPost = await fetch(
         nodeAddress + generateEndpointBroadcast(),
         postOptions

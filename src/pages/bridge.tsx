@@ -13,13 +13,11 @@ import { useApprove, useCosmos } from "./useTransactions";
 import { TokenWallet } from "./TokenSelect";
 import { Container, Balance, Center, Button } from "./styledComponents";
 import { ImageButton } from "./ImageButton";
-import { TOKENS, ADDRESSES, CantoMainnet, useAlert } from "cantoui";
+import { TOKENS, ADDRESSES, CantoMainnet } from "cantoui";
 import { getCantoBalance, getGravityTokenBalance, useCosmosTokens } from "hooks/useCosmosTokens";
 import { chain, fee, memo } from "config/networks";
 import { txIBCTransfer } from "utils/IBC/IBCTransfer";
 import { toast } from "react-toastify";
-import { GenPubKey } from "./genPubKey";
-import { generatePubKey } from "utils/nodeTransactions";
 
 const BridgePage = () => {
   const [gravReceiver, setGravReceiver] = useState("");
@@ -29,7 +27,6 @@ const BridgePage = () => {
   const [amount, setAmount] = useState("");
 
   const [bridgeOut, setBridgeOut] = useState(false);
-  const alert = useAlert();
 
   //get tokens from the contract call
   const { gravityTokens, gravityAddress } = useGravityTokens(
@@ -85,13 +82,6 @@ const [tempPubKeyMsg, setTempPubKeyMsg] = useState("")
     }
   }, [networkInfo.cantoAddress]);
 
-  useEffect(()=>{
-    if (!networkInfo.hasPubKey) {
-      alert.show("Failure", <GenPubKey />);
-    } else {
-      // alert.close();
-    }
-  },[networkInfo.hasPubKey])
   //send function
   const send = () => {
     //Checking if amount enter is greater than balance available in wallet and token has been approved.
@@ -202,7 +192,6 @@ const [tempPubKeyMsg, setTempPubKeyMsg] = useState("")
           {/* <img src={copyIcon} style={{zIndex: "80", background: "gray", height: "15px", marginLeft: "5px", cursor: "pointer"}} onClick={() => copyAddress(networkInfo.cantoAddress)}/> */}
         </div>
       </div>
-      {networkInfo.hasPubKey ? "" : <div style={{color: "white"}}><Button onClick={() => generatePubKey(networkInfo.account, setTempPubKeyMsg)}>generate a public key</Button> {tempPubKeyMsg}</div> }
       <ImageButton
         name="connect"
         networkSwitch={bridgeOut ? CantoMainnet.chainId : 1}

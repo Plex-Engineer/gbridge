@@ -1,6 +1,9 @@
 import { CantoMainnet } from "cantoui";
 import { GravityTestnet, ETHMainnet } from "config/networks";
-import { checkPubKey, getCantoAddressFromMetaMask } from "utils/nodeTransactions";
+import {
+  checkPubKey,
+  getCantoAddressFromMetaMask,
+} from "utils/nodeTransactions";
 import create from "zustand";
 import { devtools } from "zustand/middleware";
 
@@ -35,14 +38,16 @@ export const useNetworkInfo = create<NetworkProps>()(
       }
     },
     account: undefined,
-    cantoAddress : "",
+    cantoAddress: "",
     hasPubKey: true,
     setAccount: async (account) => {
-    set({ account: account });
-    let cantoAddress = await getCantoAddressFromMetaMask(account);
-    let hasPubKey = await checkPubKey(cantoAddress);
-    set({cantoAddress : cantoAddress});
-    set({hasPubKey : hasPubKey});
+      if (account) {
+        set({ account: account });
+        let cantoAddress = await getCantoAddressFromMetaMask(account);
+        let hasPubKey = await checkPubKey(cantoAddress);
+        set({ cantoAddress: cantoAddress });
+        set({ hasPubKey: hasPubKey });
+      }
     },
     balance: "0",
     setBalance: (balance) => set({ balance: balance }),
