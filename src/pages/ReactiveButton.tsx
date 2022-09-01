@@ -90,7 +90,7 @@ export const ReactiveButton = ({
     return <DisabledButton>enter amount</DisabledButton>;
   }
   if (disabled) {
-    return <DisabledButton>enter gravity address</DisabledButton>;
+    return <DisabledButton>enter cosmos address</DisabledButton>;
   }
   
   return (

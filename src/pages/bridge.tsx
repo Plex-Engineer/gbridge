@@ -4,14 +4,13 @@ import canto from "assets/logo.svg";
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { Mixpanel } from "./../mixpanel";
-import { useGravityTokens } from "hooks/useGravityTokens";
 import { useNetworkInfo } from "stores/networkInfo";
-import { selectedEmptyToken, useTokenStore } from "stores/tokens";
+import { useTokenStore } from "stores/tokens";
 import { ReactiveButton } from "./ReactiveButton";
 import { TokenWallet } from "./TokenSelect";
-import { Container, Balance, Center, Button } from "./styledComponents";
+import { Container, Balance, Center } from "./styledComponents";
 import { ImageButton } from "./ImageButton";
-import { TOKENS, ADDRESSES, CantoMainnet } from "cantoui";
+import { CantoMainnet } from "cantoui";
 import { getCantoBalance } from "hooks/useCosmosTokens";
 import { chain, fee, memo } from "config/networks";
 import { txIBCTransfer } from "utils/IBC/IBCTransfer";
@@ -47,8 +46,8 @@ const BridgePage = () => {
       networkInfo.cantoAddress
     );
     setCantoTokens(tokensWithBalances);
+    tokenStore.setSelectedToken(tokensWithBalances[0])
   }
-
   // =========================
   return (
     <Container>
@@ -120,7 +119,7 @@ const BridgePage = () => {
         <div className="column">
           <Balance>
             <TokenWallet
-              tokens={cantoTokens}
+              tokens={[]}
               activeToken={tokenStore.selectedToken}
               onSelect={(value) => {
                 tokenStore.setSelectedToken(value);
@@ -194,7 +193,7 @@ const BridgePage = () => {
                   .toString(),
                 tokenStore.selectedToken.data.nativeName,
                 CantoMainnet.cosmosAPIEndpoint,
-                "https://api.cosmos.network/cosmos",
+                "https://api-cosmoshub-ia.cosmosia.notional.ventures/",
                 fee,
                 chain,
                 memo

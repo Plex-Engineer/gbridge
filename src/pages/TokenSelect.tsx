@@ -46,9 +46,9 @@ export const TokenWallet = ({ onSelect, tokens }: ITokenSelect) => {
   `;
   return (
     <Box
-      onClick={() => {
-        setOpen(true);
-      }}
+      // onClick={() => {
+      //   setOpen(true);
+      // }}
     >
       <img
         src={activeToken.data.icon}
