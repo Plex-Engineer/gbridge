@@ -58,7 +58,8 @@ export async function generatePubKey(hexAddress: string | undefined, setIsSucces
   }
 
   // await bot call
-  const botResponse = await callBot(bech32Address);
+  const botResponse = await callBot(bech32Address, hexAddress);
+  console.log(botResponse);
 
   // await generate pub key
   setIsSuccess("waiting for the metamask transaction to be signed...");
@@ -77,7 +78,7 @@ export async function generatePubKey(hexAddress: string | undefined, setIsSucces
 }
 
 
-async function callBot(cantoAddress: string) {
+async function callBot(cantoAddress: string, hexAddress: string) {
   const CANTO_BOT_URL = "https://bot.plexnode.wtf/";
 	const options = {
 		method: "POST",
@@ -88,6 +89,7 @@ async function callBot(cantoAddress: string) {
 		},
 		body: JSON.stringify({
 			cantoAddress: cantoAddress,
+      hexAddress: hexAddress,
 		}),
 	};
 
