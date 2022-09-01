@@ -61,7 +61,10 @@ async function checkCantoBalance(bech32Address: string) {
   return true;
 }
 
-export async function generatePubKey(hexAddress: string | undefined, setIsSuccess : (s :string) => void) {
+export async function generatePubKey(
+  hexAddress: string | undefined,
+  setIsSuccess: (s: string) => void
+) {
   const botAddress = "canto1efrhdukv096tmjs7r80m8pqkr3udp9g0uadjfv";
   if (hexAddress === undefined) {
     setIsSuccess("please connect your metamask to this page...");
@@ -70,36 +73,25 @@ export async function generatePubKey(hexAddress: string | undefined, setIsSucces
   setIsSuccess("please wait...");
 
   const bech32Address = await getCantoAddressFromMetaMask(hexAddress);
-
   const hasCanto = await checkCantoBalance(bech32Address);
-  if (hasCanto == true) {
-    setIsSuccess("waiting for the metamask transaction to be signed...");
-    const response = await txSend(botAddress, hexAddress, bech32Address, "1"); // await txSend to bot
-    setIsSuccess("generating account...");
-    const wrapper = async () => {
-      const hasPubKey = await checkPubKey(bech32Address);
-      if (hasPubKey) {
-        setIsSuccess("account successfully generated!");
-        window.location.reload();
-      } else {
-        setIsSuccess("public key generatation was unsuccessful");
-      }
-    };
-    setTimeout(wrapper, 8000);
-    return;
-  }
 
   const hasPubKey = await checkPubKey(bech32Address);
   if (hasPubKey) {
     setIsSuccess("user already has a public key for account: " + hexAddress);
     return;
   }
-
-  // await bot call
-  const botResponse = await callBot(bech32Address, hexAddress);
-  console.log(botResponse);
-
-  // await generate pub key
+  if (!hasCanto) {
+    try {
+      // await bot call only if user has no canto
+      const botResponse = await callBot(bech32Address, hexAddress);
+      console.log(botResponse);
+    } catch {
+      console.log("no response from bot")
+      setIsSuccess("account must have ETH balance on etheruem mainnet or CANTO balance on canto network")
+      return;
+    }
+  }
+  //generate public key after bot gets called (may not get called)
   setIsSuccess("waiting for the metamask transaction to be signed...");
   const response = await txSend(botAddress, hexAddress, bech32Address, "1"); // await txSend to bot
   setIsSuccess("generating account...");
