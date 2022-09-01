@@ -4,6 +4,7 @@ import { CantoMainnet } from 'cantoui';
 import { chain, fee, memo } from 'config/networks';
 import { check } from 'prettier';
 import { getSenderObj, signAndBroadcastTxMsg } from './IBC/signAndBroadcast';
+import { BigNumber } from 'ethers';
 
 export async function checkPubKey(bech32Address : string) {
     const endPointAccount = generateEndpointAccount(bech32Address);
@@ -50,10 +51,10 @@ async function checkCantoBalance(bech32Address: string) {
       },
     }
   );
-  let balance = BigInt((await result.json()).balance.amount);
+  let balance = BigNumber.from((await result.json()).balance.amount);
   console.log(balance);
   
-  if (balance < 300000000000000000n) {
+  if (balance.lt(BigNumber.from("300000000000000000"))) {
     console.log("0 balance")
     return false;
   }
