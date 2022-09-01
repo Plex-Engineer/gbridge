@@ -74,8 +74,7 @@ export const ReactiveButton = ({
   //? refactor this into a single component
   //if the account doesn't have a public key
   if (!hasPubKey) {
-    return <Button onClick={() => generatePubKey(account, () => {})}>generate public key</Button>
-    // return <DisabledButton>please generate public key</DisabledButton>;
+    return <DisabledButton>please generate public key</DisabledButton>;
   }
   //if the token hasn't been approved
   if (token?.allowance == -1) {
@@ -91,7 +90,7 @@ export const ReactiveButton = ({
     return <DisabledButton>enter amount</DisabledButton>;
   }
   if (disabled) {
-    return <DisabledButton>enter gravity address</DisabledButton>;
+    return <DisabledButton>enter cosmos address</DisabledButton>;
   }
   
   return (

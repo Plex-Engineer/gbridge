@@ -1,6 +1,7 @@
 import { useEthers } from "@usedapp/core";
-import { NavBar, useAlert } from "cantoui";
+import { CantoMainnet, useAlert, NavBar } from "cantoui";
 import { getAccountBalance, getChainIdandAccount } from "global/utils/walletConnect/addCantoToWallet";
+import { GenPubKey } from "pages/genPubKey";
 import { useEffect } from "react";
 import { useNetworkInfo } from "stores/networkInfo";
 import { addNetwork } from "utils/addCantoToWallet";
@@ -8,19 +9,13 @@ import logo from "./../../assets/logo.svg"
 
 export const CantoNav = () => {
   const netWorkInfo = useNetworkInfo();
-  const { activateBrowserWallet, account, switchNetwork } = useEthers();
+  const { activateBrowserWallet, account, chainId } = useEthers();
   const alert = useAlert();
 
-  async function setChainInfo() {
-    const [chainId, account] = await getChainIdandAccount();
-    netWorkInfo.setChainId(chainId);
-    netWorkInfo.setAccount(account);
-  }
-
   useEffect(() => {
-    setChainInfo();
-   //@ts-ignore
-}, [window.ethereum?.networkVersion]);
+    netWorkInfo.setChainId(chainId?.toString());
+    netWorkInfo.setAccount(account);
+}, [account, chainId]);
 
   //@ts-ignore
   if (window.ethereum) {
@@ -28,11 +23,6 @@ export const CantoNav = () => {
     window.ethereum.on("accountsChanged", () => {
       window.location.reload();
     });
-
-  //   //@ts-ignore
-  //   window.ethereum.on("networkChanged", () => {
-  //     window.location.reload();
-  //   });
   }
 
   async function getBalance() {
@@ -41,26 +31,29 @@ export const CantoNav = () => {
     }
   }
   useEffect(() => {
-    if (!netWorkInfo.isConnected) {
+    if (!netWorkInfo.hasPubKey) {
+      alert.show("Failure", <GenPubKey />)
+    } else if (!netWorkInfo.account) {
+      alert.show("Failure", <p> please connect your wallet to use the bridge</p>)
+    }else if (!netWorkInfo.isConnected) {
       alert.show("Failure", <p>this network is not supported on gravity bridge, please <a onClick={addNetwork} style={{cursor: "pointer", textDecoration: "underline"}}>switch networks</a></p>)
     } else {
       alert.close();
     }
     getBalance();
-  },[netWorkInfo.account, netWorkInfo.chainId])
+  },[netWorkInfo.account, netWorkInfo.chainId, netWorkInfo.hasPubKey])
 
   return (
     <NavBar
       title="bridge"
       onClick={() => {
         activateBrowserWallet();
-        switchNetwork(1);
       }}
       chainId={Number(netWorkInfo.chainId)}
       account={netWorkInfo.account ?? ""}
-      isConnected={netWorkInfo.isConnected && account ? true : false}
+      isConnected={account ? true : false}
       balance={netWorkInfo.balance}
-      currency={netWorkInfo.chainId == "1" ? "ETH" : "CANTO"}
+      currency={Number(netWorkInfo.chainId) == CantoMainnet.chainId ? "CANTO" : "ETH"}
       logo={logo}
       currentPage="bridge"
     />

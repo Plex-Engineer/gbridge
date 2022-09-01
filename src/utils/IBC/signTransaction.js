@@ -15,14 +15,11 @@ export async function signAndBroadcastTxMsg(msg, senderObj, chain, nodeAddress, 
         body: generatePostBodyBroadcast(raw),
     };
 
-    console.log("POST OPTIONS: ", postOptions);
-
     const broadcastPost = await fetch(
         nodeAddress + generateEndpointBroadcast(),
         postOptions
     );
     const response = await broadcastPost.json();
-    console.log("🚀 ~ file: signTransaction.js ~ line 25 ~ signAndBroadcastTxMsg ~ response", response)
 }
 
 function generateRawTx(chain, senderObj, signature, msg) {
@@ -68,7 +65,6 @@ async function ethToCanto(address, nodeAddress) {
 }
 
 function reformatSender(addressData) {
-    console.log(addressData);
     return {
         accountNumber : addressData['account_number'],
         pubkey : addressData['pub_key']['key'],
