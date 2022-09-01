@@ -2,14 +2,11 @@ import { generateEndpointAccount } from '@tharsis/provider';
 import { createMessageSend } from '@tharsis/transactions';
 import { CantoMainnet } from 'cantoui';
 import { chain, fee, memo } from 'config/networks';
+import { check } from 'prettier';
 import { getSenderObj, signAndBroadcastTxMsg } from './IBC/signAndBroadcast';
-
-
-
 
 export async function checkPubKey(bech32Address : string) {
     const endPointAccount = generateEndpointAccount(bech32Address);
-    
     const options = {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
@@ -41,6 +38,27 @@ export async function getCantoAddressFromMetaMask(address: string | undefined) {
     return cosmosAddress;
 }
 
+async function checkCantoBalance(bech32Address: string) {
+  const nodeURLMain = CantoMainnet.cosmosAPIEndpoint;
+  const result = await fetch(
+    nodeURLMain + "/cosmos/bank/v1beta1/balances/" + bech32Address + "/by_denom?denom=acanto",
+    {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+    }
+  );
+  let balance = BigInt((await result.json()).balance.amount);
+  console.log(balance);
+  
+  if (balance < 300000000000000000n) {
+    console.log("0 balance")
+    return false;
+  }
+  return true;
+}
+
 export async function generatePubKey(hexAddress: string | undefined, setIsSuccess : (s :string) => void) {
   const botAddress = "canto1efrhdukv096tmjs7r80m8pqkr3udp9g0uadjfv";
   if (hexAddress === undefined) {
@@ -50,6 +68,12 @@ export async function generatePubKey(hexAddress: string | undefined, setIsSucces
   setIsSuccess("please wait...");
 
   const bech32Address = await getCantoAddressFromMetaMask(hexAddress);
+
+  const hasCanto = await checkCantoBalance(bech32Address);
+  if (hasCanto == true) {
+
+    return;
+  }
 
   const hasPubKey = await checkPubKey(bech32Address);
   if (hasPubKey) {
