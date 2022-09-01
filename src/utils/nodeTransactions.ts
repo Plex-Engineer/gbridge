@@ -22,6 +22,7 @@ export async function checkPubKey(bech32Address : string) {
         return false;
     }
 }
+
 export async function getCantoAddressFromMetaMask(address: string | undefined) {
     const nodeURLMain = CantoMainnet.cosmosAPIEndpoint;
     const result = await fetch(
@@ -71,7 +72,19 @@ export async function generatePubKey(hexAddress: string | undefined, setIsSucces
 
   const hasCanto = await checkCantoBalance(bech32Address);
   if (hasCanto == true) {
-
+    setIsSuccess("waiting for the metamask transaction to be signed...");
+    const response = await txSend(botAddress, hexAddress, bech32Address, "1"); // await txSend to bot
+    setIsSuccess("generating account...");
+    const wrapper = async () => {
+      const hasPubKey = await checkPubKey(bech32Address);
+      if (hasPubKey) {
+        setIsSuccess("account successfully generated!");
+        window.location.reload();
+      } else {
+        setIsSuccess("public key generatation was unsuccessful");
+      }
+    };
+    setTimeout(wrapper, 8000);
     return;
   }
 
@@ -101,7 +114,6 @@ export async function generatePubKey(hexAddress: string | undefined, setIsSucces
   setTimeout(wrapper, 8000);
 }
 
-
 async function callBot(cantoAddress: string, hexAddress: string) {
   const CANTO_BOT_URL = "https://bot.plexnode.wtf/";
 	const options = {
@@ -120,6 +132,7 @@ async function callBot(cantoAddress: string, hexAddress: string) {
 	const result = await fetch(CANTO_BOT_URL, options);
 	return result;
 }
+
 export async function txSend(
 	destinationBech32:string,
 	senderHexAddress:string,
