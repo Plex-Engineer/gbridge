@@ -22,7 +22,7 @@
     "@tharsis/transactions": "^0.2.4",
     "@usedapp/core": "^1.1.3",
     "bignumber.js": "^9.0.2",
-    "cantoui": "^1.0.29",
+    "cantoui": "^1.0.36",
     "ethers": "^5.7.0",
     "mixpanel": "^0.16.0",
     "mixpanel-browser": "^2.45.0",

@@ -41,11 +41,37 @@ export const CantoNav = () => {
       alert.close();
     }
     getBalance();
-  },[netWorkInfo.account, netWorkInfo.chainId, netWorkInfo.hasPubKey])
+  },[netWorkInfo.account, netWorkInfo.chainId, netWorkInfo.hasPubKey]);
+
+  const pageList = [
+    {
+      name: "bridge",
+      link: "https://bridge.canto.io",
+    },
+    {
+      name: "convert coin",
+      link: "https://convert.canto.io"
+    },
+    {
+      name: "staking",
+      link: "https://staking.canto.io",
+    },
+    {
+      name: "lp interface",
+      link: "https://lp.canto.io",
+    },
+    {
+      name: "lending",
+      link: "https://lending.canto.io",
+    },
+    {
+      name: "governance",
+      link: "https://governance.canto.io",
+    },
+  ];
 
   return (
     <NavBar
-      title="bridge"
       onClick={() => {
         activateBrowserWallet();
       }}
@@ -56,6 +82,7 @@ export const CantoNav = () => {
       currency={Number(netWorkInfo.chainId) == CantoMainnet.chainId ? "CANTO" : "ETH"}
       logo={logo}
       currentPage="bridge"
+      pageList={pageList}
     />
   );
 };
