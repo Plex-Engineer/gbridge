@@ -54,6 +54,7 @@ export const GenPubKey = () => {
         before bridging assets
       </p>
       <p>{pubKeySuccess}</p>
+      <div>*in order to generate a public key, you must have at least 0.5 CANTO or 0.01 ETH on mainnet*</div>
     </div>
   );
 };
