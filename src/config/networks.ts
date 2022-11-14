@@ -4,7 +4,7 @@ import {
 } from "./gravityBridgeTokens";
 import { ADDRESSES } from "cantoui";
 
-
+export const cosmosAPIEndpoint1 = "https://canto.plexnode.wtf";
 //Gravity Bridge Chains
 export const ETHMainnet = {
   name: "Ethereum Mainnet",
