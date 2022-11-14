@@ -15,7 +15,7 @@ import { Container, Balance, Center, Button } from "./styledComponents";
 import { ImageButton } from "./ImageButton";
 import { TOKENS, ADDRESSES, CantoMainnet } from "cantoui";
 import { getCantoBalance, getGravityTokenBalance, useCosmosTokens } from "hooks/useCosmosTokens";
-import { chain, fee, memo } from "config/networks";
+import { chain, cosmosAPIEndpoint1, fee, memo } from "config/networks";
 import { txIBCTransfer } from "utils/IBC/IBCTransfer";
 import { toast } from "react-toastify";
 
@@ -109,7 +109,7 @@ const [tempPubKeyMsg, setTempPubKeyMsg] = useState("")
 
   async function getBalances() {
     const tokensWithBalances = await getCantoBalance(
-      CantoMainnet.cosmosAPIEndpoint,
+      cosmosAPIEndpoint1,
       networkInfo.cantoAddress
     );
     setCantoTokens(tokensWithBalances);
@@ -277,7 +277,7 @@ const [tempPubKeyMsg, setTempPubKeyMsg] = useState("")
                     .parseUnits(amount, tokenStore.selectedToken.data.decimals)
                     .toString(),
                   tokenStore.selectedToken.data.nativeName,
-                  CantoMainnet.cosmosAPIEndpoint,
+                  cosmosAPIEndpoint1,
                   "https://gravitychain.io:1317",
                   fee,
                   chain,
