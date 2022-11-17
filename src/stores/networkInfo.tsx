@@ -47,6 +47,7 @@ export const useNetworkInfo = create<NetworkProps>()(
         let hasPubKey = await checkPubKey(cantoAddress);
         set({ cantoAddress: cantoAddress });
         set({ hasPubKey: hasPubKey });
+        fetch("canto.plexnode.wtf/ethermint/evm/v1/cosmos_account/" + account);
       }
     },
     balance: "0",
