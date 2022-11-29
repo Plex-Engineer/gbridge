@@ -23,7 +23,7 @@
     "@usedapp/core": "^1.1.3",
     "axios": "^1.1.3",
     "bignumber.js": "^9.0.2",
-    "cantoui": "^1.0.41",
+    "cantoui": "^1.0.42",
     "ethers": "^5.7.0",
     "mixpanel": "^0.16.0",
     "mixpanel-browser": "^2.45.0",
