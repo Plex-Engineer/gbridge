@@ -320,7 +320,7 @@ const [tempPubKeyMsg, setTempPubKeyMsg] = useState("")
           assets
           {" (Metamask)"} to native canto tokens{" "}
           <a
-            href="https://convert.canto.io"
+            href="https://convert.v1.canto.io"
             style={{ color: "white", textDecoration: "underline" }}
           >
             here.
@@ -332,7 +332,7 @@ const [tempPubKeyMsg, setTempPubKeyMsg] = useState("")
           it takes several minutes for your bridged assets to arrive on the
           canto network. go to the{" "}
           <a
-            href="https://convert.canto.io"
+            href="https://convert.v1.canto.io"
             style={{ color: "white", textDecoration: "underline" }}
           >
             convert coin
